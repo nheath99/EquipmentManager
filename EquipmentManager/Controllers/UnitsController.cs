@@ -7,14 +7,14 @@ using System.Web.Mvc;
 
 namespace EquipmentManager.Controllers
 {
-    public class EquipmentController : Controller
+    public class UnitsController : Controller
     {
         EquipmentManagerEntities db = new EquipmentManagerEntities();
 
         public ActionResult Index()
         {
-            var equipment = db.Equipments.ToList();
-            return View(equipment);
+            var units = db.UnitsOfMeasures.ToList();
+            return View(units);
         }
 
         public ActionResult Details(int? id)
@@ -23,13 +23,13 @@ namespace EquipmentManager.Controllers
             {
                 return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
             }
-            var equipment = db.Equipments.Find(id.Value);
-            if (equipment == null)
+            var unit = db.UnitsOfMeasures.Find(id.Value);
+            if (unit == null)
             {
                 return HttpNotFound();
             }
 
-            return View(equipment);
+            return View(unit);
         }
 
         public ActionResult Create()
@@ -39,17 +39,17 @@ namespace EquipmentManager.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="Name,Description")] Equipment eq)
+        public ActionResult Create([Bind(Include="Name")] UnitsOfMeasure unit)
         {
             if (ModelState.IsValid)
             {
-                db.Equipments.Add(eq);
+                db.UnitsOfMeasures.Add(unit);
                 db.SaveChanges();
 
                 return RedirectToAction("Index");
             }
 
-            return View(eq);
+            return View(unit);
         }
 
         public ActionResult Edit(int? id)
@@ -58,27 +58,27 @@ namespace EquipmentManager.Controllers
             {
                 return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
             }
-            var equipment = db.Equipments.Find(id.Value);
-            if (equipment == null)
+            var unit = db.UnitsOfMeasures.Find(id.Value);
+            if (unit == null)
             {
                 return HttpNotFound();
             }
 
-            return View(equipment);
+            return View(unit);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="Id,Name,Description")] Equipment eq)
+        public ActionResult Edit([Bind(Include="Id,Name")] UnitsOfMeasure unit)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(eq).State = System.Data.Entity.EntityState.Modified;
+                db.Entry(unit).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(eq);
+            return View(unit);
         }
     }
 }

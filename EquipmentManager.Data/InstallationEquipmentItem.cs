@@ -26,6 +26,8 @@ namespace EquipmentManager.Data
         public Nullable<System.DateTime> DateReceived { get; set; }
         public Nullable<int> StatusId { get; set; }
         public double InStock { get; set; }
+        public decimal CostPerUnit { get; set; }
+        public double UnitsOrdered { get; set; }
     
         public virtual EquipmentItem EquipmentItem { get; set; }
         public virtual InstallationEquipmentItemStatus InstallationEquipmentItemStatu { get; set; }

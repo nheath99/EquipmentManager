@@ -26,7 +26,6 @@ namespace EquipmentManager.Data
         public string Description { get; set; }
         public Nullable<int> SupplierId { get; set; }
         public Nullable<int> ManufacturerId { get; set; }
-        public decimal CostPerUnit { get; set; }
         public decimal ItemsPerUnit { get; set; }
         public Nullable<int> CategoryId { get; set; }
         public string Link { get; set; }

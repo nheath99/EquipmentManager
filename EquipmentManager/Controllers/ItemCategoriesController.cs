@@ -7,14 +7,14 @@ using System.Web.Mvc;
 
 namespace EquipmentManager.Controllers
 {
-    public class EquipmentController : Controller
+    public class ItemCategoriesController : Controller
     {
         EquipmentManagerEntities db = new EquipmentManagerEntities();
 
         public ActionResult Index()
         {
-            var equipment = db.Equipments.ToList();
-            return View(equipment);
+            var categories = db.ItemCategories.ToList();
+            return View(categories);
         }
 
         public ActionResult Details(int? id)
@@ -23,13 +23,13 @@ namespace EquipmentManager.Controllers
             {
                 return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
             }
-            var equipment = db.Equipments.Find(id.Value);
-            if (equipment == null)
+            var category = db.ItemCategories.Find(id.Value);
+            if (category == null)
             {
                 return HttpNotFound();
             }
 
-            return View(equipment);
+            return View(category);
         }
 
         public ActionResult Create()
@@ -39,17 +39,17 @@ namespace EquipmentManager.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="Name,Description")] Equipment eq)
+        public ActionResult Create([Bind(Include="Name")] ItemCategory c)
         {
             if (ModelState.IsValid)
             {
-                db.Equipments.Add(eq);
+                db.ItemCategories.Add(c);
                 db.SaveChanges();
 
                 return RedirectToAction("Index");
             }
 
-            return View(eq);
+            return View(c);
         }
 
         public ActionResult Edit(int? id)
@@ -58,27 +58,27 @@ namespace EquipmentManager.Controllers
             {
                 return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
             }
-            var equipment = db.Equipments.Find(id.Value);
-            if (equipment == null)
+            var category = db.ItemCategories.Find(id.Value);
+            if (category == null)
             {
                 return HttpNotFound();
             }
 
-            return View(equipment);
+            return View(category);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="Id,Name,Description")] Equipment eq)
+        public ActionResult Edit([Bind(Include="Id,Name")] ItemCategory c)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(eq).State = System.Data.Entity.EntityState.Modified;
+                db.Entry(c).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(eq);
+            return View(c);
         }
     }
 }

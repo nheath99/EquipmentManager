@@ -38,6 +38,8 @@
           <Property Name="DateReceived" Type="date" />
           <Property Name="StatusId" Type="int" />
           <Property Name="InStock" Type="float" Nullable="false" />
+          <Property Name="CostPerUnit" Type="decimal" Precision="8" Scale="4" Nullable="false" />
+          <Property Name="UnitsOrdered" Type="float" Nullable="false" />
         </EntityType>
         <EntityType Name="InstallationEquipmentItemStatus">
           <Key>
@@ -72,7 +74,6 @@
           <Property Name="Description" Type="nvarchar" MaxLength="4000" />
           <Property Name="SupplierId" Type="int" />
           <Property Name="ManufacturerId" Type="int" />
-          <Property Name="CostPerUnit" Type="decimal" Precision="8" Scale="4" Nullable="false" />
           <Property Name="ItemsPerUnit" Type="decimal" Precision="8" Scale="4" Nullable="false" />
           <Property Name="CategoryId" Type="int" />
           <Property Name="Link" Type="nvarchar" MaxLength="4000" />
@@ -411,6 +412,8 @@
           <NavigationProperty Name="InstallationEquipmentItemStatu" Relationship="Self.FK_InstallationEquipmentItems_InstallationEquipmentItemStatus" FromRole="InstallationEquipmentItems" ToRole="InstallationEquipmentItemStatus" />
           <NavigationProperty Name="Installation" Relationship="Self.FK_InstallationEquipmentItems_Installations" FromRole="InstallationEquipmentItems" ToRole="Installations" />
           <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_InstallationEquipmentItems" FromRole="InstallationEquipmentItems" ToRole="Orders" />
+          <Property Name="CostPerUnit" Type="Decimal" Nullable="false" Precision="8" Scale="4" />
+          <Property Name="UnitsOrdered" Type="Double" Nullable="false" />
         </EntityType>
         <EntityType Name="InstallationEquipmentItemStatus">
           <Key>
@@ -450,7 +453,6 @@
           <Property Name="Description" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
           <Property Name="SupplierId" Type="Int32" />
           <Property Name="ManufacturerId" Type="Int32" />
-          <Property Name="CostPerUnit" Type="Decimal" Precision="8" Scale="4" Nullable="false" />
           <Property Name="ItemsPerUnit" Type="Decimal" Precision="8" Scale="4" Nullable="false" />
           <Property Name="CategoryId" Type="Int32" />
           <Property Name="Link" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
@@ -788,6 +790,8 @@
           <EntitySetMapping Name="InstallationEquipmentItems">
             <EntityTypeMapping TypeName="EquipmentManagerModel.InstallationEquipmentItem">
               <MappingFragment StoreEntitySet="InstallationEquipmentItems">
+                <ScalarProperty Name="UnitsOrdered" ColumnName="UnitsOrdered" />
+                <ScalarProperty Name="CostPerUnit" ColumnName="CostPerUnit" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="InstallationId" ColumnName="InstallationId" />
                 <ScalarProperty Name="EquipmentItemId" ColumnName="EquipmentItemId" />
@@ -833,7 +837,6 @@
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
                 <ScalarProperty Name="ManufacturerId" ColumnName="ManufacturerId" />
-                <ScalarProperty Name="CostPerUnit" ColumnName="CostPerUnit" />
                 <ScalarProperty Name="ItemsPerUnit" ColumnName="ItemsPerUnit" />
                 <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
                 <ScalarProperty Name="Link" ColumnName="Link" />

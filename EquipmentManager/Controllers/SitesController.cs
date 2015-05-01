@@ -7,14 +7,14 @@ using System.Web.Mvc;
 
 namespace EquipmentManager.Controllers
 {
-    public class EquipmentController : Controller
+    public class SitesController : Controller
     {
         EquipmentManagerEntities db = new EquipmentManagerEntities();
 
         public ActionResult Index()
         {
-            var equipment = db.Equipments.ToList();
-            return View(equipment);
+            var sites = db.Sites.ToList();
+            return View(sites);
         }
 
         public ActionResult Details(int? id)
@@ -23,13 +23,13 @@ namespace EquipmentManager.Controllers
             {
                 return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
             }
-            var equipment = db.Equipments.Find(id.Value);
-            if (equipment == null)
+            var site = db.Sites.Find(id.Value);
+            if (site == null)
             {
                 return HttpNotFound();
             }
 
-            return View(equipment);
+            return View(site);
         }
 
         public ActionResult Create()
@@ -39,17 +39,17 @@ namespace EquipmentManager.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="Name,Description")] Equipment eq)
+        public ActionResult Create([Bind(Include="Name")] Site s)
         {
             if (ModelState.IsValid)
             {
-                db.Equipments.Add(eq);
+                db.Sites.Add(s);
                 db.SaveChanges();
 
                 return RedirectToAction("Index");
             }
 
-            return View(eq);
+            return View(s);
         }
 
         public ActionResult Edit(int? id)
@@ -58,27 +58,27 @@ namespace EquipmentManager.Controllers
             {
                 return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
             }
-            var equipment = db.Equipments.Find(id.Value);
-            if (equipment == null)
+            var site = db.Sites.Find(id.Value);
+            if (site == null)
             {
                 return HttpNotFound();
             }
 
-            return View(equipment);
+            return View(site);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="Id,Name,Description")] Equipment eq)
+        public ActionResult Edit([Bind(Include="Id,Name")] Site s)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(eq).State = System.Data.Entity.EntityState.Modified;
+                db.Entry(s).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(eq);
+            return View(s);
         }
     }
 }

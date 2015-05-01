@@ -7,14 +7,14 @@ using System.Web.Mvc;
 
 namespace EquipmentManager.Controllers
 {
-    public class EquipmentController : Controller
+    public class ManufacturersController : Controller
     {
         EquipmentManagerEntities db = new EquipmentManagerEntities();
 
         public ActionResult Index()
         {
-            var equipment = db.Equipments.ToList();
-            return View(equipment);
+            var suppliers = db.Manufacturers.ToList();
+            return View(suppliers);
         }
 
         public ActionResult Details(int? id)
@@ -23,13 +23,13 @@ namespace EquipmentManager.Controllers
             {
                 return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
             }
-            var equipment = db.Equipments.Find(id.Value);
-            if (equipment == null)
+            var manufacturer = db.Manufacturers.Find(id.Value);
+            if (manufacturer == null)
             {
                 return HttpNotFound();
             }
 
-            return View(equipment);
+            return View(manufacturer);
         }
 
         public ActionResult Create()
@@ -39,17 +39,17 @@ namespace EquipmentManager.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="Name,Description")] Equipment eq)
+        public ActionResult Create([Bind(Include = "Name,Website,Address1,Address2,Address3,Address4,Postcode,Country")] Manufacturer m)
         {
             if (ModelState.IsValid)
             {
-                db.Equipments.Add(eq);
+                db.Manufacturers.Add(m);
                 db.SaveChanges();
 
                 return RedirectToAction("Index");
             }
 
-            return View(eq);
+            return View(m);
         }
 
         public ActionResult Edit(int? id)
@@ -58,27 +58,27 @@ namespace EquipmentManager.Controllers
             {
                 return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
             }
-            var equipment = db.Equipments.Find(id.Value);
-            if (equipment == null)
+            var manufacturer = db.Manufacturers.Find(id.Value);
+            if (manufacturer == null)
             {
                 return HttpNotFound();
             }
 
-            return View(equipment);
+            return View(manufacturer);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="Id,Name,Description")] Equipment eq)
+        public ActionResult Edit([Bind(Include = "Id,Name,Website,Address1,Address2,Address3,Address4,Postcode,Country")] Manufacturer m)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(eq).State = System.Data.Entity.EntityState.Modified;
+                db.Entry(m).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(eq);
+            return View(m);
         }
     }
 }

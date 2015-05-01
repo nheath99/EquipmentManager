@@ -6,8 +6,8 @@
     <edmx:Diagrams>
       <Diagram DiagramId="6c336db397804b5a85a402694d618ff0" Name="Diagram1" ZoomLevel="86">
         <EntityTypeShape EntityType="EquipmentManagerModel.Equipment" Width="1.5" PointX="5.875" PointY="2.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="EquipmentManagerModel.EquipmentItem" Width="1.5" PointX="8.375" PointY="2.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="EquipmentManagerModel.InstallationEquipmentItem" Width="1.5" PointX="8.375" PointY="6.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="EquipmentManagerModel.EquipmentItem" Width="1.5" PointX="8.375" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="EquipmentManagerModel.InstallationEquipmentItem" Width="1.5" PointX="8.375" PointY="5.875" IsExpanded="true" />
         <EntityTypeShape EntityType="EquipmentManagerModel.InstallationEquipmentItemStatus" Width="1.5" PointX="8.375" PointY="10.375" IsExpanded="true" />
         <EntityTypeShape EntityType="EquipmentManagerModel.Installation" Width="1.5" PointX="6" PointY="5.375" IsExpanded="true" />
         <EntityTypeShape EntityType="EquipmentManagerModel.ItemCategory" Width="1.5" PointX="10.75" PointY="1.5" IsExpanded="true" />
