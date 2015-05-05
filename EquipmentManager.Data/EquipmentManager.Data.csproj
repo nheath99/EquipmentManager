@@ -91,6 +91,13 @@
     <Compile Include="Order.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="PartialClasses\Item.cs" />
+    <Compile Include="PartialClasses\Equipment.cs" />
+    <Compile Include="PartialClasses\ItemCategory.cs" />
+    <Compile Include="PartialClasses\Manufacturer.cs" />
+    <Compile Include="PartialClasses\PartNumber.cs" />
+    <Compile Include="PartialClasses\Site.cs" />
+    <Compile Include="PartialClasses\UnitsOfMeasure.cs" />
     <Compile Include="PartNumber.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
@@ -101,6 +108,7 @@
     <Compile Include="Supplier.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="PartialClasses\Supplier.cs" />
     <Compile Include="UnitsOfMeasure.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>

@@ -46,7 +46,7 @@ namespace EquipmentManager.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name")] Site site)
+        public ActionResult Create([Bind(Include = "Id,Name,Code")] Site site)
         {
             if (ModelState.IsValid)
             {
@@ -78,7 +78,7 @@ namespace EquipmentManager.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name")] Site site)
+        public ActionResult Edit([Bind(Include = "Id,Name,Code")] Site site)
         {
             if (ModelState.IsValid)
             {

@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using EquipmentManager.Data;
+using EquipmentManager.Models;
 
 namespace EquipmentManager.Controllers
 {
@@ -32,7 +33,7 @@ namespace EquipmentManager.Controllers
             {
                 return HttpNotFound();
             }
-            return View(equipment);
+            return View(new EquipmentViewModel(equipment));
         }
 
         // GET: Equipment/Create

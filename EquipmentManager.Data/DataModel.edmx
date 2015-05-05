@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="EquipmentManagerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="EquipmentManagerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Equipment">
           <Key>
             <PropertyRef Name="Id" />
@@ -121,6 +121,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Code" Type="nvarchar" MaxLength="15" />
         </EntityType>
         <EntityType Name="Suppliers">
           <Key>
@@ -300,19 +301,19 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="EquipmentManagerModelStoreContainer">
-          <EntitySet Name="Equipment" EntityType="Self.Equipment" Schema="dbo" store:Type="Tables" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-          <EntitySet Name="EquipmentItems" EntityType="Self.EquipmentItems" Schema="dbo" store:Type="Tables" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-          <EntitySet Name="InstallationEquipmentItems" EntityType="Self.InstallationEquipmentItems" Schema="dbo" store:Type="Tables" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-          <EntitySet Name="InstallationEquipmentItemStatus" EntityType="Self.InstallationEquipmentItemStatus" Schema="dbo" store:Type="Tables" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-          <EntitySet Name="Installations" EntityType="Self.Installations" Schema="dbo" store:Type="Tables" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-          <EntitySet Name="ItemCategories" EntityType="Self.ItemCategories" Schema="dbo" store:Type="Tables" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-          <EntitySet Name="Items" EntityType="Self.Items" Schema="dbo" store:Type="Tables" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-          <EntitySet Name="Manufacturers" EntityType="Self.Manufacturers" Schema="dbo" store:Type="Tables" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-          <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-          <EntitySet Name="PartNumbers" EntityType="Self.PartNumbers" Schema="dbo" store:Type="Tables" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-          <EntitySet Name="Site" EntityType="Self.Site" Schema="dbo" store:Type="Tables" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-          <EntitySet Name="Suppliers" EntityType="Self.Suppliers" Schema="dbo" store:Type="Tables" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-          <EntitySet Name="UnitsOfMeasure" EntityType="Self.UnitsOfMeasure" Schema="dbo" store:Type="Tables" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Equipment" EntityType="Self.Equipment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EquipmentItems" EntityType="Self.EquipmentItems" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="InstallationEquipmentItems" EntityType="Self.InstallationEquipmentItems" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="InstallationEquipmentItemStatus" EntityType="Self.InstallationEquipmentItemStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Installations" EntityType="Self.Installations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ItemCategories" EntityType="Self.ItemCategories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Items" EntityType="Self.Items" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Manufacturers" EntityType="Self.Manufacturers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PartNumbers" EntityType="Self.PartNumbers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Site" EntityType="Self.Site" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Suppliers" EntityType="Self.Suppliers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UnitsOfMeasure" EntityType="Self.UnitsOfMeasure" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_EquipmentItems_Equipment" Association="Self.FK_EquipmentItems_Equipment">
             <End Role="Equipment" EntitySet="Equipment" />
             <End Role="EquipmentItems" EntitySet="EquipmentItems" />
@@ -459,8 +460,8 @@
           <Property Name="Obsolete" Type="Boolean" Nullable="false" />
           <Property Name="ReplacedBy_Id" Type="Int32" />
           <NavigationProperty Name="ItemCategory" Relationship="Self.FK_Items_ItemCategories" FromRole="Items" ToRole="ItemCategories" />
-          <NavigationProperty Name="Items1" Relationship="Self.FK_Items_Items" FromRole="Items" ToRole="Items1" />
-          <NavigationProperty Name="Item1" Relationship="Self.FK_Items_Items" FromRole="Items1" ToRole="Items" />
+          <NavigationProperty Name="Replaces" Relationship="Self.FK_Items_Items" FromRole="Items" ToRole="Items1" />
+          <NavigationProperty Name="ReplacedBy" Relationship="Self.FK_Items_Items" FromRole="Items1" ToRole="Items" />
           <NavigationProperty Name="Manufacturer" Relationship="Self.FK_Items_Manufacturers" FromRole="Items" ToRole="Manufacturers" />
           <NavigationProperty Name="Supplier" Relationship="Self.FK_Items_Suppliers" FromRole="Items" ToRole="Suppliers" />
           <NavigationProperty Name="PartNumbers" Relationship="Self.FK_PartNumbers_Items" FromRole="Items" ToRole="PartNumbers" />
@@ -511,6 +512,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Installations" Relationship="Self.FK_Installations_Site" FromRole="Site" ToRole="Installations" />
+          <Property Name="Code" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Supplier">
           <Key>
@@ -886,6 +888,7 @@
           <EntitySetMapping Name="Sites">
             <EntityTypeMapping TypeName="EquipmentManagerModel.Site">
               <MappingFragment StoreEntitySet="Site">
+                <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
               </MappingFragment>

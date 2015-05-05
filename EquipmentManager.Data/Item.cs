@@ -16,7 +16,7 @@ namespace EquipmentManager.Data
     {
         public Item()
         {
-            this.Items1 = new HashSet<Item>();
+            this.Replaces = new HashSet<Item>();
             this.PartNumbers = new HashSet<PartNumber>();
             this.EquipmentItems = new HashSet<EquipmentItem>();
         }
@@ -33,8 +33,8 @@ namespace EquipmentManager.Data
         public Nullable<int> ReplacedBy_Id { get; set; }
     
         public virtual ItemCategory ItemCategory { get; set; }
-        public virtual ICollection<Item> Items1 { get; set; }
-        public virtual Item Item1 { get; set; }
+        public virtual ICollection<Item> Replaces { get; set; }
+        public virtual Item ReplacedBy { get; set; }
         public virtual Manufacturer Manufacturer { get; set; }
         public virtual Supplier Supplier { get; set; }
         public virtual ICollection<PartNumber> PartNumbers { get; set; }

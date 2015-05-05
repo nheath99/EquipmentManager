@@ -38,7 +38,8 @@ namespace EquipmentManager.Controllers
         // GET: Manufacturers/Create
         public ActionResult Create()
         {
-            return View();
+            Manufacturer m = new Manufacturer() { Website = "http://" };
+            return View(m);
         }
 
         // POST: Manufacturers/Create

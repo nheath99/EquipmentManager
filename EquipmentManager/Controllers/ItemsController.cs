@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using EquipmentManager.Data;
+using EquipmentManager.Models;
 
 namespace EquipmentManager.Controllers
 {
@@ -17,7 +18,7 @@ namespace EquipmentManager.Controllers
         // GET: Items
         public ActionResult Index()
         {
-            var items = db.Items.Include(i => i.ItemCategory).Include(i => i.Item1).Include(i => i.Manufacturer).Include(i => i.Supplier);
+            var items = db.Items.Include(i => i.ItemCategory).Include(i => i.Replaces).Include(i => i.Manufacturer).Include(i => i.Supplier);
             return View(items.ToList());
         }
 
@@ -39,10 +40,9 @@ namespace EquipmentManager.Controllers
         // GET: Items/Create
         public ActionResult Create()
         {
-            ViewBag.CategoryId = new SelectList(db.ItemCategories, "Id", "Name");
-            ViewBag.ReplacedBy_Id = new SelectList(db.Items, "Id", "Name");
-            ViewBag.ManufacturerId = new SelectList(db.Manufacturers, "Id", "Name");
-            ViewBag.SupplierId = new SelectList(db.Suppliers, "Id", "Name");
+            ViewBag.CategoryId = new SelectList(db.ItemCategories.OrderBy(x => x.Name), "Id", "Name");
+            ViewBag.ManufacturerId = new SelectList(db.Manufacturers.OrderBy(x => x.Name), "Id", "Name");
+            ViewBag.SupplierId = new SelectList(db.Suppliers.OrderBy(x => x.Name), "Id", "Name");
             return View();
         }
 
@@ -51,20 +51,19 @@ namespace EquipmentManager.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Description,SupplierId,ManufacturerId,ItemsPerUnit,CategoryId,Link,Obsolete,ReplacedBy_Id")] Item item)
+        public ActionResult Create([Bind(Include = "Name,Description,SupplierId,ManufacturerId,ItemsPerUnit,CategoryId,Link,PartNumberValues,PartNumberDescriptions")] CreateItemViewModel itemVm)
         {
             if (ModelState.IsValid)
             {
-                db.Items.Add(item);
+                db.Items.Add(itemVm.GetItem());
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CategoryId = new SelectList(db.ItemCategories, "Id", "Name", item.CategoryId);
-            ViewBag.ReplacedBy_Id = new SelectList(db.Items, "Id", "Name", item.ReplacedBy_Id);
-            ViewBag.ManufacturerId = new SelectList(db.Manufacturers, "Id", "Name", item.ManufacturerId);
-            ViewBag.SupplierId = new SelectList(db.Suppliers, "Id", "Name", item.SupplierId);
-            return View(item);
+            ViewBag.CategoryId = new SelectList(db.ItemCategories.OrderBy(x => x.Name), "Id", "Name", itemVm.CategoryId);
+            ViewBag.ManufacturerId = new SelectList(db.Manufacturers.OrderBy(x => x.Name), "Id", "Name", itemVm.ManufacturerId);
+            ViewBag.SupplierId = new SelectList(db.Suppliers.OrderBy(x => x.Name), "Id", "Name", itemVm.SupplierId);
+            return View(itemVm);
         }
 
         // GET: Items/Edit/5
@@ -79,10 +78,9 @@ namespace EquipmentManager.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.CategoryId = new SelectList(db.ItemCategories, "Id", "Name", item.CategoryId);
-            ViewBag.ReplacedBy_Id = new SelectList(db.Items, "Id", "Name", item.ReplacedBy_Id);
-            ViewBag.ManufacturerId = new SelectList(db.Manufacturers, "Id", "Name", item.ManufacturerId);
-            ViewBag.SupplierId = new SelectList(db.Suppliers, "Id", "Name", item.SupplierId);
+            ViewBag.CategoryId = new SelectList(db.ItemCategories.OrderBy(x => x.Name), "Id", "Name", item.CategoryId);
+            ViewBag.ManufacturerId = new SelectList(db.Manufacturers.OrderBy(x => x.Name), "Id", "Name", item.ManufacturerId);
+            ViewBag.SupplierId = new SelectList(db.Suppliers.OrderBy(x => x.Name), "Id", "Name", item.SupplierId);
             return View(item);
         }
 
@@ -91,7 +89,7 @@ namespace EquipmentManager.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Description,SupplierId,ManufacturerId,ItemsPerUnit,CategoryId,Link,Obsolete,ReplacedBy_Id")] Item item)
+        public ActionResult Edit([Bind(Include = "Id,Name,Description,SupplierId,ManufacturerId,ItemsPerUnit,CategoryId,Link,Obsolete,PartNumberValues,PartNumberDescriptions")] Item item)
         {
             if (ModelState.IsValid)
             {
@@ -99,10 +97,9 @@ namespace EquipmentManager.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.CategoryId = new SelectList(db.ItemCategories, "Id", "Name", item.CategoryId);
-            ViewBag.ReplacedBy_Id = new SelectList(db.Items, "Id", "Name", item.ReplacedBy_Id);
-            ViewBag.ManufacturerId = new SelectList(db.Manufacturers, "Id", "Name", item.ManufacturerId);
-            ViewBag.SupplierId = new SelectList(db.Suppliers, "Id", "Name", item.SupplierId);
+            ViewBag.CategoryId = new SelectList(db.ItemCategories.OrderBy(x => x.Name), "Id", "Name", item.CategoryId);
+            ViewBag.ManufacturerId = new SelectList(db.Manufacturers.OrderBy(x => x.Name), "Id", "Name", item.ManufacturerId);
+            ViewBag.SupplierId = new SelectList(db.Suppliers.OrderBy(x => x.Name), "Id", "Name", item.SupplierId);
             return View(item);
         }
 

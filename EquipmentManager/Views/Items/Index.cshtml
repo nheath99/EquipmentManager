@@ -27,16 +27,13 @@
             @Html.DisplayNameFor(model => model.Obsolete)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ItemCategory.Name)
+            @Html.DisplayNameFor(model => model.ItemCategory)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Item1.Name)
+            @Html.DisplayNameFor(model => model.Manufacturer)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Manufacturer.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Supplier.Name)
+            @Html.DisplayNameFor(model => model.Supplier)
         </th>
         <th></th>
     </tr>
@@ -44,7 +41,7 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Name)
+            @Html.ActionLink(item.Name, "Details")
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Description)
@@ -62,9 +59,6 @@
             @Html.DisplayFor(modelItem => item.ItemCategory.Name)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Item1.Name)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.Manufacturer.Name)
         </td>
         <td>
@@ -72,7 +66,6 @@
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
             @Html.ActionLink("Delete", "Delete", new { id=item.Id })
         </td>
     </tr>

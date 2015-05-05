@@ -1,33 +1,51 @@
-﻿@model EquipmentManager.Data.Equipment
+﻿@model EquipmentManager.Models.EquipmentViewModel
 
 @{
     ViewBag.Title = "Details";
 }
+<h2>@Model.Name</h2>
+<h4>@Model.Description</h4>
 
-<h2>Details</h2>
+<fieldset>
+    <legend>Installations</legend>
+    <button id="addInstallation" class="btn btn-primary">Add Installation</button>
+    <ul class="list-unstyled">
+        @foreach (var item in Model.Installations)
+        {
+            <li>@item.Site.Code - @item.Site.Name</li>
+        }
+    </ul>
+</fieldset>
 
-<div>
-    <h4>Equipment</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-
-    </dl>
-</div>
+<fieldset>
+    <legend>Items</legend>
+    <button id="addItem" class="btn btn-primary">Add Item</button>
+    <table class="table table-condensed">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Manufacturer</th>
+                <th>Supplier</th>
+                <th>Quantity Required</th>
+                <th>Quantity Spare</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.EquipmentItems)
+            {
+                <tr>
+                    <td>@item.ItemId</td>
+                    <td>@Html.ActionLink(item.ItemName, "Details", "Items", new { id = item.ItemId })</td>
+                    <td>@item.ItemManufacturer</td>
+                    <td>@item.ItemSupplier</td>
+                    <td>@item.QuantityRequired</td>
+                    <td>@item.QuantityRequiredSpare</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</fieldset>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
