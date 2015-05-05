@@ -3,6 +3,68 @@
 @{
     ViewBag.Title = "Details";
 }
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryui")
+    <script type="text/javascript">
+        $(function () {
+            $('#modalAddItem').click(function () {
+                $('#addItemModal').modal('hide');
+            });
+
+            function log(message) {
+                alert(message);
+            }
+
+            $('#tbItemSearch').autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Items/Search",
+                        data: {
+                            s: request.term
+                        },
+                        success: function (data) {
+                            response(data);
+                        }
+                    });
+                },
+                minLength: 2,
+                select: (function (event, ui) {
+                    log(ui.item ? ui.item.label : this.value);
+                }),
+                open: function () {
+                    $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+                },
+                close: function () {
+                    $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+                }
+            });
+        });
+    </script>
+}
+
+<div class="modal" id="addItemModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Select Item:</h4>
+            </div>
+            <div class="modal-body">
+                <dl class="dl-horizontal">
+                    <dt>Item</dt>
+                    <dd><input type="text" id="tbItemSearch" /></dd>
+                </dl>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button id="modalAddItem" type="button" class="btn btn-primary">Add Item</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <h2>@Model.Name</h2>
 <h4>@Model.Description</h4>
 
@@ -16,10 +78,9 @@
         }
     </ul>
 </fieldset>
-
 <fieldset>
     <legend>Items</legend>
-    <button id="addItem" class="btn btn-primary">Add Item</button>
+    <button id="addItem" class="btn btn-primary" data-toggle="modal" data-target="#addItemModal">Add Item</button>
     <table class="table table-condensed">
         <thead>
             <tr>

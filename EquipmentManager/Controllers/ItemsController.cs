@@ -37,6 +37,16 @@ namespace EquipmentManager.Controllers
             return View(item);
         }
 
+        public JsonResult Search(string q)
+        {
+            var items = db.Items.Where(x => !x.Obsolete).ToList();
+
+            var retItems = items
+                .Where(x => x.SearchString.ToLower().Contains(q.ToLower()))
+                .Select(x => new { value = x.Id, label = x.DisplayString });
+            return Json(retItems, JsonRequestBehavior.AllowGet);
+        }
+
         // GET: Items/Create
         public ActionResult Create()
         {
