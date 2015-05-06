@@ -10,6 +10,14 @@ namespace EquipmentManager.Data
     [MetadataType(typeof(IItem))]
     public partial class Item
     {
+        public string PartNumbersList
+        {
+            get
+            {
+                return string.Join(", ", this.PartNumbers.Select(x => x.Value));
+            }
+        }
+
         public string SearchString
         {
             get

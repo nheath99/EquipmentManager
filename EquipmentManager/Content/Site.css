@@ -40,3 +40,17 @@ input[type="checkbox"].input-validation-error {
 .validation-summary-valid {
     display: none;
 }
+
+.form-group-condensed {
+    margin-bottom: 0;
+}
+
+.remove-row {
+    color: lightgray;
+    cursor: pointer;
+}
+
+a.remove-row:hover {
+    color: #333;
+    text-decoration: none;
+}

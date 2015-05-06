@@ -8,31 +8,101 @@
     @Scripts.Render("~/bundles/jqueryui")
     <script type="text/javascript">
         $(function () {
-            $('#modalAddItem').click(function () {
-                $('#addItemModal').modal('hide');
+            $('#itemsTable').on('click', '.remove-row', function () {
+                var id = $(this).data('id');
+                var row = $(this).closest('tr');
+                $.ajax({
+                    type: 'POST',
+                    url: '/Equipment/RemoveEquipmentItem',
+                    data: { id: id },
+                    dataType: 'json',
+                    success: function (data) {
+                        row.remove();
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
             });
 
-            function log(message) {
-                alert(message);
-            }
+            $('#modalAddItem').click(function () {
 
-            $('#tbItemSearch').autocomplete({
+                var eqId = $('#Id').val();
+                var itId = $('#addItemId').val();
+                var qty = $('#addItemQty').val();
+                var qtySpare = $('#addItemQtySpare').val();
+                var unit = $('#UnitsOfMeasure').val();
+                var n = $('#addItemNotes').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/Equipment/AddEquipmentItem',
+                    data: { equipmentId: eqId, itemId: itId, quantityRequired: qty, quantitySpare: qtySpare, unitOfMeasure: unit, notes: n },
+                    dataType: 'json',
+                    success: function (data) {
+                        var row = '<tr><td><a class="glyphicon glyphicon-remove remove-row" data-id=' + data.id + ' /></td><td>' + data.itemId + '</td><td>' + data.name + '</td><td>' + data.manufacturer + '</td><td>' + data.supplier + '</td><td>' + data.quantityRequired + '</td><td>' + data.quantitySpare + '</td></tr>';
+                        var table = $('#itemsTable').find('tbody');
+                        table.append(row);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                });
+
+                $('#addItemModal').modal('hide');
+                $('#tbItemSearch').val('');
+                $('#addItem').prop('disabled', true);
+            });
+
+            $("#tbItemSearch").autocomplete({
                 source: function (request, response) {
                     $.ajax({
-                        type: "POST",
-                        url: "/Items/Search",
+                        url: '/Items/Search',
+                        dataType: 'json',
                         data: {
-                            s: request.term
+                            q: request.term
                         },
                         success: function (data) {
                             response(data);
                         }
                     });
                 },
-                minLength: 2,
-                select: (function (event, ui) {
-                    log(ui.item ? ui.item.label : this.value);
-                }),
+                minLength: 3,
+                change: function (event, ui) {
+
+                },
+                select: function (event, ui) {
+                    if (ui.item) {
+                        $('#addItemId').val(ui.item.value);
+                        $('#addItemName').html(ui.item.name);
+                        $('#addItemManufacturer').html(ui.item.manufacturer);
+                        $('#addItemSupplier').html(ui.item.supplier);
+                        $('#addItemLink').html(ui.item.link);
+                        $('#addItemPartNumbers').html(ui.item.partNumbers);
+                        $('#addItemItemsPerUnit').html(ui.item.itemsPerUnit);
+                        $('#addItemQty').val('');
+                        $('#addItemQtySpare').val('');
+                        $('#addItemUnit').val('');
+                        $('#addItemNotes').val('');
+                        $('#addItem').prop('disabled', false);
+                    }
+                    else {
+                        alert('Error');
+                        $('#addItemName').html('');
+                        $('#addItemManufacturer').html('');
+                        $('#addItemSupplier').html('');
+                        $('#addItemLink').html('');
+                        $('#addItemPartNumbers').html('');
+                        $('#addItemItemsPerUnit').html('');
+                        $('#addItemQty').val('');
+                        $('#addItemQtySpare').val('');
+                        $('#addItemUnit').val('');
+                        $('#addItemNotes').val('');
+                        $('#addItem').prop('disabled', true);
+                    }
+                    $(this).val(ui.item.label);
+                    return false;
+                },
                 open: function () {
                     $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
                 },
@@ -49,13 +119,72 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Select Item:</h4>
+                <h4 class="modal-title" id="myModalLabel">Enter Details</h4>
             </div>
             <div class="modal-body">
-                <dl class="dl-horizontal">
-                    <dt>Item</dt>
-                    <dd><input type="text" id="tbItemSearch" /></dd>
-                </dl>
+                <input type="hidden" id="addItemId" />
+                <form class="form-horizontal">
+                    <div class="form-group form-group-sm form-group-condensed">
+                        <label for="" class="col-sm-4 control-label">Item Name</label>
+                        <div class="col-sm-8">
+                            <p id="addItemName" class="form-control-static"></p>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm form-group-condensed">
+                        <label for="" class="col-sm-4 control-label">Manufacturer</label>
+                        <div class="col-sm-8">
+                            <p id="addItemManufacturer" class="form-control-static"></p>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm form-group-condensed">
+                        <label for="" class="col-sm-4 control-label">Supplier</label>
+                        <div class="col-sm-8">
+                            <p id="addItemSupplier" class="form-control-static"></p>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm form-group-condensed">
+                        <label for="" class="col-sm-4 control-label">Link</label>
+                        <div class="col-sm-8">
+                            <p id="addItemLink" class="form-control-static"></p>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm form-group-condensed">
+                        <label for="" class="col-sm-4 control-label">Part Numbers</label>
+                        <div class="col-sm-8">
+                            <p id="addItemPartNumbers" class="form-control-static"></p>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm form-group-condensed">
+                        <label for="" class="col-sm-4 control-label">Items per Unit</label>
+                        <div class="col-sm-8">
+                            <p id="addItemItemsPerUnit" class="form-control-static"></p>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm form-group-condensed">
+                        <label for="" class="col-sm-4 control-label">Quantity Required</label>
+                        <div class="col-sm-8">
+                            <input type="text" id="addItemQty" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm form-group-condensed">
+                        <label for="" class="col-sm-4 control-label">Quantity Spare</label>
+                        <div class="col-sm-8">
+                            <input type="text" id="addItemQtySpare" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm form-group-condensed">
+                        <label for="" class="col-sm-4 control-label">Unit</label>
+                        <div class="col-sm-8">
+                            @Html.DropDownList("UnitsOfMeasure", null, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm form-group-condensed">
+                        <label for="" class="col-sm-4 control-label">Notes</label>
+                        <div class="col-sm-8">
+                            <input type="text" id="addItemNotes" class="form-control" />
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -67,7 +196,7 @@
 
 <h2>@Model.Name</h2>
 <h4>@Model.Description</h4>
-
+@Html.HiddenFor(model => model.Id)
 <fieldset>
     <legend>Installations</legend>
     <button id="addInstallation" class="btn btn-primary">Add Installation</button>
@@ -79,11 +208,17 @@
     </ul>
 </fieldset>
 <fieldset>
-    <legend>Items</legend>
-    <button id="addItem" class="btn btn-primary" data-toggle="modal" data-target="#addItemModal">Add Item</button>
-    <table class="table table-condensed">
+    <legend>Equipment Items (Components)</legend>
+    <form class="form-inline">
+        <div class="form-group">
+            <input type="text" id="tbItemSearch" class="form-control" placeholder="Search..." style="width:700px;" />
+            <a id="addItem" class="btn btn-primary" data-toggle="modal" data-target="#addItemModal" disabled>Add Item</a>
+        </div>
+    </form>
+    <table id="itemsTable" class="table table-condensed">
         <thead>
             <tr>
+                <th></th>
                 <th>#</th>
                 <th>Name</th>
                 <th>Manufacturer</th>
@@ -96,10 +231,11 @@
             @foreach (var item in Model.EquipmentItems)
             {
                 <tr>
-                    <td>@item.ItemId</td>
-                    <td>@Html.ActionLink(item.ItemName, "Details", "Items", new { id = item.ItemId })</td>
-                    <td>@item.ItemManufacturer</td>
-                    <td>@item.ItemSupplier</td>
+                    <td><a class="glyphicon glyphicon-remove remove-row" data-id="@item.Id" /></td>
+                    <td>@Html.ActionLink(item.Id.ToString(), "Details", "EquipmentItems", new { id = item.Id }, null)</td>
+                    <td>@Html.ActionLink(item.ItemName, "Details", "Items", new { id = item.ItemId }, null)</td>
+                    <td>@item.ItemManufacturer.Name</td>
+                    <td>@item.ItemSupplier.Name</td>
                     <td>@item.QuantityRequired</td>
                     <td>@item.QuantityRequiredSpare</td>
                 </tr>

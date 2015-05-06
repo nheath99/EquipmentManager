@@ -43,7 +43,16 @@ namespace EquipmentManager.Controllers
 
             var retItems = items
                 .Where(x => x.SearchString.ToLower().Contains(q.ToLower()))
-                .Select(x => new { value = x.Id, label = x.DisplayString });
+                .Select(x => new { 
+                    value = x.Id, 
+                    label = x.DisplayString,
+                    name = x.Name,
+                    manufacturer = x.Manufacturer.Name,
+                    supplier = x.Supplier.Name,
+                    itemsPerUnit = x.ItemsPerUnit,
+                    link = x.Link,
+                    partNumbers = x.PartNumbersList
+                });
             return Json(retItems, JsonRequestBehavior.AllowGet);
         }
 

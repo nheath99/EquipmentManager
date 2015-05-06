@@ -33,7 +33,50 @@ namespace EquipmentManager.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.UnitsOfMeasure = new SelectList(db.UnitsOfMeasures.ToList(), "Name", "Name");
             return View(new EquipmentViewModel(equipment));
+        }
+
+        public JsonResult RemoveEquipmentItem(int id)
+        {
+            EquipmentItem e = db.EquipmentItems.Find(id);
+            if (e != null)
+            {
+                db.EquipmentItems.Remove(e);
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddEquipmentItem(int equipmentId, int itemId, double quantityRequired, double? quantitySpare, string unitOfMeasure, string notes)
+        {
+            EquipmentItem eq = new EquipmentItem()
+            {
+                EquipmentId = equipmentId,
+                ItemId = itemId,
+                QuantityRequired = quantityRequired,
+                QuantityRequiredSpare = quantitySpare ?? 0,
+                UnitOfMeasure = unitOfMeasure,
+                Notes = notes
+            };
+
+            db.EquipmentItems.Add(eq);
+            db.SaveChanges();
+
+            eq = db.EquipmentItems.Include(x => x.Item).Single(x => x.Id == eq.Id);
+
+            return Json(new
+            {
+                id = eq.Id,
+                itemId = eq.ItemId,
+                name = eq.Item.Name,
+                manufacturer = eq.Item.Manufacturer.Name,
+                supplier = eq.Item.Supplier.Name,
+                quantityRequired = eq.QuantityRequired,
+                quantitySpare = eq.QuantityRequiredSpare,
+                unitOfMeasure = eq.UnitOfMeasure,
+                notes = eq.Notes
+            }, JsonRequestBehavior.AllowGet);
         }
 
         // GET: Equipment/Create
