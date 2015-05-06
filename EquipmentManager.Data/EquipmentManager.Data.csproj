@@ -91,6 +91,7 @@
     <Compile Include="Order.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="PartialClasses\EquipmentItem.cs" />
     <Compile Include="PartialClasses\Item.cs" />
     <Compile Include="PartialClasses\Equipment.cs" />
     <Compile Include="PartialClasses\ItemCategory.cs" />

@@ -10,6 +10,10 @@ namespace EquipmentManager.Data
     [MetadataType(typeof(ISite))]
     public partial class Site
     {
+        public string CodeName
+        {
+            get { return string.Format("{0} - {1}", this.Code, this.Name); }
+        }
     }
 
     public interface ISite

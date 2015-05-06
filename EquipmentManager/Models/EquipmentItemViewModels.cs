@@ -53,6 +53,7 @@ namespace EquipmentManager.Models
             this.Notes = e.Notes;
             this.ValidFrom = e.ValidFrom;
             this.ValidTo = e.ValidTo;
+            this.IsValidToday = e.IsValidToday;
 
             if (e.Item != null)
             {
@@ -77,6 +78,7 @@ namespace EquipmentManager.Models
         public string Notes { get; set; }
         public DateTime ValidFrom { get; set; }
         public Nullable<DateTime> ValidTo { get; set; }
+        public bool IsValidToday { get; set; }
 
         public string ItemName { get; set; }
         public string ItemDescription { get; set; }

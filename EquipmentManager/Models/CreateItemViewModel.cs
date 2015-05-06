@@ -20,12 +20,12 @@ namespace EquipmentManager.Models
         public string Description { get; set; }
         public Nullable<int> SupplierId { get; set; }
         public Nullable<int> ManufacturerId { get; set; }
-        [Display(Name="Items Per Unit")]
+        [Display(Name = "Items Per Unit")]
         [Required]
         public decimal ItemsPerUnit { get; set; }
         public Nullable<int> CategoryId { get; set; }
         public string Link { get; set; }
-        [Display(Name="Part Numbers")]
+        [Display(Name = "Part Numbers")]
         public List<string> PartNumberValues { get; set; }
         public List<string> PartNumberDescriptions { get; set; }
 
@@ -47,7 +47,7 @@ namespace EquipmentManager.Models
                 i.PartNumbers.Add(new PartNumber()
                     {
                         Value = this.PartNumberValues[j],
-                        Description =this.PartNumberDescriptions[j],
+                        Description = this.PartNumberDescriptions[j],
                         Active = true
                     });
             }

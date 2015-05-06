@@ -6,59 +6,26 @@
     @Scripts.Render("~/bundles/jqueryui")
     <script type="text/javascript">
         $(function () {
-            function log(message) {
-                $("<div>").text(message).prependTo("#log");
-                $("#log").scrollTop(0);
-            }
 
-            $("#item").autocomplete({
-                source: function (request, response) {
-                    $.ajax({
-                        url: '/Items/Search',
-                        dataType: 'json',
-                        data: {
-                            q: request.term
-                        },
-                        success: function (data) {
-                            response(data);
-                        }
-                    });
-                },
-                minLength: 3,
-                select: function (event, ui) {
-                    log(ui.item ?
-                    "Selected: " + ui.item.value + " - " + ui.item.label :
-                    "Nothing selected, input was " + this.value);
-                    $(this).val(ui.item.label);
-                    return false;
-                },
-                open: function () {
-                    $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
-                },
-                close: function () {
-                    $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
-                }
-            });
         });
     </script>
 }
-
+<h2>Build Manager</h2>
 <div class="row">
-    <div class="col-md-6">
-        <ul class="list-unstyled">
-            <li>@Html.ActionLink("Equipment", "Index", "Equipment")</li>
-            <li>@Html.ActionLink("Installations", "Index", "Installations")</li>
-            <li>@Html.ActionLink("Items", "Index", "Items")</li>
-        </ul>
+    <div class="col-md-3">
+        <div class="list-group">
+            @Html.ActionLink("Equipment", "Index", "Equipment", null, new { @class = "list-group-item" })
+            @Html.ActionLink("Installations", "Index", "Installations", null, new { @class = "list-group-item" })
+            @Html.ActionLink("Items", "Index", "Items", null, new { @class = "list-group-item" })
+            @Html.ActionLink("Sites", "Index", "Sites", null, new { @class = "list-group-item" })
+        </div>
     </div>
-</div>
-<div class="row">
-    <div class="ui-widget">
-        <label for="item">Select Item:</label>
-        <input id="item" />
-    </div>
-    <div class="ui-widget" style="margin-top:2em; font-family:Arial">
-        Result:
-        <div id="log" style="height: 200px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
+    <div class="col-md-3">
+        <div class="list-group">
+            @Html.ActionLink("Manufacturers", "Index", "Manufacturers", null, new { @class = "list-group-item" })
+            @Html.ActionLink("Suppliers", "Index", "Suppliers", null, new { @class = "list-group-item" })
+            @Html.ActionLink("Categories", "Index", "ItemCategories", null, new { @class = "list-group-item" })
+            @Html.ActionLink("Units", "Index", "Units", null, new { @class = "list-group-item" })
+        </div>
     </div>
 </div>

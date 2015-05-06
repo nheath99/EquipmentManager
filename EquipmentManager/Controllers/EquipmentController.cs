@@ -34,6 +34,7 @@ namespace EquipmentManager.Controllers
                 return HttpNotFound();
             }
             ViewBag.UnitsOfMeasure = new SelectList(db.UnitsOfMeasures.ToList(), "Name", "Name");
+            ViewBag.Sites = new SelectList(db.Sites.OrderBy(x => x.Code).ToList(), "Id", "CodeName");
             return View(new EquipmentViewModel(equipment));
         }
 
@@ -42,10 +43,22 @@ namespace EquipmentManager.Controllers
             EquipmentItem e = db.EquipmentItems.Find(id);
             if (e != null)
             {
-                db.EquipmentItems.Remove(e);
-                db.SaveChanges();
+                try
+                {
+                    db.EquipmentItems.Remove(e);
+                    db.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    e.ValidTo = DateTime.Today;
+                    db.SaveChanges();
+                }
+                return Json(new { result = true }, JsonRequestBehavior.AllowGet);
             }
-            return Json(true, JsonRequestBehavior.AllowGet);
+            else
+            {
+                return Json(new { result = false }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         public JsonResult AddEquipmentItem(int equipmentId, int itemId, double quantityRequired, double? quantitySpare, string unitOfMeasure, string notes)
@@ -57,7 +70,8 @@ namespace EquipmentManager.Controllers
                 QuantityRequired = quantityRequired,
                 QuantityRequiredSpare = quantitySpare ?? 0,
                 UnitOfMeasure = unitOfMeasure,
-                Notes = notes
+                Notes = notes,
+                ValidFrom = DateTime.Today
             };
 
             db.EquipmentItems.Add(eq);

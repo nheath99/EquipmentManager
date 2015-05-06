@@ -8,6 +8,24 @@
     @Scripts.Render("~/bundles/jqueryui")
     <script type="text/javascript">
         $(function () {
+
+            $('#modalAddInstallation').click(function () {
+                var eqId = $('#Id').val();
+                var siteId = $('#Sites').val();
+                var name = $('#addInstallationName').val();
+                var desc = $('#addInstallationDescription').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/Installations/AddInstallation',
+                    data: { equipmentId: eqId, siteId: siteId, name: name, description: desc },
+                    dataType: 'json',
+                    success: function (data) {
+                        location.reload();
+                    }
+                });
+            });
+
             $('#itemsTable').on('click', '.remove-row', function () {
                 var id = $(this).data('id');
                 var row = $(this).closest('tr');
@@ -17,7 +35,12 @@
                     data: { id: id },
                     dataType: 'json',
                     success: function (data) {
-                        row.remove();
+                        if (data.result == true) {
+                            row.remove();
+                        }
+                        else {
+                            alert("Cannot delete.");
+                        }
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
 
@@ -114,6 +137,43 @@
     </script>
 }
 
+<div class="modal" id="addInstallationModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Select Site</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group form-group-sm form-group-condensed">
+                        <label for="" class="col-sm-4 control-label">Site</label>
+                        <div class="col-sm-8">
+                            @Html.DropDownList("Sites", null, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm form-group-condensed">
+                        <label for="" class="col-sm-4 control-label">Name</label>
+                        <div class="col-sm-8">
+                            <input type="text" id="addInstallationName" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm form-group-condensed">
+                        <label for="" class="col-sm-4 control-label">Description</label>
+                        <div class="col-sm-8">
+                            <input type="text" id="addInstallationDescription" class="form-control" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button id="modalAddInstallation" type="button" class="btn btn-primary">Add Item</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal" id="addItemModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -198,12 +258,13 @@
 <h4>@Model.Description</h4>
 @Html.HiddenFor(model => model.Id)
 <fieldset>
-    <legend>Installations</legend>
-    <button id="addInstallation" class="btn btn-primary">Add Installation</button>
-    <ul class="list-unstyled">
+    <legend>Installations <a id="addInstallation" class="btn btn-info btn-xs" data-toggle="modal" data-target="#addInstallationModal">Add Installation</a></legend>
+    <ul>
         @foreach (var item in Model.Installations)
         {
-            <li>@item.Site.Code - @item.Site.Name</li>
+            <li>
+                @Html.ActionLink(item.Site.CodeName, "Details", "Installations", new { id = item.Id }, null)
+            </li>
         }
     </ul>
 </fieldset>
@@ -228,7 +289,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.EquipmentItems)
+            @foreach (var item in Model.EquipmentItems.Where(x => x.IsValidToday))
             {
                 <tr>
                     <td><a class="glyphicon glyphicon-remove remove-row" data-id="@item.Id" /></td>
