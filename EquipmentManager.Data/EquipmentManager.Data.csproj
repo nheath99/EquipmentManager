@@ -76,9 +76,6 @@
     <Compile Include="InstallationEquipmentItem.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="InstallationEquipmentItemStatus.cs">
-      <DependentUpon>DataModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Item.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
@@ -92,6 +89,7 @@
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="PartialClasses\EquipmentItem.cs" />
+    <Compile Include="PartialClasses\InstallationEquipmentItem.cs" />
     <Compile Include="PartialClasses\Item.cs" />
     <Compile Include="PartialClasses\Equipment.cs" />
     <Compile Include="PartialClasses\ItemCategory.cs" />

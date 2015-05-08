@@ -63,7 +63,13 @@
                     data: { equipmentId: eqId, itemId: itId, quantityRequired: qty, quantitySpare: qtySpare, unitOfMeasure: unit, notes: n },
                     dataType: 'json',
                     success: function (data) {
-                        var row = '<tr><td><a class="glyphicon glyphicon-remove remove-row" data-id=' + data.id + ' /></td><td>' + data.itemId + '</td><td>' + data.name + '</td><td>' + data.manufacturer + '</td><td>' + data.supplier + '</td><td>' + data.quantityRequired + '</td><td>' + data.quantitySpare + '</td></tr>';
+                        var row = '<tr><td><a class="glyphicon glyphicon-remove remove-row" data-id=' + data.id + ' /></td><td>' + data.id + '</td><td>' + data.name + '</td><td>' + data.manufacturer + '</td><td>' + data.supplier + '</td><td>' + data.quantityRequired;
+                        if (qtySpare == 0) {
+                            row = row + '</td></tr>';
+                        }
+                        else {
+                            row = row + ' (' + data.quantitySpare + ')</td></tr>';
+                        }
                         var table = $('#itemsTable').find('tbody');
                         table.append(row);
                     },
@@ -103,8 +109,8 @@
                         $('#addItemLink').html(ui.item.link);
                         $('#addItemPartNumbers').html(ui.item.partNumbers);
                         $('#addItemItemsPerUnit').html(ui.item.itemsPerUnit);
-                        $('#addItemQty').val('');
-                        $('#addItemQtySpare').val('');
+                        $('#addItemQty').val('1');
+                        $('#addItemQtySpare').val('0');
                         $('#addItemUnit').val('');
                         $('#addItemNotes').val('');
                         $('#addItem').prop('disabled', false);
@@ -223,13 +229,13 @@
                     <div class="form-group form-group-sm form-group-condensed">
                         <label for="" class="col-sm-4 control-label">Quantity Required</label>
                         <div class="col-sm-8">
-                            <input type="text" id="addItemQty" class="form-control" />
+                            <input type="text" id="addItemQty" class="form-control" value="1" />
                         </div>
                     </div>
                     <div class="form-group form-group-sm form-group-condensed">
                         <label for="" class="col-sm-4 control-label">Quantity Spare</label>
                         <div class="col-sm-8">
-                            <input type="text" id="addItemQtySpare" class="form-control" />
+                            <input type="text" id="addItemQtySpare" class="form-control" value="0" />
                         </div>
                     </div>
                     <div class="form-group form-group-sm form-group-condensed">
@@ -254,6 +260,12 @@
     </div>
 </div>
 
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+    <li>@Html.ActionLink("Equipment", "Index", "Equipment")</li>
+    <li class="active">@Model.Name</li>
+</ol>
+
 <h2>@Model.Name</h2>
 <h4>@Model.Description</h4>
 @Html.HiddenFor(model => model.Id)
@@ -269,7 +281,7 @@
     </ul>
 </fieldset>
 <fieldset>
-    <legend>Equipment Items (Components)</legend>
+    <legend>Equipment Items (@Model.EquipmentItems.Count)</legend>
     <form class="form-inline">
         <div class="form-group">
             <input type="text" id="tbItemSearch" class="form-control" placeholder="Search..." style="width:700px;" />
@@ -284,8 +296,7 @@
                 <th>Name</th>
                 <th>Manufacturer</th>
                 <th>Supplier</th>
-                <th>Quantity Required</th>
-                <th>Quantity Spare</th>
+                <th>Quantity Required (Spare)</th>
             </tr>
         </thead>
         <tbody>
@@ -295,10 +306,9 @@
                     <td><a class="glyphicon glyphicon-remove remove-row" data-id="@item.Id" /></td>
                     <td>@Html.ActionLink(item.Id.ToString(), "Details", "EquipmentItems", new { id = item.Id }, null)</td>
                     <td>@Html.ActionLink(item.ItemName, "Details", "Items", new { id = item.ItemId }, null)</td>
-                    <td>@item.ItemManufacturer.Name</td>
-                    <td>@item.ItemSupplier.Name</td>
-                    <td>@item.QuantityRequired</td>
-                    <td>@item.QuantityRequiredSpare</td>
+                    <td>@item.ItemManufacturerName</td>
+                    <td>@item.ItemSupplierName</td>
+                    <td>@item.QuantityRequired @item.QuantityRequiredSpareString</td>
                 </tr>
             }
         </tbody>

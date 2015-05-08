@@ -19,6 +19,11 @@ namespace EquipmentManager.Data
         {
             get { return this.IsValid(DateTime.Today); }
         }
+
+        public string QuantityRequiredSpareString
+        {
+            get { return this.QuantityRequiredSpare != 0 ? string.Format("({0})", this.QuantityRequiredSpare) : string.Empty; }
+        }
     }
 
     public interface IEquipmentItem

@@ -30,7 +30,7 @@ namespace EquipmentManager.Data
         public Nullable<System.DateTime> ValidTo { get; set; }
     
         public virtual Equipment Equipment { get; set; }
-        public virtual ICollection<InstallationEquipmentItem> InstallationEquipmentItems { get; set; }
         public virtual Item Item { get; set; }
+        public virtual ICollection<InstallationEquipmentItem> InstallationEquipmentItems { get; set; }
     }
 }

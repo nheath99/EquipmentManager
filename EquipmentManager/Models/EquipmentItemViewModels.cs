@@ -90,5 +90,29 @@ namespace EquipmentManager.Models
         public Supplier ItemSupplier { get; set; }
         [Display(Name = "Part Numbers")]
         public ICollection<PartNumber> ItemPartNumbers { get; set; }
+
+        public string ItemManufacturerName
+        { get { return this.ItemManufacturer != null ? this.ItemManufacturer.Name : string.Empty; } }
+
+        public string ItemSupplierName
+        { get { return this.ItemSupplier != null ? this.ItemSupplier.Name : string.Empty; } }
+
+        public string ItemCategoryName
+        { get { return this.ItemCategory != null ? this.ItemCategory.Name : string.Empty; } }
+
+        public string QuantityRequiredSpareString
+        {
+            get
+            {
+                if (this.QuantityRequiredSpare == 0)
+                {
+                    return string.Empty;
+                }
+                else
+                {
+                    return string.Format("({0})", this.QuantityRequiredSpare);
+                }
+            }
+        }
     }
 }

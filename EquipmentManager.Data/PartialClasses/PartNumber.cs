@@ -10,6 +10,20 @@ namespace EquipmentManager.Data
     [MetadataType(typeof(IPartNumber))]
     public partial class PartNumber
     {
+        public string DescriptionAddition
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(this.Description))
+                {
+                    return string.Empty;
+                }
+                else
+                {
+                    return " - " + this.Description;
+                }
+            }
+        }
     }
 
     public interface IPartNumber

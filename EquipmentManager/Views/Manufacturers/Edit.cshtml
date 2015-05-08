@@ -4,8 +4,12 @@
     ViewBag.Title = "Edit";
 }
 
-<h2>Edit</h2>
-
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+    <li>@Html.ActionLink("Manufacturers", "Index", "Manufacturers")</li>
+    <li>@Html.ActionLink(Model.Name, "Details", "Manufacturers", new { id = Model.Id }, null)</li>
+    <li class="active">Edit</li>
+</ol>
 
 @using (Html.BeginForm())
 {

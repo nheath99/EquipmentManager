@@ -4,7 +4,11 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+    <li>@Html.ActionLink("Sites", "Index", "Sites")</li>
+    <li class="active">@Model.Name</li>
+</ol>
 
 <div>
     <h4>Site</h4>

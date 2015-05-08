@@ -27,8 +27,6 @@ namespace EquipmentManager.Data
     
         public virtual DbSet<Equipment> Equipments { get; set; }
         public virtual DbSet<EquipmentItem> EquipmentItems { get; set; }
-        public virtual DbSet<InstallationEquipmentItem> InstallationEquipmentItems { get; set; }
-        public virtual DbSet<InstallationEquipmentItemStatus> InstallationEquipmentItemStatus { get; set; }
         public virtual DbSet<Installation> Installations { get; set; }
         public virtual DbSet<ItemCategory> ItemCategories { get; set; }
         public virtual DbSet<Item> Items { get; set; }
@@ -38,5 +36,6 @@ namespace EquipmentManager.Data
         public virtual DbSet<Site> Sites { get; set; }
         public virtual DbSet<Supplier> Suppliers { get; set; }
         public virtual DbSet<UnitsOfMeasure> UnitsOfMeasures { get; set; }
+        public virtual DbSet<InstallationEquipmentItem> InstallationEquipmentItems { get; set; }
     }
 }

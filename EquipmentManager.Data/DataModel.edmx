@@ -35,18 +35,12 @@
           <Property Name="InstallationId" Type="int" Nullable="false" />
           <Property Name="EquipmentItemId" Type="int" Nullable="false" />
           <Property Name="DateOrdered" Type="date" />
+          <Property Name="DateExpected" Type="date" />
           <Property Name="DateReceived" Type="date" />
           <Property Name="StatusId" Type="int" />
-          <Property Name="InStock" Type="float" Nullable="false" />
           <Property Name="CostPerUnit" Type="decimal" Precision="8" Scale="4" Nullable="false" />
           <Property Name="UnitsOrdered" Type="float" Nullable="false" />
-        </EntityType>
-        <EntityType Name="InstallationEquipmentItemStatus">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Postage" Type="decimal" Precision="8" Scale="4" Nullable="false" />
         </EntityType>
         <EntityType Name="Installations">
           <Key>
@@ -180,18 +174,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_InstallationEquipmentItems_InstallationEquipmentItemStatus">
-          <End Role="InstallationEquipmentItemStatus" Type="Self.InstallationEquipmentItemStatus" Multiplicity="0..1" />
-          <End Role="InstallationEquipmentItems" Type="Self.InstallationEquipmentItems" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="InstallationEquipmentItemStatus">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="InstallationEquipmentItems">
-              <PropertyRef Name="StatusId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_InstallationEquipmentItems_Installations">
           <End Role="Installations" Type="Self.Installations" Multiplicity="1" />
           <End Role="InstallationEquipmentItems" Type="Self.InstallationEquipmentItems" Multiplicity="*" />
@@ -304,7 +286,6 @@
           <EntitySet Name="Equipment" EntityType="Self.Equipment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EquipmentItems" EntityType="Self.EquipmentItems" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="InstallationEquipmentItems" EntityType="Self.InstallationEquipmentItems" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="InstallationEquipmentItemStatus" EntityType="Self.InstallationEquipmentItemStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Installations" EntityType="Self.Installations" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ItemCategories" EntityType="Self.ItemCategories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Items" EntityType="Self.Items" Schema="dbo" store:Type="Tables" />
@@ -324,10 +305,6 @@
           </AssociationSet>
           <AssociationSet Name="FK_InstallationEquipmentItems_EquipmentItems" Association="Self.FK_InstallationEquipmentItems_EquipmentItems">
             <End Role="EquipmentItems" EntitySet="EquipmentItems" />
-            <End Role="InstallationEquipmentItems" EntitySet="InstallationEquipmentItems" />
-          </AssociationSet>
-          <AssociationSet Name="FK_InstallationEquipmentItems_InstallationEquipmentItemStatus" Association="Self.FK_InstallationEquipmentItems_InstallationEquipmentItemStatus">
-            <End Role="InstallationEquipmentItemStatus" EntitySet="InstallationEquipmentItemStatus" />
             <End Role="InstallationEquipmentItems" EntitySet="InstallationEquipmentItems" />
           </AssociationSet>
           <AssociationSet Name="FK_InstallationEquipmentItems_Installations" Association="Self.FK_InstallationEquipmentItems_Installations">
@@ -395,34 +372,8 @@
           <Property Name="ValidFrom" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="ValidTo" Type="DateTime" Precision="0" />
           <NavigationProperty Name="Equipment" Relationship="Self.FK_EquipmentItems_Items" FromRole="EquipmentItems" ToRole="Equipment" />
-          <NavigationProperty Name="InstallationEquipmentItems" Relationship="Self.FK_InstallationEquipmentItems_EquipmentItems" FromRole="EquipmentItems" ToRole="InstallationEquipmentItems" />
           <NavigationProperty Name="Item" Relationship="EquipmentManagerModel.FK_EquipmentItems_Items1" FromRole="EquipmentItem" ToRole="Item" />
-        </EntityType>
-        <EntityType Name="InstallationEquipmentItem">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <Property Name="InstallationId" Type="Int32" Nullable="false" />
-          <Property Name="EquipmentItemId" Type="Int32" Nullable="false" />
-          <Property Name="DateOrdered" Type="DateTime" Precision="0" />
-          <Property Name="DateReceived" Type="DateTime" Precision="0" />
-          <Property Name="StatusId" Type="Int32" />
-          <Property Name="InStock" Type="Double" Nullable="false" />
-          <NavigationProperty Name="EquipmentItem" Relationship="Self.FK_InstallationEquipmentItems_EquipmentItems" FromRole="InstallationEquipmentItems" ToRole="EquipmentItems" />
-          <NavigationProperty Name="InstallationEquipmentItemStatu" Relationship="Self.FK_InstallationEquipmentItems_InstallationEquipmentItemStatus" FromRole="InstallationEquipmentItems" ToRole="InstallationEquipmentItemStatus" />
-          <NavigationProperty Name="Installation" Relationship="Self.FK_InstallationEquipmentItems_Installations" FromRole="InstallationEquipmentItems" ToRole="Installations" />
-          <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_InstallationEquipmentItems" FromRole="InstallationEquipmentItems" ToRole="Orders" />
-          <Property Name="CostPerUnit" Type="Decimal" Nullable="false" Precision="8" Scale="4" />
-          <Property Name="UnitsOrdered" Type="Double" Nullable="false" />
-        </EntityType>
-        <EntityType Name="InstallationEquipmentItemStatus">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="InstallationEquipmentItems" Relationship="Self.FK_InstallationEquipmentItems_InstallationEquipmentItemStatus" FromRole="InstallationEquipmentItemStatus" ToRole="InstallationEquipmentItems" />
+          <NavigationProperty Name="InstallationEquipmentItems" Relationship="EquipmentManagerModel.FK_InstallationEquipmentItems_EquipmentItems" FromRole="EquipmentItem" ToRole="InstallationEquipmentItem" />
         </EntityType>
         <EntityType Name="Installation">
           <Key>
@@ -434,8 +385,8 @@
           <Property Name="EquipmentId" Type="Int32" Nullable="false" />
           <Property Name="Destination_SiteId" Type="Int32" />
           <NavigationProperty Name="Equipment" Relationship="Self.FK_Installations_Equipment" FromRole="Installations" ToRole="Equipment" />
-          <NavigationProperty Name="InstallationEquipmentItems" Relationship="Self.FK_InstallationEquipmentItems_Installations" FromRole="Installations" ToRole="InstallationEquipmentItems" />
           <NavigationProperty Name="Site" Relationship="Self.FK_Installations_Site" FromRole="Installations" ToRole="Site" />
+          <NavigationProperty Name="InstallationEquipmentItems" Relationship="EquipmentManagerModel.FK_InstallationEquipmentItems_Installations" FromRole="Installation" ToRole="InstallationEquipmentItem" />
         </EntityType>
         <EntityType Name="ItemCategory">
           <Key>
@@ -492,7 +443,7 @@
           <Property Name="DateReceived" Type="DateTime" Precision="0" />
           <Property Name="Quantity" Type="Double" Nullable="false" />
           <Property Name="Notes" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="InstallationEquipmentItem" Relationship="Self.FK_Orders_InstallationEquipmentItems" FromRole="Orders" ToRole="InstallationEquipmentItems" />
+          <NavigationProperty Name="InstallationEquipmentItem" Relationship="EquipmentManagerModel.FK_Orders_InstallationEquipmentItems" FromRole="Order" ToRole="InstallationEquipmentItem" />
         </EntityType>
         <EntityType Name="PartNumber">
           <Key>
@@ -557,54 +508,6 @@
             </Principal>
             <Dependent Role="Installations">
               <PropertyRef Name="EquipmentId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_InstallationEquipmentItems_EquipmentItems">
-          <End Role="EquipmentItems" Type="Self.EquipmentItem" Multiplicity="1" />
-          <End Role="InstallationEquipmentItems" Type="Self.InstallationEquipmentItem" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="EquipmentItems">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="InstallationEquipmentItems">
-              <PropertyRef Name="EquipmentItemId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_InstallationEquipmentItems_InstallationEquipmentItemStatus">
-          <End Role="InstallationEquipmentItemStatus" Type="EquipmentManagerModel.InstallationEquipmentItemStatus" Multiplicity="0..1" />
-          <End Role="InstallationEquipmentItems" Type="Self.InstallationEquipmentItem" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="InstallationEquipmentItemStatus">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="InstallationEquipmentItems">
-              <PropertyRef Name="StatusId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_InstallationEquipmentItems_Installations">
-          <End Role="Installations" Type="Self.Installation" Multiplicity="1" />
-          <End Role="InstallationEquipmentItems" Type="Self.InstallationEquipmentItem" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Installations">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="InstallationEquipmentItems">
-              <PropertyRef Name="InstallationId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Orders_InstallationEquipmentItems">
-          <End Role="InstallationEquipmentItems" Type="Self.InstallationEquipmentItem" Multiplicity="1" />
-          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="InstallationEquipmentItems">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Orders">
-              <PropertyRef Name="InstallationEquipmentItemId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -683,8 +586,6 @@
         <EntityContainer Name="EquipmentManagerEntities" annotation:LazyLoadingEnabled="true" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
           <EntitySet Name="Equipments" EntityType="Self.Equipment" />
           <EntitySet Name="EquipmentItems" EntityType="Self.EquipmentItem" />
-          <EntitySet Name="InstallationEquipmentItems" EntityType="Self.InstallationEquipmentItem" />
-          <EntitySet Name="InstallationEquipmentItemStatus" EntityType="EquipmentManagerModel.InstallationEquipmentItemStatus" />
           <EntitySet Name="Installations" EntityType="Self.Installation" />
           <EntitySet Name="ItemCategories" EntityType="Self.ItemCategory" />
           <EntitySet Name="Items" EntityType="Self.Item" />
@@ -701,22 +602,6 @@
           <AssociationSet Name="FK_Installations_Equipment" Association="Self.FK_Installations_Equipment">
             <End Role="Equipment" EntitySet="Equipments" />
             <End Role="Installations" EntitySet="Installations" />
-          </AssociationSet>
-          <AssociationSet Name="FK_InstallationEquipmentItems_EquipmentItems" Association="Self.FK_InstallationEquipmentItems_EquipmentItems">
-            <End Role="EquipmentItems" EntitySet="EquipmentItems" />
-            <End Role="InstallationEquipmentItems" EntitySet="InstallationEquipmentItems" />
-          </AssociationSet>
-          <AssociationSet Name="FK_InstallationEquipmentItems_InstallationEquipmentItemStatus" Association="Self.FK_InstallationEquipmentItems_InstallationEquipmentItemStatus">
-            <End Role="InstallationEquipmentItemStatus" EntitySet="InstallationEquipmentItemStatus" />
-            <End Role="InstallationEquipmentItems" EntitySet="InstallationEquipmentItems" />
-          </AssociationSet>
-          <AssociationSet Name="FK_InstallationEquipmentItems_Installations" Association="Self.FK_InstallationEquipmentItems_Installations">
-            <End Role="Installations" EntitySet="Installations" />
-            <End Role="InstallationEquipmentItems" EntitySet="InstallationEquipmentItems" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Orders_InstallationEquipmentItems" Association="Self.FK_Orders_InstallationEquipmentItems">
-            <End Role="InstallationEquipmentItems" EntitySet="InstallationEquipmentItems" />
-            <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
           <AssociationSet Name="FK_Installations_Site" Association="Self.FK_Installations_Site">
             <End Role="Site" EntitySet="Sites" />
@@ -746,6 +631,19 @@
             <End Role="Item" EntitySet="Items" />
             <End Role="EquipmentItem" EntitySet="EquipmentItems" />
           </AssociationSet>
+          <EntitySet Name="InstallationEquipmentItems" EntityType="EquipmentManagerModel.InstallationEquipmentItem" />
+          <AssociationSet Name="FK_InstallationEquipmentItems_EquipmentItems" Association="EquipmentManagerModel.FK_InstallationEquipmentItems_EquipmentItems">
+            <End Role="EquipmentItem" EntitySet="EquipmentItems" />
+            <End Role="InstallationEquipmentItem" EntitySet="InstallationEquipmentItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InstallationEquipmentItems_Installations" Association="EquipmentManagerModel.FK_InstallationEquipmentItems_Installations">
+            <End Role="Installation" EntitySet="Installations" />
+            <End Role="InstallationEquipmentItem" EntitySet="InstallationEquipmentItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_InstallationEquipmentItems" Association="EquipmentManagerModel.FK_Orders_InstallationEquipmentItems">
+            <End Role="InstallationEquipmentItem" EntitySet="InstallationEquipmentItems" />
+            <End Role="Order" EntitySet="Orders" />
+          </AssociationSet>
         </EntityContainer>
         <Association Name="FK_EquipmentItems_Items1">
           <End Type="EquipmentManagerModel.Item" Role="Item" Multiplicity="1" />
@@ -756,6 +654,60 @@
             </Principal>
             <Dependent Role="EquipmentItem">
               <PropertyRef Name="ItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="InstallationEquipmentItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InstallationId" Type="Int32" Nullable="false" />
+          <Property Name="EquipmentItemId" Type="Int32" Nullable="false" />
+          <Property Name="DateOrdered" Type="DateTime" Precision="0" />
+          <Property Name="DateExpected" Type="DateTime" Precision="0" />
+          <Property Name="DateReceived" Type="DateTime" Precision="0" />
+          <Property Name="StatusId" Type="Int32" />
+          <Property Name="CostPerUnit" Type="Decimal" Nullable="false" Precision="8" Scale="4" />
+          <Property Name="UnitsOrdered" Type="Double" Nullable="false" />
+          <Property Name="Postage" Type="Decimal" Nullable="false" Precision="8" Scale="4" />
+          <NavigationProperty Name="EquipmentItem" Relationship="EquipmentManagerModel.FK_InstallationEquipmentItems_EquipmentItems" FromRole="InstallationEquipmentItem" ToRole="EquipmentItem" />
+          <NavigationProperty Name="Installation" Relationship="EquipmentManagerModel.FK_InstallationEquipmentItems_Installations" FromRole="InstallationEquipmentItem" ToRole="Installation" />
+          <NavigationProperty Name="Orders" Relationship="EquipmentManagerModel.FK_Orders_InstallationEquipmentItems" FromRole="InstallationEquipmentItem" ToRole="Order" />
+        </EntityType>
+        <Association Name="FK_InstallationEquipmentItems_EquipmentItems">
+          <End Type="EquipmentManagerModel.EquipmentItem" Role="EquipmentItem" Multiplicity="1" />
+          <End Type="EquipmentManagerModel.InstallationEquipmentItem" Role="InstallationEquipmentItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EquipmentItem">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="InstallationEquipmentItem">
+              <PropertyRef Name="EquipmentItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InstallationEquipmentItems_Installations">
+          <End Type="EquipmentManagerModel.Installation" Role="Installation" Multiplicity="1" />
+          <End Type="EquipmentManagerModel.InstallationEquipmentItem" Role="InstallationEquipmentItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Installation">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="InstallationEquipmentItem">
+              <PropertyRef Name="InstallationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_InstallationEquipmentItems">
+          <End Type="EquipmentManagerModel.InstallationEquipmentItem" Role="InstallationEquipmentItem" Multiplicity="1" />
+          <End Type="EquipmentManagerModel.Order" Role="Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="InstallationEquipmentItem">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="InstallationEquipmentItemId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -786,29 +738,6 @@
                 <ScalarProperty Name="Notes" ColumnName="Notes" />
                 <ScalarProperty Name="ValidFrom" ColumnName="ValidFrom" />
                 <ScalarProperty Name="ValidTo" ColumnName="ValidTo" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="InstallationEquipmentItems">
-            <EntityTypeMapping TypeName="EquipmentManagerModel.InstallationEquipmentItem">
-              <MappingFragment StoreEntitySet="InstallationEquipmentItems">
-                <ScalarProperty Name="UnitsOrdered" ColumnName="UnitsOrdered" />
-                <ScalarProperty Name="CostPerUnit" ColumnName="CostPerUnit" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="InstallationId" ColumnName="InstallationId" />
-                <ScalarProperty Name="EquipmentItemId" ColumnName="EquipmentItemId" />
-                <ScalarProperty Name="DateOrdered" ColumnName="DateOrdered" />
-                <ScalarProperty Name="DateReceived" ColumnName="DateReceived" />
-                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
-                <ScalarProperty Name="InStock" ColumnName="InStock" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="InstallationEquipmentItemStatus">
-            <EntityTypeMapping TypeName="EquipmentManagerModel.InstallationEquipmentItemStatus">
-              <MappingFragment StoreEntitySet="InstallationEquipmentItemStatus">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -914,6 +843,22 @@
               <MappingFragment StoreEntitySet="UnitsOfMeasure">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="InstallationEquipmentItems">
+            <EntityTypeMapping TypeName="EquipmentManagerModel.InstallationEquipmentItem">
+              <MappingFragment StoreEntitySet="InstallationEquipmentItems">
+                <ScalarProperty Name="Postage" ColumnName="Postage" />
+                <ScalarProperty Name="UnitsOrdered" ColumnName="UnitsOrdered" />
+                <ScalarProperty Name="CostPerUnit" ColumnName="CostPerUnit" />
+                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+                <ScalarProperty Name="DateReceived" ColumnName="DateReceived" />
+                <ScalarProperty Name="DateExpected" ColumnName="DateExpected" />
+                <ScalarProperty Name="DateOrdered" ColumnName="DateOrdered" />
+                <ScalarProperty Name="EquipmentItemId" ColumnName="EquipmentItemId" />
+                <ScalarProperty Name="InstallationId" ColumnName="InstallationId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

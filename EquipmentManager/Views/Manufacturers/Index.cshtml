@@ -4,7 +4,10 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+    <li class="active">Manufacturers</li>
+</ol>
 
 <p>
     @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default" })

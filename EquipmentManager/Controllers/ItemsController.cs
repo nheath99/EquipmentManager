@@ -22,6 +22,49 @@ namespace EquipmentManager.Controllers
             return View(items.ToList());
         }
 
+        public JsonResult AddPartNumber(int itemId, string value, string description)
+        {
+            var item = db.Items.Find(itemId);
+            if (item != null)
+            {
+                try
+                {
+                    PartNumber pn = new PartNumber()
+                    {
+                        Value = value,
+                        Description = description,
+                        Active = true
+                    };
+                    item.PartNumbers.Add(pn);
+                    db.SaveChanges();
+                    return Json(new { result = true, id = pn.Id, value = pn.Value, description = pn.Description }, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+            return Json(new { result = false }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeletePartNumber(int id)
+        {
+            var pn = db.PartNumbers.Find(id);
+            if (pn != null)
+            {
+                try
+                {
+                    db.PartNumbers.Remove(pn);
+                    db.SaveChanges();
+                    return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception)
+                {
+                }
+            }
+            return Json(new { result = false }, JsonRequestBehavior.AllowGet);
+        }
+
         // GET: Items/Details/5
         public ActionResult Details(int? id)
         {
@@ -43,12 +86,13 @@ namespace EquipmentManager.Controllers
 
             var retItems = items
                 .Where(x => x.SearchString.ToLower().Contains(q.ToLower()))
-                .Select(x => new { 
-                    value = x.Id, 
+                .Select(x => new
+                {
+                    value = x.Id,
                     label = x.DisplayString,
                     name = x.Name,
-                    manufacturer = x.Manufacturer.Name,
-                    supplier = x.Supplier.Name,
+                    manufacturer = x.ManufacturerName,
+                    supplier = x.SupplierName,
                     itemsPerUnit = x.ItemsPerUnit,
                     link = x.Link,
                     partNumbers = x.PartNumbersList

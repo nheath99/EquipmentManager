@@ -26,7 +26,7 @@ namespace EquipmentManager.Data
         public Nullable<int> Destination_SiteId { get; set; }
     
         public virtual Equipment Equipment { get; set; }
-        public virtual ICollection<InstallationEquipmentItem> InstallationEquipmentItems { get; set; }
         public virtual Site Site { get; set; }
+        public virtual ICollection<InstallationEquipmentItem> InstallationEquipmentItems { get; set; }
     }
 }

@@ -1,18 +1,21 @@
 ﻿@model EquipmentManager.Data.Equipment
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Create Equipment";
 }
 
-<h2>Create</h2>
-
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+    <li>@Html.ActionLink("Equipment", "Index", "Equipment")</li>
+    <li class="active">Create</li>
+</ol>
 
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>Equipment</h4>
+        <h4>@ViewBag.Title</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">

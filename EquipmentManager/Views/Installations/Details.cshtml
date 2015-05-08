@@ -1,50 +1,87 @@
 ﻿@model EquipmentManager.Data.Installation
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = Model.Name;
 }
 
-<h2>Details</h2>
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+    <li>@Html.ActionLink("Installations", "Index", "Installations")</li>
+    <li class="active">@Model.Name</li>
+</ol>
 
 <div>
-    <h4>Installation</h4>
-    <hr />
+    <h4>@ViewBag.Title <small>@Html.ActionLink("Edit", "Edit", new { id = Model.Id })</small></h4>
+
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-
+        <dt>@Html.DisplayNameFor(model => model.Site):</dt>
         <dd>
-            @Html.DisplayFor(model => model.Name)
+            @Html.ActionLink(Model.Site.Name, "Details", "Sites", new { id = Model.Destination_SiteId }, null)
         </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-
+        <dt>@Html.DisplayNameFor(model => model.Equipment):</dt>
         <dd>
-            @Html.DisplayFor(model => model.Description)
+            @Html.ActionLink(Model.Equipment.Name, "Details", "Equipment", new { id = Model.EquipmentId }, null)
         </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Equipment.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Equipment.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Site.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Site.Name)
-        </dd>
-
     </dl>
+    <hr />
+    <h4>Items (@Model.InstallationEquipmentItems.Count)</h4>
+    <div class="btn-group">
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            Action <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+            <li><a href="#">Import items from @Model.Equipment.Name</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+        </ul>
+    </div>
+    <div class="btn-group">
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            Filter <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+            <li><a href="#">All Items</a></li>
+            <li class="divider"></li>
+            <li><a href="#">Not Ordered</a></li>
+            <li><a href="#">Ordered</a></li>
+            <li><a href="#"></a></li>
+            <li><a href="#"></a></li>
+        </ul>
+    </div>
+    <table id="itemsTable" class="table table-condensed">
+        <thead>
+            <tr>
+                <th></th>
+                <th>#</th>
+                <th>Name</th>
+                <th>Manufacturer</th>
+                <th>Supplier</th>
+                <th>Quantity Required (Spare)</th>
+                <th>Qty Ordered</th>
+                <th>Status</th>
+                <th>Cost per Unit</th>
+                <th>Postage</th>
+                <th>Total Cost</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.InstallationEquipmentItems)
+            {
+                <tr>
+                    <td>@Html.ActionLink(item.Id.ToString(), "Details", "InstallationEquipmentItem", new { id = item.Id }, null)</td>
+                    <td>@Html.ActionLink(item.EquipmentItem.Item.Name, "Details", "Item", new { id = item.EquipmentItemId }, null)</td>
+                    <td>@Html.ActionLink(item.EquipmentItem.Item.ManufacturerName, "Details", "Manufacturer", new {id = item.EquipmentItem.Item.ManufacturerId}, null)</td>
+                    <td>@Html.ActionLink(item.EquipmentItem.Item.SupplierName, "Details", "Supplier", new { id = item.EquipmentItem.Item.SupplierId }, null)</td>
+                    <td>@item.EquipmentItem.QuantityRequired @item.EquipmentItem.QuantityRequiredSpareString</td>
+                    <td>@item.UnitsOrdered</td>
+                    <td>@item.StatusId</td>
+                    <td>@item.CostPerUnit</td>
+                    <td>@item.Postage</td>
+                    <td>@item.TotalCost</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>

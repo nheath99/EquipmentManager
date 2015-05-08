@@ -54,3 +54,7 @@ a.remove-row:hover {
     color: #333;
     text-decoration: none;
 }
+
+.breadcrumb {
+    margin-top: 25px;
+}

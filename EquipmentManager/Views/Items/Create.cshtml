@@ -20,6 +20,9 @@
                 $('#pnValue').val('');
                 $('#pnDescription').val('');
             });
+            $('#partNumberList').on('click', 'a.remove-row', function () {
+                $(this).closest('li').remove();
+            });
         });
     </script>
 }
@@ -54,7 +57,11 @@
     </div>
 </div>
 
-<h2>Create</h2>
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+    <li>@Html.ActionLink("Items", "Index", "Items")</li>
+    <li class="active">Create</li>
+</ol>
 
 @using (Html.BeginForm())
 {

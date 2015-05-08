@@ -10,6 +10,25 @@ namespace EquipmentManager.Data
     [MetadataType(typeof(IItem))]
     public partial class Item
     {
+        public static readonly int LinkShortLength = 20;
+
+        public string ManufacturerName
+        { get { return this.Manufacturer != null ? this.Manufacturer.Name : string.Empty; } }
+
+        public string SupplierName
+        { get { return this.Supplier != null ? this.Supplier.Name : string.Empty; } }
+
+        public string ItemCategoryName
+        { get { return this.ItemCategory != null ? this.ItemCategory.Name : string.Empty; } }
+
+        public string LinkShort
+        {
+            get
+            {
+                return this.Link != null ? (this.Link.Length <= LinkShortLength ? this.Link : this.Link.Substring(0, LinkShortLength - 2) + "...") : null;
+            }
+        }
+
         public string PartNumbersList
         {
             get
@@ -70,6 +89,7 @@ namespace EquipmentManager.Data
         bool Obsolete { get; set; }
         Nullable<int> ReplacedBy_Id { get; set; }
 
+        [Display(Name="Category")]
         ItemCategory ItemCategory { get; set; }
         ICollection<Item> Replaces { get; set; }
         [Display(Name="Replaced By")]
