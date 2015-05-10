@@ -24,6 +24,11 @@ namespace EquipmentManager.Data
         {
             get { return this.QuantityRequiredSpare != 0 ? string.Format("({0})", this.QuantityRequiredSpare) : string.Empty; }
         }
+
+        public double TotalRequired
+        {
+            get { return this.QuantityRequired + this.QuantityRequiredSpare; }
+        }
     }
 
     public interface IEquipmentItem
