@@ -26,6 +26,10 @@
                 });
             });
 
+            $('#modalAddLabour').click(function () {
+                $('#addLabour').modal('hide');
+            });
+
             $('#itemsTable').on('click', '.remove-row', function () {
                 var id = $(this).data('id');
                 var row = $(this).closest('tr');
@@ -179,7 +183,54 @@
         </div>
     </div>
 </div>
-
+<div class="modal" id="addLabour" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Add Labour</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group form-group-sm form-group-condensed">
+                        <label for="" class="col-sm-4 control-label">Name</label>
+                        <div class="col-sm-8">
+                            <input type="text" id="addLabourName" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm form-group-condensed">
+                        <label for="" class="col-sm-4 control-label">Description</label>
+                        <div class="col-sm-8">
+                            <input type="text" id="addLabourDescription" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm form-group-condensed">
+                        <label for="" class="col-sm-4 control-label">Supplier</label>
+                        <div class="col-sm-8">
+                            @Html.DropDownList("Suppliers", null, "Select...", new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm form-group-condensed">
+                        <label for="" class="col-sm-4 control-label">Quantity</label>
+                        <div class="col-sm-8">
+                            <input type="text" id="addLabourQuantity" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm form-group-condensed">
+                        <label for="" class="col-sm-4 control-label">Unit</label>
+                        <div class="col-sm-8">
+                            @*@Html.DropDownList("TemporalUnit", null, new { @class = "form-control" })*@
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button id="modalAddLabour" type="button" class="btn btn-primary">Add Labour</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal" id="addItemModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -279,6 +330,10 @@
             </li>
         }
     </ul>
+</fieldset>
+<fieldset>
+    <legend>Equipment Labour <a id="addLabour" class="btn btn-info btn-xs" data-toggle="modal" data-target="#addLabour">Add</a></legend>
+
 </fieldset>
 <fieldset>
     <legend>Equipment Items (@Model.EquipmentItems.Count)</legend>

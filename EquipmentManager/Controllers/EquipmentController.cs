@@ -35,6 +35,8 @@ namespace EquipmentManager.Controllers
             }
             ViewBag.UnitsOfMeasure = new SelectList(db.UnitsOfMeasures.ToList(), "Name", "Name");
             ViewBag.Sites = new SelectList(db.Sites.OrderBy(x => x.Code).ToList(), "Id", "CodeName");
+            ViewBag.Suppliers = new SelectList(db.Suppliers.OrderBy(x => x.Name), "Id", "Name");
+            //ViewBag.TemporalUnit = ExtensionMethods.ToSelectList((Enum)Data.TemporalUnit);
             return View(new EquipmentViewModel(equipment));
         }
 

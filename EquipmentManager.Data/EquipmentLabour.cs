@@ -12,21 +12,23 @@ namespace EquipmentManager.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class Equipment
+    public partial class EquipmentLabour
     {
-        public Equipment()
+        public EquipmentLabour()
         {
-            this.EquipmentItems = new HashSet<EquipmentItem>();
-            this.Installations = new HashSet<Installation>();
-            this.EquipmentLabours = new HashSet<EquipmentLabour>();
+            this.InstallationEquipmentLabours = new HashSet<InstallationEquipmentLabour>();
         }
     
         public int Id { get; set; }
+        public int EquipmentId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public Nullable<int> SupplierId { get; set; }
+        public double Quantity { get; set; }
+        public TemporalUnit QuantityUnit { get; set; }
     
-        public virtual ICollection<EquipmentItem> EquipmentItems { get; set; }
-        public virtual ICollection<Installation> Installations { get; set; }
-        public virtual ICollection<EquipmentLabour> EquipmentLabours { get; set; }
+        public virtual Equipment Equipment { get; set; }
+        public virtual Supplier Supplier { get; set; }
+        public virtual ICollection<InstallationEquipmentLabour> InstallationEquipmentLabours { get; set; }
     }
 }

@@ -8,14 +8,14 @@
         <EntityTypeShape EntityType="EquipmentManagerModel.Equipment" Width="1.5" PointX="5.875" PointY="2.125" IsExpanded="true" />
         <EntityTypeShape EntityType="EquipmentManagerModel.EquipmentItem" Width="1.5" PointX="8.375" PointY="1.875" IsExpanded="true" />
         <EntityTypeShape EntityType="EquipmentManagerModel.Installation" Width="1.5" PointX="6" PointY="5.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="EquipmentManagerModel.ItemCategory" Width="1.5" PointX="10.75" PointY="1.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="EquipmentManagerModel.Item" Width="1.5" PointX="10.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="EquipmentManagerModel.ItemCategory" Width="1.5" PointX="13.375" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="EquipmentManagerModel.Item" Width="1.5" PointX="10.75" PointY="4.25" IsExpanded="true" />
         <EntityTypeShape EntityType="EquipmentManagerModel.Manufacturer" Width="1.5" PointX="13.25" PointY="7.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="EquipmentManagerModel.Order" Width="1.5" PointX="10.75" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="EquipmentManagerModel.Order" Width="1.5" PointX="10.75" PointY="9.125" IsExpanded="true" />
         <EntityTypeShape EntityType="EquipmentManagerModel.PartNumber" Width="1.5" PointX="13.25" PointY="5" IsExpanded="true" />
-        <EntityTypeShape EntityType="EquipmentManagerModel.Site" Width="1.5" PointX="3.75" PointY="5.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="EquipmentManagerModel.Supplier" Width="1.5" PointX="13.25" PointY="1.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="EquipmentManagerModel.UnitsOfMeasure" Width="1.5" PointX="3.5" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="EquipmentManagerModel.Site" Width="1.5" PointX="6" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="EquipmentManagerModel.Supplier" Width="1.5" PointX="10.75" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="EquipmentManagerModel.UnitsOfMeasure" Width="1.5" PointX="13.375" PointY="0.875" IsExpanded="true" />
         <AssociationConnector Association="EquipmentManagerModel.FK_EquipmentItems_Items" ManuallyRouted="false" />
         <AssociationConnector Association="EquipmentManagerModel.FK_Installations_Equipment" ManuallyRouted="false" />
         <AssociationConnector Association="EquipmentManagerModel.FK_Installations_Site" ManuallyRouted="false" />
@@ -29,6 +29,12 @@
         <AssociationConnector Association="EquipmentManagerModel.FK_InstallationEquipmentItems_EquipmentItems" />
         <AssociationConnector Association="EquipmentManagerModel.FK_InstallationEquipmentItems_Installations" />
         <AssociationConnector Association="EquipmentManagerModel.FK_Orders_InstallationEquipmentItems" />
+        <EntityTypeShape EntityType="EquipmentManagerModel.EquipmentLabour" Width="1.5" PointX="3.375" PointY="1.125" />
+        <AssociationConnector Association="EquipmentManagerModel.FK_EquipmentLabour_Equipment" />
+        <AssociationConnector Association="EquipmentManagerModel.FK_EquipmentLabour_Suppliers" />
+        <EntityTypeShape EntityType="EquipmentManagerModel.InstallationEquipmentLabour" Width="1.5" PointX="3.375" PointY="5.125" />
+        <AssociationConnector Association="EquipmentManagerModel.FK_InstallationEquipmentLabour_EquipmentLabour" />
+        <AssociationConnector Association="EquipmentManagerModel.FK_InstallationEquipmentLabour_Installations" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

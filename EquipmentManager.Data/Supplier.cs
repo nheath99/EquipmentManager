@@ -17,6 +17,7 @@ namespace EquipmentManager.Data
         public Supplier()
         {
             this.Items = new HashSet<Item>();
+            this.EquipmentLabours = new HashSet<EquipmentLabour>();
         }
     
         public int Id { get; set; }
@@ -30,5 +31,6 @@ namespace EquipmentManager.Data
         public string Country { get; set; }
     
         public virtual ICollection<Item> Items { get; set; }
+        public virtual ICollection<EquipmentLabour> EquipmentLabours { get; set; }
     }
 }

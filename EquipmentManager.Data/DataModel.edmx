@@ -27,6 +27,18 @@
           <Property Name="ValidFrom" Type="date" Nullable="false" />
           <Property Name="ValidTo" Type="date" />
         </EntityType>
+        <EntityType Name="EquipmentLabour">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EquipmentId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="4000" />
+          <Property Name="SupplierId" Type="int" />
+          <Property Name="Quantity" Type="float" Nullable="false" />
+          <Property Name="QuantityUnit" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="InstallationEquipmentItems">
           <Key>
             <PropertyRef Name="Id" />
@@ -41,6 +53,17 @@
           <Property Name="CostPerUnit" Type="decimal" Precision="8" Scale="4" Nullable="false" />
           <Property Name="UnitsOrdered" Type="float" Nullable="false" />
           <Property Name="Postage" Type="decimal" Precision="8" Scale="4" Nullable="false" />
+        </EntityType>
+        <EntityType Name="InstallationEquipmentLabour">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="InstallationId" Type="int" Nullable="false" />
+          <Property Name="EquipmentLabourId" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="float" Nullable="false" />
+          <Property Name="QuantityUnit" Type="int" Nullable="false" />
+          <Property Name="TotalCost" Type="decimal" Precision="8" Scale="4" Nullable="false" />
         </EntityType>
         <EntityType Name="Installations">
           <Key>
@@ -162,6 +185,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_EquipmentLabour_Equipment">
+          <End Role="Equipment" Type="Self.Equipment" Multiplicity="1" />
+          <End Role="EquipmentLabour" Type="Self.EquipmentLabour" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Equipment">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EquipmentLabour">
+              <PropertyRef Name="EquipmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EquipmentLabour_Suppliers">
+          <End Role="Suppliers" Type="Self.Suppliers" Multiplicity="0..1" />
+          <End Role="EquipmentLabour" Type="Self.EquipmentLabour" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Suppliers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EquipmentLabour">
+              <PropertyRef Name="SupplierId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_InstallationEquipmentItems_EquipmentItems">
           <End Role="EquipmentItems" Type="Self.EquipmentItems" Multiplicity="1" />
           <End Role="InstallationEquipmentItems" Type="Self.InstallationEquipmentItems" Multiplicity="*" />
@@ -182,6 +229,30 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="InstallationEquipmentItems">
+              <PropertyRef Name="InstallationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InstallationEquipmentLabour_EquipmentLabour">
+          <End Role="EquipmentLabour" Type="Self.EquipmentLabour" Multiplicity="1" />
+          <End Role="InstallationEquipmentLabour" Type="Self.InstallationEquipmentLabour" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EquipmentLabour">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="InstallationEquipmentLabour">
+              <PropertyRef Name="EquipmentLabourId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InstallationEquipmentLabour_Installations">
+          <End Role="Installations" Type="Self.Installations" Multiplicity="1" />
+          <End Role="InstallationEquipmentLabour" Type="Self.InstallationEquipmentLabour" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Installations">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="InstallationEquipmentLabour">
               <PropertyRef Name="InstallationId" />
             </Dependent>
           </ReferentialConstraint>
@@ -285,7 +356,9 @@
         <EntityContainer Name="EquipmentManagerModelStoreContainer">
           <EntitySet Name="Equipment" EntityType="Self.Equipment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EquipmentItems" EntityType="Self.EquipmentItems" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EquipmentLabour" EntityType="Self.EquipmentLabour" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="InstallationEquipmentItems" EntityType="Self.InstallationEquipmentItems" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="InstallationEquipmentLabour" EntityType="Self.InstallationEquipmentLabour" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Installations" EntityType="Self.Installations" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ItemCategories" EntityType="Self.ItemCategories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Items" EntityType="Self.Items" Schema="dbo" store:Type="Tables" />
@@ -303,6 +376,14 @@
             <End Role="Items" EntitySet="Items" />
             <End Role="EquipmentItems" EntitySet="EquipmentItems" />
           </AssociationSet>
+          <AssociationSet Name="FK_EquipmentLabour_Equipment" Association="Self.FK_EquipmentLabour_Equipment">
+            <End Role="Equipment" EntitySet="Equipment" />
+            <End Role="EquipmentLabour" EntitySet="EquipmentLabour" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EquipmentLabour_Suppliers" Association="Self.FK_EquipmentLabour_Suppliers">
+            <End Role="Suppliers" EntitySet="Suppliers" />
+            <End Role="EquipmentLabour" EntitySet="EquipmentLabour" />
+          </AssociationSet>
           <AssociationSet Name="FK_InstallationEquipmentItems_EquipmentItems" Association="Self.FK_InstallationEquipmentItems_EquipmentItems">
             <End Role="EquipmentItems" EntitySet="EquipmentItems" />
             <End Role="InstallationEquipmentItems" EntitySet="InstallationEquipmentItems" />
@@ -310,6 +391,14 @@
           <AssociationSet Name="FK_InstallationEquipmentItems_Installations" Association="Self.FK_InstallationEquipmentItems_Installations">
             <End Role="Installations" EntitySet="Installations" />
             <End Role="InstallationEquipmentItems" EntitySet="InstallationEquipmentItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InstallationEquipmentLabour_EquipmentLabour" Association="Self.FK_InstallationEquipmentLabour_EquipmentLabour">
+            <End Role="EquipmentLabour" EntitySet="EquipmentLabour" />
+            <End Role="InstallationEquipmentLabour" EntitySet="InstallationEquipmentLabour" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InstallationEquipmentLabour_Installations" Association="Self.FK_InstallationEquipmentLabour_Installations">
+            <End Role="Installations" EntitySet="Installations" />
+            <End Role="InstallationEquipmentLabour" EntitySet="InstallationEquipmentLabour" />
           </AssociationSet>
           <AssociationSet Name="FK_Installations_Equipment" Association="Self.FK_Installations_Equipment">
             <End Role="Equipment" EntitySet="Equipment" />
@@ -357,6 +446,7 @@
           <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="EquipmentItems" Relationship="Self.FK_EquipmentItems_Items" FromRole="Equipment" ToRole="EquipmentItems" />
           <NavigationProperty Name="Installations" Relationship="Self.FK_Installations_Equipment" FromRole="Equipment" ToRole="Installations" />
+          <NavigationProperty Name="EquipmentLabours" Relationship="EquipmentManagerModel.FK_EquipmentLabour_Equipment" FromRole="Equipment" ToRole="EquipmentLabour" />
         </EntityType>
         <EntityType Name="EquipmentItem">
           <Key>
@@ -387,6 +477,7 @@
           <NavigationProperty Name="Equipment" Relationship="Self.FK_Installations_Equipment" FromRole="Installations" ToRole="Equipment" />
           <NavigationProperty Name="Site" Relationship="Self.FK_Installations_Site" FromRole="Installations" ToRole="Site" />
           <NavigationProperty Name="InstallationEquipmentItems" Relationship="EquipmentManagerModel.FK_InstallationEquipmentItems_Installations" FromRole="Installation" ToRole="InstallationEquipmentItem" />
+          <NavigationProperty Name="InstallationEquipmentLabours" Relationship="EquipmentManagerModel.FK_InstallationEquipmentLabour_Installations" FromRole="Installation" ToRole="InstallationEquipmentLabour" />
         </EntityType>
         <EntityType Name="ItemCategory">
           <Key>
@@ -479,6 +570,7 @@
           <Property Name="Postcode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Items" Relationship="Self.FK_Items_Suppliers" FromRole="Suppliers" ToRole="Items" />
+          <NavigationProperty Name="EquipmentLabours" Relationship="EquipmentManagerModel.FK_EquipmentLabour_Suppliers" FromRole="Supplier" ToRole="EquipmentLabour" />
         </EntityType>
         <EntityType Name="UnitsOfMeasure">
           <Key>
@@ -644,6 +736,24 @@
             <End Role="InstallationEquipmentItem" EntitySet="InstallationEquipmentItems" />
             <End Role="Order" EntitySet="Orders" />
           </AssociationSet>
+          <EntitySet Name="EquipmentLabours" EntityType="EquipmentManagerModel.EquipmentLabour" />
+          <AssociationSet Name="FK_EquipmentLabour_Equipment" Association="EquipmentManagerModel.FK_EquipmentLabour_Equipment">
+            <End Role="Equipment" EntitySet="Equipments" />
+            <End Role="EquipmentLabour" EntitySet="EquipmentLabours" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EquipmentLabour_Suppliers" Association="EquipmentManagerModel.FK_EquipmentLabour_Suppliers">
+            <End Role="Supplier" EntitySet="Suppliers" />
+            <End Role="EquipmentLabour" EntitySet="EquipmentLabours" />
+          </AssociationSet>
+          <EntitySet Name="InstallationEquipmentLabours" EntityType="EquipmentManagerModel.InstallationEquipmentLabour" />
+          <AssociationSet Name="FK_InstallationEquipmentLabour_EquipmentLabour" Association="EquipmentManagerModel.FK_InstallationEquipmentLabour_EquipmentLabour">
+            <End Role="EquipmentLabour" EntitySet="EquipmentLabours" />
+            <End Role="InstallationEquipmentLabour" EntitySet="InstallationEquipmentLabours" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InstallationEquipmentLabour_Installations" Association="EquipmentManagerModel.FK_InstallationEquipmentLabour_Installations">
+            <End Role="Installation" EntitySet="Installations" />
+            <End Role="InstallationEquipmentLabour" EntitySet="InstallationEquipmentLabours" />
+          </AssociationSet>
         </EntityContainer>
         <Association Name="FK_EquipmentItems_Items1">
           <End Type="EquipmentManagerModel.Item" Role="Item" Multiplicity="1" />
@@ -711,6 +821,89 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="EquipmentLabour">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EquipmentId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="SupplierId" Type="Int32" />
+          <Property Name="Quantity" Type="Double" Nullable="false" />
+          <Property Name="QuantityUnit" Type="EquipmentManagerModel.TemporalUnit" Nullable="false" />
+          <NavigationProperty Name="Equipment" Relationship="EquipmentManagerModel.FK_EquipmentLabour_Equipment" FromRole="EquipmentLabour" ToRole="Equipment" />
+          <NavigationProperty Name="Supplier" Relationship="EquipmentManagerModel.FK_EquipmentLabour_Suppliers" FromRole="EquipmentLabour" ToRole="Supplier" />
+          <NavigationProperty Name="InstallationEquipmentLabours" Relationship="EquipmentManagerModel.FK_InstallationEquipmentLabour_EquipmentLabour" FromRole="EquipmentLabour" ToRole="InstallationEquipmentLabour" />
+        </EntityType>
+        <Association Name="FK_EquipmentLabour_Equipment">
+          <End Type="EquipmentManagerModel.Equipment" Role="Equipment" Multiplicity="1" />
+          <End Type="EquipmentManagerModel.EquipmentLabour" Role="EquipmentLabour" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Equipment">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EquipmentLabour">
+              <PropertyRef Name="EquipmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EquipmentLabour_Suppliers">
+          <End Type="EquipmentManagerModel.Supplier" Role="Supplier" Multiplicity="0..1" />
+          <End Type="EquipmentManagerModel.EquipmentLabour" Role="EquipmentLabour" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Supplier">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EquipmentLabour">
+              <PropertyRef Name="SupplierId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="InstallationEquipmentLabour">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InstallationId" Type="Int32" Nullable="false" />
+          <Property Name="EquipmentLabourId" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Double" Nullable="false" />
+          <Property Name="QuantityUnit" Type="EquipmentManagerModel.TemporalUnit" Nullable="false" />
+          <Property Name="TotalCost" Type="Decimal" Nullable="false" Precision="8" Scale="4" />
+          <NavigationProperty Name="EquipmentLabour" Relationship="EquipmentManagerModel.FK_InstallationEquipmentLabour_EquipmentLabour" FromRole="InstallationEquipmentLabour" ToRole="EquipmentLabour" />
+          <NavigationProperty Name="Installation" Relationship="EquipmentManagerModel.FK_InstallationEquipmentLabour_Installations" FromRole="InstallationEquipmentLabour" ToRole="Installation" />
+        </EntityType>
+        <Association Name="FK_InstallationEquipmentLabour_EquipmentLabour">
+          <End Type="EquipmentManagerModel.EquipmentLabour" Role="EquipmentLabour" Multiplicity="1" />
+          <End Type="EquipmentManagerModel.InstallationEquipmentLabour" Role="InstallationEquipmentLabour" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EquipmentLabour">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="InstallationEquipmentLabour">
+              <PropertyRef Name="EquipmentLabourId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InstallationEquipmentLabour_Installations">
+          <End Type="EquipmentManagerModel.Installation" Role="Installation" Multiplicity="1" />
+          <End Type="EquipmentManagerModel.InstallationEquipmentLabour" Role="InstallationEquipmentLabour" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Installation">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="InstallationEquipmentLabour">
+              <PropertyRef Name="InstallationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EnumType Name="TemporalUnit">
+          <Member Name="Hour" />
+          <Member Name="Day" />
+          <Member Name="Week" />
+          <Member Name="Month" />
+          <Member Name="Year" />
+        </EnumType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -857,6 +1050,31 @@
                 <ScalarProperty Name="DateExpected" ColumnName="DateExpected" />
                 <ScalarProperty Name="DateOrdered" ColumnName="DateOrdered" />
                 <ScalarProperty Name="EquipmentItemId" ColumnName="EquipmentItemId" />
+                <ScalarProperty Name="InstallationId" ColumnName="InstallationId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EquipmentLabours">
+            <EntityTypeMapping TypeName="EquipmentManagerModel.EquipmentLabour">
+              <MappingFragment StoreEntitySet="EquipmentLabour">
+                <ScalarProperty Name="QuantityUnit" ColumnName="QuantityUnit" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="EquipmentId" ColumnName="EquipmentId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="InstallationEquipmentLabours">
+            <EntityTypeMapping TypeName="EquipmentManagerModel.InstallationEquipmentLabour">
+              <MappingFragment StoreEntitySet="InstallationEquipmentLabour">
+                <ScalarProperty Name="TotalCost" ColumnName="TotalCost" />
+                <ScalarProperty Name="QuantityUnit" ColumnName="QuantityUnit" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="EquipmentLabourId" ColumnName="EquipmentLabourId" />
                 <ScalarProperty Name="InstallationId" ColumnName="InstallationId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
