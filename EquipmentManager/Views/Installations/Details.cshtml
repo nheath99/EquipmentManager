@@ -30,8 +30,8 @@
             Action <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu">
-            <li><a href="#">Import items from @Model.Equipment.Name</a></li>
-            <li><a href="#">Another action</a></li>
+            <li><a id="importItems" href="#">Import Items from @Model.Equipment.Name</a></li>
+            <li><a id="importLabour" href="#">Import Labour from @Model.Equipment.Name</a></li>
             <li><a href="#">Something else here</a></li>
             <li class="divider"></li>
             <li><a href="#">Separated link</a></li>
@@ -46,8 +46,6 @@
             <li class="divider"></li>
             <li><a href="#">Not Ordered</a></li>
             <li><a href="#">Ordered</a></li>
-            <li><a href="#"></a></li>
-            <li><a href="#"></a></li>
         </ul>
     </div>
     <table id="itemsTable" class="table table-condensed">

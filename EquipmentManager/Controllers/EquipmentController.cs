@@ -40,6 +40,52 @@ namespace EquipmentManager.Controllers
             return View(new EquipmentViewModel(equipment));
         }
 
+        public JsonResult AddLabour(int equipmentId, string name, string description, Nullable<int> supplierId, float quantity, int quantityUnit)
+        {
+            Equipment eq = db.Equipments.Find(equipmentId);
+            if (eq != null)
+            {
+                EquipmentLabour el = new EquipmentLabour()
+                {
+                    Equipment = eq,
+                    Name = name,
+                    Description = description,
+                    SupplierId = supplierId,
+                    Quantity = quantity,
+                    QuantityUnit = (TemporalUnit)quantityUnit
+                };
+
+                db.EquipmentLabours.Add(el);
+                db.SaveChanges();
+
+                el = db.EquipmentLabours.Include(x => x.Supplier).Single(x => x.Id == el.Id);
+                return Json(new { result = true, id = el.Id, name = el.Name, description = el.Description, supplierId = el.SupplierId, supplierName = el.SupplierId != null ? el.Supplier.Name : string.Empty, quantity = Math.Round(el.Quantity, 2).ToString() + " " + el.QuantityUnit.Name() }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { result = false }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult RemoveLabour(int id)
+        {
+            EquipmentLabour el = db.EquipmentLabours.Find(id);
+            if (el != null)
+            {
+                try
+                {
+                    db.EquipmentLabours.Remove(el);
+                    db.SaveChanges();
+                    return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception)
+                {
+                    return Json(new { result = false }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                return Json(new { result = false }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         public JsonResult RemoveEquipmentItem(int id)
         {
             EquipmentItem e = db.EquipmentItems.Find(id);

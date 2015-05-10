@@ -25,7 +25,7 @@ namespace EquipmentManager.Data
         public Nullable<System.DateTime> DateOrdered { get; set; }
         public Nullable<System.DateTime> DateExpected { get; set; }
         public Nullable<System.DateTime> DateReceived { get; set; }
-        public Nullable<int> StatusId { get; set; }
+        public EquipmentManager.Data.ItemStatus StatusId { get; set; }
         public decimal CostPerUnit { get; set; }
         public double UnitsOrdered { get; set; }
         public decimal Postage { get; set; }

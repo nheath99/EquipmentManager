@@ -64,6 +64,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DataModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Enums.cs" />
     <Compile Include="Equipment.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>

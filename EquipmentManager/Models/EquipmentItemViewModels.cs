@@ -12,6 +12,7 @@ namespace EquipmentManager.Models
         public EquipmentViewModel()
         {
             this.EquipmentItems = new HashSet<EquipmentItemViewModel>();
+            this.Labour = new HashSet<EquipmentLabour>();
         }
 
         public EquipmentViewModel(Equipment e)
@@ -26,6 +27,11 @@ namespace EquipmentManager.Models
                 this.EquipmentItems.Add(new EquipmentItemViewModel(item));
             }
 
+            foreach (var item in e.EquipmentLabours)
+            {
+                this.Labour.Add(item);
+            }
+
             this.Installations = e.Installations;
         }
 
@@ -34,6 +40,7 @@ namespace EquipmentManager.Models
         public string Description { get; set; }
         public ICollection<EquipmentItemViewModel> EquipmentItems { get; set; }
         public ICollection<Installation> Installations { get; set; }
+        public ICollection<EquipmentLabour> Labour { get; set; }
     }
 
     public class EquipmentItemViewModel

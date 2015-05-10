@@ -13,10 +13,10 @@ namespace EquipmentManager.Data
     
     public enum TemporalUnit : int
     {
-        Hour = 0,
-        Day = 1,
-        Week = 2,
-        Month = 3,
-        Year = 4
+        Hours = 0,
+        Days = 1,
+        Weeks = 2,
+        Months = 3,
+        Years = 4
     }
 }

@@ -25,16 +25,16 @@
         <AssociationConnector Association="EquipmentManagerModel.FK_Items_Suppliers" ManuallyRouted="false" />
         <AssociationConnector Association="EquipmentManagerModel.FK_PartNumbers_Items" ManuallyRouted="false" />
         <AssociationConnector Association="EquipmentManagerModel.FK_EquipmentItems_Items1" />
-        <EntityTypeShape EntityType="EquipmentManagerModel.InstallationEquipmentItem" Width="1.5" PointX="8.375" PointY="6.125" />
-        <AssociationConnector Association="EquipmentManagerModel.FK_InstallationEquipmentItems_EquipmentItems" />
-        <AssociationConnector Association="EquipmentManagerModel.FK_InstallationEquipmentItems_Installations" />
-        <AssociationConnector Association="EquipmentManagerModel.FK_Orders_InstallationEquipmentItems" />
         <EntityTypeShape EntityType="EquipmentManagerModel.EquipmentLabour" Width="1.5" PointX="3.375" PointY="1.125" />
         <AssociationConnector Association="EquipmentManagerModel.FK_EquipmentLabour_Equipment" />
         <AssociationConnector Association="EquipmentManagerModel.FK_EquipmentLabour_Suppliers" />
         <EntityTypeShape EntityType="EquipmentManagerModel.InstallationEquipmentLabour" Width="1.5" PointX="3.375" PointY="5.125" />
         <AssociationConnector Association="EquipmentManagerModel.FK_InstallationEquipmentLabour_EquipmentLabour" />
         <AssociationConnector Association="EquipmentManagerModel.FK_InstallationEquipmentLabour_Installations" />
+        <EntityTypeShape EntityType="EquipmentManagerModel.InstallationEquipmentItem" Width="1.5" PointX="8.375" PointY="6.125" />
+        <AssociationConnector Association="EquipmentManagerModel.FK_InstallationEquipmentItems_EquipmentItems" />
+        <AssociationConnector Association="EquipmentManagerModel.FK_InstallationEquipmentItems_Installations" />
+        <AssociationConnector Association="EquipmentManagerModel.FK_Orders_InstallationEquipmentItems" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

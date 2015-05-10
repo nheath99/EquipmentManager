@@ -27,7 +27,65 @@
             });
 
             $('#modalAddLabour').click(function () {
-                $('#addLabour').modal('hide');
+
+                var eqId = $('#Id').val();
+                var name = $('#addLabourName').val();
+                var description = $('#addLabourDescription').val();
+                var suplierId = $('#Suppliers').val();
+                var qty = $('#addLabourQuantity').val();
+                var unit = $('#TemporalUnit').val();
+
+                $.ajax({
+                    type: 'post',
+                    url: '/Equipment/AddLabour',
+                    data: { equipmentId: eqId, name: name, description: description, supplierId: suplierId, quantity: qty, quantityUnit: unit },
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.result == true) {
+                            var row = '<tr><td><a class="glyphicon glyphicon-remove remove-row" data-id="' + data.id + '" /></td>'
+                                + '<td>' + data.name + '</td>'
+                                + '<td>' + data.description + '</td>'
+                                + '<td>' + data.quantity + '</td>'
+                                + '<td>' + data.supplierName + '</td></tr>';
+
+                            var name = $('#addLabourName').val('');
+                            var description = $('#addLabourDescription').val('');
+                            var suplierId = $('#Suppliers').val('');
+                            var qty = $('#addLabourQuantity').val('');
+                            var unit = $('#TemporalUnit').val('0');
+
+                            $('#addLabour').modal('hide');
+
+                            var table = $('#labourTable').find('tbody');
+                            table.append(row);
+                        }
+                    }
+                });
+            });
+
+            $('#labourTable').on('click', '.remove-row', function () {
+                var id = $(this).data('id');
+                var row = $(this).closest('tr');
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/Equipment/RemoveLabour',
+                    data: { id: id },
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.result == true) {
+                            row.remove();
+                        }
+                        else {
+                            alert("Cannot delete.");
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }
+                })
+
+                row.remove();
             });
 
             $('#itemsTable').on('click', '.remove-row', function () {
@@ -320,20 +378,49 @@
 <h2>@Model.Name</h2>
 <h4>@Model.Description</h4>
 @Html.HiddenFor(model => model.Id)
+
 <fieldset>
-    <legend>Installations <a id="addInstallation" class="btn btn-info btn-xs" data-toggle="modal" data-target="#addInstallationModal">Add Installation</a></legend>
-    <ul>
-        @foreach (var item in Model.Installations)
-        {
-            <li>
-                @Html.ActionLink(item.Site.CodeName, "Details", "Installations", new { id = item.Id }, null)
-            </li>
-        }
-    </ul>
+    <legend>Installations <button id="addInstallation" class="btn btn-info btn-xs" data-toggle="modal" data-target="#addInstallationModal">Add Installation</button></legend>
+    <div id="installations">
+        <ul class="list-unstyled" style="margin-left:25px;">
+            @foreach (var item in Model.Installations)
+            {
+                <li>
+                    @Html.ActionLink(item.Site.CodeName, "Details", "Installations", new { id = item.Id }, null)
+                </li>
+            }
+        </ul>
+    </div>
 </fieldset>
+
 <fieldset>
     <legend>Equipment Labour <a id="addLabour" class="btn btn-info btn-xs" data-toggle="modal" data-target="#addLabour">Add</a></legend>
-
+    <table id="labourTable" class="table table-condensed">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Supplier</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var l in Model.Labour)
+            {
+                <tr>
+                    <td><a class="glyphicon glyphicon-remove remove-row" data-id="@l.Id" /></td>
+                    <td>@l.Name</td>
+                    <td>@l.Description</td>
+                    <td>@Math.Round(l.Quantity, 2) @l.QuantityUnit.Name()</td>
+                    <td>
+                        @if (l.Supplier != null)
+                        { @l.Supplier.Name }
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
 </fieldset>
 <fieldset>
     <legend>Equipment Items (@Model.EquipmentItems.Count)</legend>
