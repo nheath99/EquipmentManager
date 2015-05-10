@@ -73,6 +73,7 @@
     <Compile Include="EquipmentLabour.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="INameId.cs" />
     <Compile Include="Installation.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
