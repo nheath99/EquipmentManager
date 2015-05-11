@@ -10,7 +10,6 @@ namespace EquipmentManager
 {
     public static class ExtensionMethods
     {
-
         public static string Name(this Enum e)
         {
             return (e as Enum).GetAttributeValue<DisplayAttribute>(x => x.Name);

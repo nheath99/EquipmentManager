@@ -29,6 +29,7 @@ namespace EquipmentManager.Data
         public decimal CostPerUnit { get; set; }
         public double UnitsOrdered { get; set; }
         public decimal Postage { get; set; }
+        public Nullable<decimal> ActualCost { get; set; }
     
         public virtual EquipmentItem EquipmentItem { get; set; }
         public virtual Installation Installation { get; set; }

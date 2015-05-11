@@ -20,6 +20,7 @@ namespace EquipmentManager.Data
         public double Quantity { get; set; }
         public TemporalUnit QuantityUnit { get; set; }
         public decimal TotalCost { get; set; }
+        public Nullable<decimal> ActualCost { get; set; }
     
         public virtual EquipmentLabour EquipmentLabour { get; set; }
         public virtual Installation Installation { get; set; }

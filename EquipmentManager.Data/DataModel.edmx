@@ -53,6 +53,7 @@
           <Property Name="CostPerUnit" Type="decimal" Precision="8" Scale="4" Nullable="false" />
           <Property Name="UnitsOrdered" Type="float" Nullable="false" />
           <Property Name="Postage" Type="decimal" Precision="8" Scale="4" Nullable="false" />
+          <Property Name="ActualCost" Type="decimal" Precision="8" Scale="4" />
         </EntityType>
         <EntityType Name="InstallationEquipmentLabour">
           <Key>
@@ -64,6 +65,7 @@
           <Property Name="Quantity" Type="float" Nullable="false" />
           <Property Name="QuantityUnit" Type="int" Nullable="false" />
           <Property Name="TotalCost" Type="decimal" Precision="8" Scale="4" Nullable="false" />
+          <Property Name="ActualCost" Type="decimal" Precision="8" Scale="4" />
         </EntityType>
         <EntityType Name="Installations">
           <Key>
@@ -818,6 +820,7 @@
           <Property Name="TotalCost" Type="Decimal" Nullable="false" Precision="8" Scale="4" />
           <NavigationProperty Name="EquipmentLabour" Relationship="EquipmentManagerModel.FK_InstallationEquipmentLabour_EquipmentLabour" FromRole="InstallationEquipmentLabour" ToRole="EquipmentLabour" />
           <NavigationProperty Name="Installation" Relationship="EquipmentManagerModel.FK_InstallationEquipmentLabour_Installations" FromRole="InstallationEquipmentLabour" ToRole="Installation" />
+          <Property Name="ActualCost" Type="Decimal" Precision="8" Scale="4" />
         </EntityType>
         <Association Name="FK_InstallationEquipmentLabour_EquipmentLabour">
           <End Type="EquipmentManagerModel.EquipmentLabour" Role="EquipmentLabour" Multiplicity="1" />
@@ -867,6 +870,7 @@
           <NavigationProperty Name="EquipmentItem" Relationship="EquipmentManagerModel.FK_InstallationEquipmentItems_EquipmentItems" FromRole="InstallationEquipmentItem" ToRole="EquipmentItem" />
           <NavigationProperty Name="Installation" Relationship="EquipmentManagerModel.FK_InstallationEquipmentItems_Installations" FromRole="InstallationEquipmentItem" ToRole="Installation" />
           <NavigationProperty Name="Orders" Relationship="EquipmentManagerModel.FK_Orders_InstallationEquipmentItems" FromRole="InstallationEquipmentItem" ToRole="Order" />
+          <Property Name="ActualCost" Type="Decimal" Precision="8" Scale="4" />
         </EntityType>
         <Association Name="FK_InstallationEquipmentItems_EquipmentItems">
           <End Type="EquipmentManagerModel.EquipmentItem" Role="EquipmentItem" Multiplicity="1" />
@@ -1056,6 +1060,7 @@
           <EntitySetMapping Name="InstallationEquipmentLabours">
             <EntityTypeMapping TypeName="EquipmentManagerModel.InstallationEquipmentLabour">
               <MappingFragment StoreEntitySet="InstallationEquipmentLabour">
+                <ScalarProperty Name="ActualCost" ColumnName="ActualCost" />
                 <ScalarProperty Name="TotalCost" ColumnName="TotalCost" />
                 <ScalarProperty Name="QuantityUnit" ColumnName="QuantityUnit" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
@@ -1068,6 +1073,7 @@
           <EntitySetMapping Name="InstallationEquipmentItems">
             <EntityTypeMapping TypeName="EquipmentManagerModel.InstallationEquipmentItem">
               <MappingFragment StoreEntitySet="InstallationEquipmentItems">
+                <ScalarProperty Name="ActualCost" ColumnName="ActualCost" />
                 <ScalarProperty Name="Postage" ColumnName="Postage" />
                 <ScalarProperty Name="UnitsOrdered" ColumnName="UnitsOrdered" />
                 <ScalarProperty Name="CostPerUnit" ColumnName="CostPerUnit" />
