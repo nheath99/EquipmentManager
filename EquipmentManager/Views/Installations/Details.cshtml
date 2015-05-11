@@ -4,32 +4,29 @@
     ViewBag.Title = Model.Name;
 }
 
-<div class="modal" id="modalItems" tabindex="-1" role="dialog" aria-hidden="true">
+@section scripts {
+    <script type="text/javascript">
+        $(function () {
+
+        })
+    </script>
+}
+<div class="modal" id="itemDetails" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Select Items</h4>
+                <h4 class="modal-title" id="myModalLabel">Item Details</h4>
             </div>
             <div class="modal-body">
-                <table class="table table-condensed">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Qty</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            
-                        }
-                    </tbody>
-                </table>
+                <dl class="dl-horizontal">
+                    <dt>Item</dt>
+                    <dd></dd>
+                </dl>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button id="modalAddInstallation" type="button" class="btn btn-primary">Add Item</button>
+                <button id="modal" type="button" class="btn btn-primary">Save</button>
             </div>
         </div>
     </div>
@@ -43,7 +40,7 @@
 
 <div>
     <h4>@ViewBag.Title <small>@Html.ActionLink("Edit", "Edit", new { id = Model.Id })</small></h4>
-
+    @Model.OutstandingItems.Count().ToString()
     <dl class="dl-horizontal">
         <dt>@Html.DisplayNameFor(model => model.Site):</dt>
         <dd>
@@ -62,7 +59,6 @@
         </button>
         <ul class="dropdown-menu" role="menu">
             <li><a id="importItems" href="#">Import Items from @Model.Equipment.Name</a></li>
-            <li><a id="importLabour" href="#">Import Labour from @Model.Equipment.Name</a></li>
             <li><a href="#">Something else here</a></li>
             <li class="divider"></li>
             <li><a href="#">Separated link</a></li>
@@ -82,7 +78,6 @@
     <table id="itemsTable" class="table table-condensed">
         <thead>
             <tr>
-                <th></th>
                 <th>#</th>
                 <th>Name</th>
                 <th>Manufacturer</th>
@@ -99,10 +94,10 @@
             @foreach (var item in Model.InstallationEquipmentItems)
             {
                 <tr>
-                    <td>@Html.ActionLink(item.Id.ToString(), "Details", "InstallationEquipmentItem", new { id = item.Id }, null)</td>
-                    <td>@Html.ActionLink(item.EquipmentItem.Item.Name, "Details", "Item", new { id = item.EquipmentItemId }, null)</td>
-                    <td>@Html.ActionLink(item.EquipmentItem.Item.ManufacturerName, "Details", "Manufacturer", new {id = item.EquipmentItem.Item.ManufacturerId}, null)</td>
-                    <td>@Html.ActionLink(item.EquipmentItem.Item.SupplierName, "Details", "Supplier", new { id = item.EquipmentItem.Item.SupplierId }, null)</td>
+                    <td><a href="#" data-toggle="modal" data-target="#itemDetails">@item.Id.ToString()</a></td>
+                    <td>@Html.ActionLink(item.EquipmentItem.Item.Name, "Details", "Items", new { id = item.EquipmentItem.ItemId }, null)</td>
+                    <td>@Html.ActionLink(item.EquipmentItem.Item.ManufacturerName, "Details", "Manufacturers", new {id = item.EquipmentItem.Item.ManufacturerId}, null)</td>
+                    <td>@Html.ActionLink(item.EquipmentItem.Item.SupplierName, "Details", "Suppliers", new { id = item.EquipmentItem.Item.SupplierId }, null)</td>
                     <td>@item.EquipmentItem.QuantityRequired @item.EquipmentItem.QuantityRequiredSpareString</td>
                     <td>@item.UnitsOrdered</td>
                     <td>@item.StatusId</td>

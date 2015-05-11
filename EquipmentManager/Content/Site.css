@@ -55,6 +55,16 @@ a.remove-row:hover {
     text-decoration: none;
 }
 
+.row-command {
+    color: lightgray;
+    cursor: pointer;
+}
+
+a.row-command:hover {
+    color: #333;
+    text-decoration: none;
+}
+
 .breadcrumb {
     margin-top: 25px;
 }
