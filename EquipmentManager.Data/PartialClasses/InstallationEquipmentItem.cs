@@ -10,9 +10,19 @@ namespace EquipmentManager.Data
     [MetadataType(typeof(IInstallationEquipmentItem))]
     public partial class InstallationEquipmentItem
     {
-        public decimal TotalCost
+        public decimal? TotalCost
         {
-            get { return (CostPerUnit * Convert.ToDecimal(UnitsOrdered)) + Postage; }
+            get
+            {
+                if (CostPerUnit.HasValue && UnitsOrdered.HasValue)
+                {
+                    return (CostPerUnit.Value * Convert.ToDecimal(UnitsOrdered.Value)) + (Postage ?? 0m);
+                }
+                else
+                {
+                    return null;
+                }
+            }
         }
     }
 

@@ -10,7 +10,12 @@ namespace EquipmentManager.Data
     {
         public bool HasEquipmentItem(EquipmentItem equipmentItem)
         {
-            return this.InstallationEquipmentItems.Count(x => x.EquipmentItemId == equipmentItem.Id && x.UnitsOrdered >= equipmentItem.TotalRequired) > 0;
+            return this.InstallationEquipmentItems.Count(x => x.EquipmentItemId == equipmentItem.Id) > 0;
+        }
+
+        public bool HasEquipmentLabour(EquipmentLabour equipmentLabour)
+        {
+            return this.InstallationEquipmentLabours.Count(x => x.EquipmentLabourId == equipmentLabour.Id) > 0;
         }
 
         public IEnumerable<EquipmentItem> OutstandingItems
@@ -19,6 +24,27 @@ namespace EquipmentManager.Data
             {
                 return this.Equipment.EquipmentItems.Where(x => !this.HasEquipmentItem(x));
             }
+        }
+
+        public IEnumerable<EquipmentLabour> OutstandingLabour
+        {
+            get
+            {
+                return this.Equipment.EquipmentLabours.Where(x => !this.HasEquipmentLabour(x));
+            }
+        }
+
+        public decimal TotalCostItems
+        {
+            get
+            {
+                return this.InstallationEquipmentItems.Sum(x => x.ActualCost ?? x.TotalCost ?? 0m);
+            }
+        }
+
+        public decimal TotalCostLabour
+        {
+            get { return this.InstallationEquipmentLabours.Sum(x => x.ActualCost ?? x.TotalCost ?? 0m); }
         }
     }
 }

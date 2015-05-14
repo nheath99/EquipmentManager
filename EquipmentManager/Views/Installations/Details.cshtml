@@ -7,7 +7,154 @@
 @section scripts {
     <script type="text/javascript">
         $(function () {
+            $('#importItems').click(function () {
+                $('#modalImportItems').modal('show');
+            });
 
+            $('#importLabour').click(function () {
+                $('#modalImportLabour').modal('show');
+            })
+
+            $('#selectAllItems').click(function () {
+                var checked = $(this).prop('checked');
+                $('#selectImportItemsTable').find(':checkbox').prop('checked', checked);
+            });
+
+            $('#selectAllLabour').click(function () {
+                var checked = $(this).prop('checked');
+                $('#selectImportLabourTable').find(':checkbox').prop('checked', checked);
+            });
+
+            $('#importSelectedItems').click(function () {
+                var checkboxes = $('#selectImportItemsTable').find(':checkbox:checked');
+                checkboxes.each(function (i, elem) {
+                    var row = $(elem).closest('tr');
+                    var id = $(elem).data('add-id');
+                    var installationId = $('#Id').val();
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Installations/AddInstallationEquipmentItem',
+                        data: { installationId: installationId, equipmentItemId: id },
+                        dataType: 'json',
+                        success: function (data) {
+                            row.remove();
+                            $('#modalImportItems').modal('hide');
+                            location.reload();
+                        }
+                    });
+                });
+            });
+
+            $('#importSelectedLabour').click(function () {
+                var checkboxes = $('#selectImportLabourTable').find(':checkbox:checked');
+                checkboxes.each(function (i, elem) {
+                    var row = $(elem).closest('tr');
+                    var id = $(elem).data('add-id');
+                    var installationId = $('#Id').val();
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Installations/AddInstallationEquipmentLabour',
+                        data: { installationId: installationId, equipmentLabourId: id },
+                        dataType: 'json',
+                        success: function (data) {
+                            row.remove();
+                            $('#modalImportLabour').modal('hide');
+                            location.reload();
+                        }
+                    });
+                });
+            });
+
+            $('#itemsTable').on('click', '[data-id-edit]', function () {
+                var id = $(this).data('id-edit');
+                var row = $(this).closest('tr');
+                var itemName = row.data('name-edit');
+                var supplier = row.data('supplier-edit');
+                var qty = row.data('qty-edit');
+                var qtySpare = row.data('qtyspare-edit');
+                var qtyOrdered = row.data('qtyordered-edit');
+                var statusId = row.data('status-edit');
+                var costperunit = row.data('costperunit-edit');
+                var postage = row.data('postage-edit');
+                var actualCost = row.data('actualcost-edit');
+
+                $('#itemDetails').modal('show');
+                $('#detailsId').val(id);
+                $('#detailsName').html(itemName);
+                $('#detailsSupplier').html(supplier);
+                if (qtySpare == 0) {
+                    $('#detailsQtyReq').html(qty);
+                }
+                else {
+                    $('#detailsQtyReq').html(qty + ' +' + qtySpare + ' spare');
+                }
+                $('#detailsQtyOrdered').val(qtyOrdered)
+                $('#Statuses').val(statusId);
+                $('#detailsCostPerUnit').val(costperunit);
+                $('#detailsPostage').val(postage);
+                $('#detailsActualCost').val(actualCost);
+            });
+
+            $('#labourTable').on('click', '[data-id]', function () {
+                var id = $(this).data('id');
+            });
+
+            $('#itemDetailsSave').click(function () {
+
+                var id = $('#detailsId').val();
+                var unitsOrdered = $('#detailsQtyOrdered').val()
+                var statusId = $('#Statuses').val();
+                var costPerUnit = $('#detailsCostPerUnit').val();
+                var postage = $('#detailsPostage').val();
+                var actualCost = $('#detailsActualCost').val();
+
+                $.ajax({
+                    type: 'post',
+                    url: '/Installations/UpdateInstallationEquipmentItem',
+                    data: { id: id, qtyOrdered: unitsOrdered, statusId: statusId, costPerUnit: costPerUnit, postage: postage, actualCost: actualCost },
+                    dataType: 'json',
+                    success: function (data) {
+                        $('#itemDetails').modal('hide');
+
+                        var row = $('[data-id-edit=' + id + ']').closest('tr');
+                        // qty ordered
+                        row.data('qtyordered-edit', unitsOrdered);
+                        row.find('[unitsOrdered]').html(unitsOrdered);
+
+                        // status
+                        row.data('status-edit', statusId);
+                        var newStatusName = $('#Statuses option:selected').text();
+                        row.find('[itemStatus]').html(newStatusName);
+
+                        // cost per unit
+                        row.data('costperunit-edit', costPerUnit);
+                        row.find('[costPerUnit]').html(costPerUnit);
+
+                        // postage
+                        row.data('postage-edit', postage);
+                        row.find('[postage]').html(postage);
+
+                        // total cost
+                        if (costPerUnit != null && unitsOrdered != null && costPerUnit != 0 && unitsOrdered != 0) {
+                            row.find('[totalCost]').html((costPerUnit * unitsOrdered) + postage);
+                        }
+                        else {
+                            row.find('[totalCost]').html('');
+                        }
+
+                        if (costPerUnit == null || costPerUnit == "") {
+                            row.find('[costPerUnit]').addClass('bg-danger');
+                        }
+                        else {
+                            row.find('[costPerUnit]').removeClass('bg-danger');
+                        }
+
+                        // actual cost
+                        row.data('actualcost-edit', actualCost);
+                        row.find('[actualCost]').html(actualCost);
+                    }
+                })
+            });
         })
     </script>
 }
@@ -16,31 +163,157 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Item Details</h4>
+                <h4 class="modal-title" id="myModalLabel">Edit Item</h4>
             </div>
             <div class="modal-body">
-                <dl class="dl-horizontal">
-                    <dt>Item</dt>
-                    <dd></dd>
-                </dl>
+                <form class="form-horizontal">
+                    <input type="hidden" id="detailsId" />
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Item</label>
+                        <div class="col-sm-9">
+                            <p id="detailsName" class="form-control-static"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Supplier</label>
+                        <div class="col-sm-9">
+                            <p id="detailsSupplier" class="form-control-static"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Qty Req</label>
+                        <div class="col-sm-9">
+                            <p id="detailsQtyReq" class="form-control-static"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="detailsQtyOrdered" class="col-sm-3 control-label">Qty Ordered</label>
+                        <div class="col-sm-9">
+                            <input id="detailsQtyOrdered" type="number" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="detailsStatus" class="col-sm-3 control-label">Status</label>
+                        <div class="col-sm-9">
+                            @Html.DropDownList("Statuses", null, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="detailsCostPerUnit" class="col-sm-3 control-label">Cost per Unit</label>
+                        <div class="col-sm-9">
+                            <input id="detailsCostPerUnit" type="number" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="detailsPostage" class="col-sm-3 control-label">Postage</label>
+                        <div class="col-sm-9">
+                            <input id="detailsPostage" type="number" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="detailsActualCost" class="col-sm-3 control-label">Actual Cost</label>
+                        <div class="col-sm-9">
+                            <input id="detailsActualCost" type="number" class="form-control" />
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button id="modal" type="button" class="btn btn-primary">Save</button>
+                <button id="itemDetailsSave" type="button" class="btn btn-primary">Save</button>
             </div>
         </div>
     </div>
 </div>
 
+<div class="modal" id="modalImportItems" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Import</h4>
+            </div>
+            <div id="selectImportItemsTable" class="modal-body">
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="selectAllItems" /></th>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Manufacturer</th>
+                            <th>Supplier</th>
+                            <th>Quantity Required</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.OutstandingItems)
+                        {
+                            <tr>
+                                <td><input type="checkbox" data-add-id="@item.Id" /></td>
+                                <td>@item.Id</td>
+                                <td>@item.Item.Name</td>
+                                <td>@item.Item.ManufacturerName</td>
+                                <td>@item.Item.SupplierName</td>
+                                <td>@item.QuantityRequired @item.QuantityRequiredSpareString</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button id="importSelectedItems" type="button" class="btn btn-primary">Import</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="modalImportLabour" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Import</h4>
+            </div>
+            <div id="selectImportLabourTable" class="modal-body">
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="selectAllLabour" /></th>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Supplier</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.OutstandingLabour)
+                        {
+                            <tr>
+                                <td><input type="checkbox" data-add-id="@item.Id" /></td>
+                                <td>@item.Id</td>
+                                <td>@item.Name</td>
+                                <td>@item.SupplierName</td>
+                                <td>@item.QuantityString</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button id="importSelectedLabour" type="button" class="btn btn-primary">Import</button>
+            </div>
+        </div>
+    </div>
+</div>
 <ol class="breadcrumb">
     <li>@Html.ActionLink("Home", "Index", "Home")</li>
     <li>@Html.ActionLink("Installations", "Index", "Installations")</li>
     <li class="active">@Model.Name</li>
 </ol>
-
+@Html.HiddenFor(model => model.Id)
 <div>
     <h4>@ViewBag.Title <small>@Html.ActionLink("Edit", "Edit", new { id = Model.Id })</small></h4>
-    @Model.OutstandingItems.Count().ToString()
     <dl class="dl-horizontal">
         <dt>@Html.DisplayNameFor(model => model.Site):</dt>
         <dd>
@@ -50,16 +323,67 @@
         <dd>
             @Html.ActionLink(Model.Equipment.Name, "Details", "Equipment", new { id = Model.EquipmentId }, null)
         </dd>
+        <dt>@Html.DisplayNameFor(model => model.Description):</dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt>Total Cost (Parts):</dt>
+        <dd>@Html.DisplayFor(model => model.TotalCostItems)</dd>
+        <dt>Total Cost (Labour):</dt>
+        <dd>@Html.DisplayFor(model => model.TotalCostLabour)</dd>
     </dl>
     <hr />
+    <h4>Labour</h4>
+    <div class="btn-group">
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            Action <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+            <li><a id="importLabour" href="#">View outstanding labour from @Model.Equipment.Name</a></li>
+            <li><a id="importAllLabour" href="#">View all labour from @Model.Equipment.Name</a></li>
+        </ul>
+    </div>
+    <table class="table table-condensed">
+        <thead>
+            <tr>
+                <th></th>
+                <th>#</th>
+                <th>Name</th>
+                <th>Supplier</th>
+                <th>Quantity Required</th>
+                <th>Quantity Actual</th>
+                <th>Status</th>
+                <th>Cost</th>
+                <th>Total Cost</th>
+                <th>Actual Cost</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.InstallationEquipmentLabours)
+            {
+                <tr data-name="@item.EquipmentLabour.Name" data-suppliername="@item.EquipmentLabour.SupplierName" data-quantityreq="@item.EquipmentLabour.QuantityString" data-quantity="@item.Quantity" data-unit="@item.QuantityUnit" data-cost="@item.CostPerUnit" data-actual="@item.ActualCost">
+                    <td><a class="glyphicon glyphicon-pencil row-command" data-id="@item.Id"></a></td>
+                    <td>@Html.ActionLink(item.Id.ToString(), "Details", "InstallationEquipmentLabour", new { id = item.Id}, null)</td>
+                    <td>@item.EquipmentLabour.Name</td>
+                    <td>@item.EquipmentLabour.SupplierName</td>
+                    <td>@item.EquipmentLabour.QuantityString</td>
+                    <td>@item.QuantityString</td>
+                    <td><a style="cursor:pointer;" data-id="@item.Id" itemstatus>@item.LabourStatusId.Name()</a></td>
+                    <td>@item.CostString</td>
+                    <td>@item.TotalCost</td>
+                    <td>@item.ActualCost</td>
+                </tr>
+            }
+        </tbody>
+    </table>
     <h4>Items (@Model.InstallationEquipmentItems.Count)</h4>
     <div class="btn-group">
         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
             Action <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu">
-            <li><a id="importItems" href="#">Import Items from @Model.Equipment.Name</a></li>
-            <li><a href="#">Something else here</a></li>
+            <li><a id="importItems" href="#">View outstanding items from @Model.Equipment.Name</a></li>
+            <li><a id="importAllItems" href="#">View all items from @Model.Equipment.Name</a></li>
             <li class="divider"></li>
             <li><a href="#">Separated link</a></li>
         </ul>
@@ -78,32 +402,46 @@
     <table id="itemsTable" class="table table-condensed">
         <thead>
             <tr>
+                <th></th>
                 <th>#</th>
                 <th>Name</th>
                 <th>Manufacturer</th>
                 <th>Supplier</th>
-                <th>Quantity Required (Spare)</th>
+                <th>Quantity Required</th>
                 <th>Qty Ordered</th>
                 <th>Status</th>
                 <th>Cost per Unit</th>
                 <th>Postage</th>
                 <th>Total Cost</th>
+                <th>Actual Cost</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model.InstallationEquipmentItems)
             {
-                <tr>
-                    <td><a href="#" data-toggle="modal" data-target="#itemDetails">@item.Id.ToString()</a></td>
+                <tr data-name-edit="@item.EquipmentItem.Item.Name" data-supplier-edit="@item.EquipmentItem.Item.SupplierName" data-qty-edit="@item.EquipmentItem.QuantityRequired" data-qtyspare-edit="@item.EquipmentItem.QuantityRequiredSpare" data-status-edit="@Convert.ToInt32(item.StatusId)" data-qtyordered-edit="@item.UnitsOrdered" data-costperunit-edit="@item.CostPerUnit" data-postage-edit="@item.Postage" data-actualcost-edit="@item.ActualCost">
+                    <td><a class="glyphicon glyphicon-pencil row-command" data-id-edit="@item.Id"></a></td>
+                    <td>@Html.ActionLink(item.Id.ToString(), "Details", "InstallationEquipmentItems", new { id = item.Id }, null)</td>
                     <td>@Html.ActionLink(item.EquipmentItem.Item.Name, "Details", "Items", new { id = item.EquipmentItem.ItemId }, null)</td>
-                    <td>@Html.ActionLink(item.EquipmentItem.Item.ManufacturerName, "Details", "Manufacturers", new {id = item.EquipmentItem.Item.ManufacturerId}, null)</td>
-                    <td>@Html.ActionLink(item.EquipmentItem.Item.SupplierName, "Details", "Suppliers", new { id = item.EquipmentItem.Item.SupplierId }, null)</td>
+                    <td>
+                        @if (item.EquipmentItem.Item.ManufacturerId.HasValue)
+                        {
+                            @Html.ActionLink(item.EquipmentItem.Item.ManufacturerName, "Details", "Manufacturers", new { id = item.EquipmentItem.Item.ManufacturerId }, null)
+                        }
+                    </td>
+                    <td>
+                        @if (item.EquipmentItem.Item.SupplierId.HasValue)
+                        {
+                            @Html.ActionLink(item.EquipmentItem.Item.SupplierName, "Details", "Suppliers", new { id = item.EquipmentItem.Item.SupplierId }, null)
+                        }
+                    </td>
                     <td>@item.EquipmentItem.QuantityRequired @item.EquipmentItem.QuantityRequiredSpareString</td>
-                    <td>@item.UnitsOrdered</td>
-                    <td>@item.StatusId</td>
-                    <td>@item.CostPerUnit</td>
-                    <td>@item.Postage</td>
-                    <td>@item.TotalCost</td>
+                    <td unitsOrdered>@item.UnitsOrdered</td>
+                    <td><a style="cursor:pointer;" data-id-edit="@item.Id" itemStatus>@item.StatusId.Name()</a></td>
+                    <td costPerUnit class="text-right @(!item.CostPerUnit.HasValue ? "bg-danger" : "")">@item.CostPerUnit</td>
+                    <td postage class="text-right">@item.Postage</td>
+                    <td totalCost class="text-right">@item.TotalCost</td>
+                    <td actualCost class="text-right">@item.ActualCost</td>
                 </tr>
             }
         </tbody>

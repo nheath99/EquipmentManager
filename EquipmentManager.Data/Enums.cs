@@ -9,7 +9,7 @@ namespace EquipmentManager.Data
 {
     public enum ItemStatus
     {
-        None,
+        None = 0,
         [Display(Name="Quote Received")]
         QuoteReceived,
         [Display(Name = "On Order")]
@@ -17,6 +17,17 @@ namespace EquipmentManager.Data
         Delivered,
         [Display(Name = "In Stock")]
         InStock,
+        [Display(Name = "Not Required")]
+        NotRequired
+    }
+
+    public enum LabourStatus
+    {
+        None = 0,
+        [Display(Name = "Quote Received")]
+        QuoteReceived,
+        Scheduled,
+        Completed,
         [Display(Name = "Not Required")]
         NotRequired
     }

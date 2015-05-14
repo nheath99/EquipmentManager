@@ -46,13 +46,14 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="InstallationId" Type="int" Nullable="false" />
           <Property Name="EquipmentItemId" Type="int" Nullable="false" />
+          <Property Name="DateQuoted" Type="date" />
           <Property Name="DateOrdered" Type="date" />
           <Property Name="DateExpected" Type="date" />
           <Property Name="DateReceived" Type="date" />
           <Property Name="StatusId" Type="int" Nullable="false" />
-          <Property Name="CostPerUnit" Type="decimal" Precision="8" Scale="4" Nullable="false" />
-          <Property Name="UnitsOrdered" Type="float" Nullable="false" />
-          <Property Name="Postage" Type="decimal" Precision="8" Scale="4" Nullable="false" />
+          <Property Name="CostPerUnit" Type="decimal" Precision="8" Scale="4" />
+          <Property Name="UnitsOrdered" Type="float" />
+          <Property Name="Postage" Type="decimal" Precision="8" Scale="4" />
           <Property Name="ActualCost" Type="decimal" Precision="8" Scale="4" />
         </EntityType>
         <EntityType Name="InstallationEquipmentLabour">
@@ -62,9 +63,10 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="InstallationId" Type="int" Nullable="false" />
           <Property Name="EquipmentLabourId" Type="int" Nullable="false" />
-          <Property Name="Quantity" Type="float" Nullable="false" />
-          <Property Name="QuantityUnit" Type="int" Nullable="false" />
-          <Property Name="TotalCost" Type="decimal" Precision="8" Scale="4" Nullable="false" />
+          <Property Name="LabourStatusId" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="float" />
+          <Property Name="QuantityUnit" Type="int" />
+          <Property Name="CostPerUnit" Type="decimal" Precision="8" Scale="4" />
           <Property Name="ActualCost" Type="decimal" Precision="8" Scale="4" />
         </EntityType>
         <EntityType Name="Installations">
@@ -478,8 +480,8 @@
           <Property Name="Destination_SiteId" Type="Int32" />
           <NavigationProperty Name="Equipment" Relationship="Self.FK_Installations_Equipment" FromRole="Installations" ToRole="Equipment" />
           <NavigationProperty Name="Site" Relationship="Self.FK_Installations_Site" FromRole="Installations" ToRole="Site" />
-          <NavigationProperty Name="InstallationEquipmentLabours" Relationship="EquipmentManagerModel.FK_InstallationEquipmentLabour_Installations" FromRole="Installation" ToRole="InstallationEquipmentLabour" />
           <NavigationProperty Name="InstallationEquipmentItems" Relationship="EquipmentManagerModel.FK_InstallationEquipmentItems_Installations" FromRole="Installation" ToRole="InstallationEquipmentItem" />
+          <NavigationProperty Name="InstallationEquipmentLabours" Relationship="EquipmentManagerModel.FK_InstallationEquipmentLabour_Installations" FromRole="Installation" ToRole="InstallationEquipmentLabour" />
         </EntityType>
         <EntityType Name="ItemCategory">
           <Key>
@@ -734,15 +736,6 @@
             <End Role="Supplier" EntitySet="Suppliers" />
             <End Role="EquipmentLabour" EntitySet="EquipmentLabours" />
           </AssociationSet>
-          <EntitySet Name="InstallationEquipmentLabours" EntityType="EquipmentManagerModel.InstallationEquipmentLabour" />
-          <AssociationSet Name="FK_InstallationEquipmentLabour_EquipmentLabour" Association="EquipmentManagerModel.FK_InstallationEquipmentLabour_EquipmentLabour">
-            <End Role="EquipmentLabour" EntitySet="EquipmentLabours" />
-            <End Role="InstallationEquipmentLabour" EntitySet="InstallationEquipmentLabours" />
-          </AssociationSet>
-          <AssociationSet Name="FK_InstallationEquipmentLabour_Installations" Association="EquipmentManagerModel.FK_InstallationEquipmentLabour_Installations">
-            <End Role="Installation" EntitySet="Installations" />
-            <End Role="InstallationEquipmentLabour" EntitySet="InstallationEquipmentLabours" />
-          </AssociationSet>
           <EntitySet Name="InstallationEquipmentItems" EntityType="EquipmentManagerModel.InstallationEquipmentItem" />
           <AssociationSet Name="FK_InstallationEquipmentItems_EquipmentItems" Association="EquipmentManagerModel.FK_InstallationEquipmentItems_EquipmentItems">
             <End Role="EquipmentItem" EntitySet="EquipmentItems" />
@@ -756,7 +749,16 @@
             <End Role="InstallationEquipmentItem" EntitySet="InstallationEquipmentItems" />
             <End Role="Order" EntitySet="Orders" />
           </AssociationSet>
-        </EntityContainer>
+          <EntitySet Name="InstallationEquipmentLabours" EntityType="EquipmentManagerModel.InstallationEquipmentLabour" />
+          <AssociationSet Name="FK_InstallationEquipmentLabour_EquipmentLabour" Association="EquipmentManagerModel.FK_InstallationEquipmentLabour_EquipmentLabour">
+            <End Role="EquipmentLabour" EntitySet="EquipmentLabours" />
+            <End Role="InstallationEquipmentLabour" EntitySet="InstallationEquipmentLabours" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InstallationEquipmentLabour_Installations" Association="EquipmentManagerModel.FK_InstallationEquipmentLabour_Installations">
+            <End Role="Installation" EntitySet="Installations" />
+            <End Role="InstallationEquipmentLabour" EntitySet="InstallationEquipmentLabours" />
+          </AssociationSet>
+          </EntityContainer>
         <Association Name="FK_EquipmentItems_Items1">
           <End Type="EquipmentManagerModel.Item" Role="Item" Multiplicity="1" />
           <End Type="EquipmentManagerModel.EquipmentItem" Role="EquipmentItem" Multiplicity="*" />
@@ -808,44 +810,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="InstallationEquipmentLabour">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="InstallationId" Type="Int32" Nullable="false" />
-          <Property Name="EquipmentLabourId" Type="Int32" Nullable="false" />
-          <Property Name="Quantity" Type="Double" Nullable="false" />
-          <Property Name="QuantityUnit" Type="EquipmentManagerModel.TemporalUnit" Nullable="false" />
-          <Property Name="TotalCost" Type="Decimal" Nullable="false" Precision="8" Scale="4" />
-          <NavigationProperty Name="EquipmentLabour" Relationship="EquipmentManagerModel.FK_InstallationEquipmentLabour_EquipmentLabour" FromRole="InstallationEquipmentLabour" ToRole="EquipmentLabour" />
-          <NavigationProperty Name="Installation" Relationship="EquipmentManagerModel.FK_InstallationEquipmentLabour_Installations" FromRole="InstallationEquipmentLabour" ToRole="Installation" />
-          <Property Name="ActualCost" Type="Decimal" Precision="8" Scale="4" />
-        </EntityType>
-        <Association Name="FK_InstallationEquipmentLabour_EquipmentLabour">
-          <End Type="EquipmentManagerModel.EquipmentLabour" Role="EquipmentLabour" Multiplicity="1" />
-          <End Type="EquipmentManagerModel.InstallationEquipmentLabour" Role="InstallationEquipmentLabour" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="EquipmentLabour">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="InstallationEquipmentLabour">
-              <PropertyRef Name="EquipmentLabourId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_InstallationEquipmentLabour_Installations">
-          <End Type="EquipmentManagerModel.Installation" Role="Installation" Multiplicity="1" />
-          <End Type="EquipmentManagerModel.InstallationEquipmentLabour" Role="InstallationEquipmentLabour" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Installation">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="InstallationEquipmentLabour">
-              <PropertyRef Name="InstallationId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EnumType Name="TemporalUnit">
           <Member Name="Hours" />
           <Member Name="Days" />
@@ -863,14 +827,15 @@
           <Property Name="DateOrdered" Type="DateTime" Precision="0" />
           <Property Name="DateExpected" Type="DateTime" Precision="0" />
           <Property Name="DateReceived" Type="DateTime" Precision="0" />
-          <Property Name="StatusId" Nullable="false" Type="EquipmentManagerModel.ItemStatus" />
-          <Property Name="CostPerUnit" Type="Decimal" Nullable="false" Precision="8" Scale="4" />
-          <Property Name="UnitsOrdered" Type="Double" Nullable="false" />
-          <Property Name="Postage" Type="Decimal" Nullable="false" Precision="8" Scale="4" />
+          <Property Name="StatusId" Type="EquipmentManagerModel.ItemStatus" Nullable="false" />
+          <Property Name="CostPerUnit" Type="Decimal" Precision="8" Scale="4" />
+          <Property Name="UnitsOrdered" Type="Double" />
+          <Property Name="Postage" Type="Decimal" Precision="8" Scale="4" />
+          <Property Name="ActualCost" Type="Decimal" Precision="8" Scale="4" />
           <NavigationProperty Name="EquipmentItem" Relationship="EquipmentManagerModel.FK_InstallationEquipmentItems_EquipmentItems" FromRole="InstallationEquipmentItem" ToRole="EquipmentItem" />
           <NavigationProperty Name="Installation" Relationship="EquipmentManagerModel.FK_InstallationEquipmentItems_Installations" FromRole="InstallationEquipmentItem" ToRole="Installation" />
           <NavigationProperty Name="Orders" Relationship="EquipmentManagerModel.FK_Orders_InstallationEquipmentItems" FromRole="InstallationEquipmentItem" ToRole="Order" />
-          <Property Name="ActualCost" Type="Decimal" Precision="8" Scale="4" />
+          <Property Name="DateQuoted" Type="DateTime" Precision="0" />
         </EntityType>
         <Association Name="FK_InstallationEquipmentItems_EquipmentItems">
           <End Type="EquipmentManagerModel.EquipmentItem" Role="EquipmentItem" Multiplicity="1" />
@@ -908,7 +873,47 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EnumType Name="ItemStatus" a:ExternalTypeName="EquipmentManager.Data.ItemStatus" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="ItemStatus" a:ExternalTypeName="ItemStatus" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EntityType Name="InstallationEquipmentLabour">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InstallationId" Type="Int32" Nullable="false" />
+          <Property Name="EquipmentLabourId" Type="Int32" Nullable="false" />
+          <Property Name="LabourStatusId" Nullable="false" Type="EquipmentManagerModel.LabourStatus" />
+          <Property Name="Quantity" Type="Double" />
+          <Property Name="QuantityUnit" Type="EquipmentManagerModel.TemporalUnit" />
+          <Property Name="CostPerUnit" Type="Decimal" Precision="8" Scale="4" />
+          <Property Name="ActualCost" Type="Decimal" Precision="8" Scale="4" />
+          <NavigationProperty Name="EquipmentLabour" Relationship="EquipmentManagerModel.FK_InstallationEquipmentLabour_EquipmentLabour" FromRole="InstallationEquipmentLabour" ToRole="EquipmentLabour" />
+          <NavigationProperty Name="Installation" Relationship="EquipmentManagerModel.FK_InstallationEquipmentLabour_Installations" FromRole="InstallationEquipmentLabour" ToRole="Installation" />
+        </EntityType>
+        <Association Name="FK_InstallationEquipmentLabour_EquipmentLabour">
+          <End Type="EquipmentManagerModel.EquipmentLabour" Role="EquipmentLabour" Multiplicity="1" />
+          <End Type="EquipmentManagerModel.InstallationEquipmentLabour" Role="InstallationEquipmentLabour" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EquipmentLabour">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="InstallationEquipmentLabour">
+              <PropertyRef Name="EquipmentLabourId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InstallationEquipmentLabour_Installations">
+          <End Type="EquipmentManagerModel.Installation" Role="Installation" Multiplicity="1" />
+          <End Type="EquipmentManagerModel.InstallationEquipmentLabour" Role="InstallationEquipmentLabour" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Installation">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="InstallationEquipmentLabour">
+              <PropertyRef Name="InstallationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EnumType Name="LabourStatus" a:ExternalTypeName="LabourStatus" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1057,22 +1062,10 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="InstallationEquipmentLabours">
-            <EntityTypeMapping TypeName="EquipmentManagerModel.InstallationEquipmentLabour">
-              <MappingFragment StoreEntitySet="InstallationEquipmentLabour">
-                <ScalarProperty Name="ActualCost" ColumnName="ActualCost" />
-                <ScalarProperty Name="TotalCost" ColumnName="TotalCost" />
-                <ScalarProperty Name="QuantityUnit" ColumnName="QuantityUnit" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="EquipmentLabourId" ColumnName="EquipmentLabourId" />
-                <ScalarProperty Name="InstallationId" ColumnName="InstallationId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="InstallationEquipmentItems">
             <EntityTypeMapping TypeName="EquipmentManagerModel.InstallationEquipmentItem">
               <MappingFragment StoreEntitySet="InstallationEquipmentItems">
+                <ScalarProperty Name="DateQuoted" ColumnName="DateQuoted" />
                 <ScalarProperty Name="ActualCost" ColumnName="ActualCost" />
                 <ScalarProperty Name="Postage" ColumnName="Postage" />
                 <ScalarProperty Name="UnitsOrdered" ColumnName="UnitsOrdered" />
@@ -1082,6 +1075,20 @@
                 <ScalarProperty Name="DateExpected" ColumnName="DateExpected" />
                 <ScalarProperty Name="DateOrdered" ColumnName="DateOrdered" />
                 <ScalarProperty Name="EquipmentItemId" ColumnName="EquipmentItemId" />
+                <ScalarProperty Name="InstallationId" ColumnName="InstallationId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="InstallationEquipmentLabours">
+            <EntityTypeMapping TypeName="EquipmentManagerModel.InstallationEquipmentLabour">
+              <MappingFragment StoreEntitySet="InstallationEquipmentLabour">
+                <ScalarProperty Name="ActualCost" ColumnName="ActualCost" />
+                <ScalarProperty Name="CostPerUnit" ColumnName="CostPerUnit" />
+                <ScalarProperty Name="QuantityUnit" ColumnName="QuantityUnit" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="LabourStatusId" ColumnName="LabourStatusId" />
+                <ScalarProperty Name="EquipmentLabourId" ColumnName="EquipmentLabourId" />
                 <ScalarProperty Name="InstallationId" ColumnName="InstallationId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>

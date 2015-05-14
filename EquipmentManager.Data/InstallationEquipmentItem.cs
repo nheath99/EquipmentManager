@@ -25,11 +25,12 @@ namespace EquipmentManager.Data
         public Nullable<System.DateTime> DateOrdered { get; set; }
         public Nullable<System.DateTime> DateExpected { get; set; }
         public Nullable<System.DateTime> DateReceived { get; set; }
-        public EquipmentManager.Data.ItemStatus StatusId { get; set; }
-        public decimal CostPerUnit { get; set; }
-        public double UnitsOrdered { get; set; }
-        public decimal Postage { get; set; }
+        public ItemStatus StatusId { get; set; }
+        public Nullable<decimal> CostPerUnit { get; set; }
+        public Nullable<double> UnitsOrdered { get; set; }
+        public Nullable<decimal> Postage { get; set; }
         public Nullable<decimal> ActualCost { get; set; }
+        public Nullable<System.DateTime> DateQuoted { get; set; }
     
         public virtual EquipmentItem EquipmentItem { get; set; }
         public virtual Installation Installation { get; set; }

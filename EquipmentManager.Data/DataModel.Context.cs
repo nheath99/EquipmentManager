@@ -37,7 +37,7 @@ namespace EquipmentManager.Data
         public virtual DbSet<Supplier> Suppliers { get; set; }
         public virtual DbSet<UnitsOfMeasure> UnitsOfMeasures { get; set; }
         public virtual DbSet<EquipmentLabour> EquipmentLabours { get; set; }
-        public virtual DbSet<InstallationEquipmentLabour> InstallationEquipmentLabours { get; set; }
         public virtual DbSet<InstallationEquipmentItem> InstallationEquipmentItems { get; set; }
+        public virtual DbSet<InstallationEquipmentLabour> InstallationEquipmentLabours { get; set; }
     }
 }

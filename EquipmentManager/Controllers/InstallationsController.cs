@@ -35,6 +35,82 @@ namespace EquipmentManager.Controllers
             return Json(new { result = true }, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult AddInstallationEquipmentItem(int installationId, int equipmentItemId)
+        {
+            try
+            {
+                Installation i = db.Installations.Find(installationId);
+                EquipmentItem ei = db.EquipmentItems.Find(equipmentItemId);
+
+                if (i != null && ei != null && i.EquipmentId == ei.EquipmentId)
+                {
+                    InstallationEquipmentItem iei = new InstallationEquipmentItem()
+                    {
+                        Installation = i,
+                        EquipmentItem = ei,
+                        StatusId = ItemStatus.None
+                    };
+                    i.InstallationEquipmentItems.Add(iei);
+                    db.SaveChanges();
+                    return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception)
+            {
+            }
+            return Json(new { result = false }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult UpdateInstallationEquipmentItem(int id, double? qtyOrdered, int statusId, decimal? costPerUnit, decimal? postage, decimal? actualCost)
+        {
+            try
+            {
+                InstallationEquipmentItem i = db.InstallationEquipmentItems.Find(id);
+                if (i != null)
+                {
+                    i.UnitsOrdered = qtyOrdered;
+                    i.StatusId = (ItemStatus)statusId;
+                    i.CostPerUnit = costPerUnit;
+                    i.Postage = postage;
+                    i.ActualCost = actualCost;
+
+                    db.SaveChanges();
+                    return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception)
+            {             
+            }
+            return Json(new { result = false }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddInstallationEquipmentLabour(int installationId, int equipmentLabourId)
+        {
+            try
+            {
+                Installation i = db.Installations.Find(installationId);
+                EquipmentLabour el = db.EquipmentLabours.Find(equipmentLabourId);
+
+                if (i != null && el != null && i.EquipmentId == el.EquipmentId)
+                {
+                    InstallationEquipmentLabour iei = new InstallationEquipmentLabour()
+                    {
+                        Installation = i,
+                        EquipmentLabour = el,
+                        LabourStatusId = LabourStatus.None
+                    };
+                    i.InstallationEquipmentLabours.Add(iei);
+                    db.SaveChanges();
+                    return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception)
+            {
+            }
+
+            return Json(new { result = false }, JsonRequestBehavior.AllowGet);
+        }
+
         // GET: Installations/Details/5
         public ActionResult Details(int? id)
         {
@@ -47,6 +123,7 @@ namespace EquipmentManager.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Statuses = ExtensionMethods.AsSelectList<ItemStatus>();
             return View(installation);
         }
 

@@ -17,9 +17,10 @@ namespace EquipmentManager.Data
         public int Id { get; set; }
         public int InstallationId { get; set; }
         public int EquipmentLabourId { get; set; }
-        public double Quantity { get; set; }
-        public TemporalUnit QuantityUnit { get; set; }
-        public decimal TotalCost { get; set; }
+        public LabourStatus LabourStatusId { get; set; }
+        public Nullable<double> Quantity { get; set; }
+        public Nullable<TemporalUnit> QuantityUnit { get; set; }
+        public Nullable<decimal> CostPerUnit { get; set; }
         public Nullable<decimal> ActualCost { get; set; }
     
         public virtual EquipmentLabour EquipmentLabour { get; set; }
