@@ -10,6 +10,10 @@ namespace EquipmentManager.Data
     [MetadataType(typeof(IEquipment))]
     public partial class Equipment
     {
+        public IEnumerable<EquipmentModule> TopLevelModules
+        {
+            get { return this.EquipmentModules.Where(x => x.ParentModuleId == null); }
+        }
     }
 
     public interface IEquipment
@@ -19,7 +23,7 @@ namespace EquipmentManager.Data
         string Name { get; set; }
         string Description { get; set; }
 
-        ICollection<EquipmentItem> EquipmentItems { get; set; }
         ICollection<Installation> Installations { get; set; }
+        ICollection<EquipmentModule> EquipmentModules { get; set; }
     }
 }

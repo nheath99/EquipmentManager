@@ -8,43 +8,29 @@ namespace EquipmentManager.Data
 {
     public partial class Installation
     {
-        public bool HasEquipmentItem(EquipmentItem equipmentItem)
+        public bool HasEquipmentSection(EquipmentModule equipmentSection)
         {
-            return this.InstallationEquipmentItems.Count(x => x.EquipmentItemId == equipmentItem.Id) > 0;
+            //return this.InstallationEquipmentComposites.Count(x => x.EquipmentSectionId == equipmentSection.Id) > 0;
+            return false;
         }
 
-        public bool HasEquipmentLabour(EquipmentLabour equipmentLabour)
-        {
-            return this.InstallationEquipmentLabours.Count(x => x.EquipmentLabourId == equipmentLabour.Id) > 0;
-        }
-
-        public IEnumerable<EquipmentItem> OutstandingItems
+        public IEnumerable<EquipmentModule> OutstandingSections
         {
             get
             {
-                return this.Equipment.EquipmentItems.Where(x => !this.HasEquipmentItem(x));
+                return this.Equipment.EquipmentModules.Where(x => !this.HasEquipmentSection(x));
             }
         }
 
-        public IEnumerable<EquipmentLabour> OutstandingLabour
+        public decimal ActualCost
         {
             get
             {
-                return this.Equipment.EquipmentLabours.Where(x => !this.HasEquipmentLabour(x));
+                //return this.InstallationEquipmentSections.Sum(x =>
+                //    x.ActualCost ??
+                //    x.RealCost);
+                return 0;
             }
-        }
-
-        public decimal TotalCostItems
-        {
-            get
-            {
-                return this.InstallationEquipmentItems.Sum(x => x.ActualCost ?? x.TotalCost ?? 0m);
-            }
-        }
-
-        public decimal TotalCostLabour
-        {
-            get { return this.InstallationEquipmentLabours.Sum(x => x.ActualCost ?? x.TotalCost ?? 0m); }
-        }
+        }        
     }
 }

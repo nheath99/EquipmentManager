@@ -16,17 +16,15 @@ namespace EquipmentManager.Data
     {
         public Equipment()
         {
-            this.EquipmentItems = new HashSet<EquipmentItem>();
             this.Installations = new HashSet<Installation>();
-            this.EquipmentLabours = new HashSet<EquipmentLabour>();
+            this.EquipmentModules = new HashSet<EquipmentModule>();
         }
     
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
     
-        public virtual ICollection<EquipmentItem> EquipmentItems { get; set; }
         public virtual ICollection<Installation> Installations { get; set; }
-        public virtual ICollection<EquipmentLabour> EquipmentLabours { get; set; }
+        public virtual ICollection<EquipmentModule> EquipmentModules { get; set; }
     }
 }

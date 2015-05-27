@@ -26,6 +26,6 @@ namespace EquipmentManager.Data
         string Postcode { get; set; }
         string Country { get; set; }
 
-        ICollection<Item> Items { get; set; }
+        ICollection<Part> Parts { get; set; }
     }
 }

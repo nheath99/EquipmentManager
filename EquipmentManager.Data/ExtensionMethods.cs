@@ -11,6 +11,9 @@ namespace EquipmentManager
     {
         public static string Name(this Enum e)
         {
+            if (e == null)
+                return string.Empty;
+
             return (e as Enum).GetAttributeValue<DisplayAttribute>(x => x.Name);
         }
 

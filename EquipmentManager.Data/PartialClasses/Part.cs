@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace EquipmentManager.Data
 {
-    [MetadataType(typeof(IItem))]
-    public partial class Item
+    [MetadataType(typeof(IPart))]
+    public partial class Part
     {
         public static readonly int LinkShortLength = 20;
 
@@ -19,7 +19,7 @@ namespace EquipmentManager.Data
         { get { return this.Supplier != null ? this.Supplier.Name : string.Empty; } }
 
         public string ItemCategoryName
-        { get { return this.ItemCategory != null ? this.ItemCategory.Name : string.Empty; } }
+        { get { return this.PartCategory != null ? this.PartCategory.Name : string.Empty; } }
 
         public string LinkShort
         {
@@ -74,7 +74,7 @@ namespace EquipmentManager.Data
         }
     }
 
-    public interface IItem
+    public interface IPart
     {
         int Id { get; set; }
         [Required]
@@ -90,14 +90,14 @@ namespace EquipmentManager.Data
         Nullable<int> ReplacedBy_Id { get; set; }
 
         [Display(Name="Category")]
-        ItemCategory ItemCategory { get; set; }
-        ICollection<Item> Replaces { get; set; }
+        PartCategory PartCategory { get; set; }
+        ICollection<Part> Replaces { get; set; }
         [Display(Name="Replaced By")]
-        Item ReplacedBy { get; set; }
+        Part ReplacedBy { get; set; }
         Manufacturer Manufacturer { get; set; }
         Supplier Supplier { get; set; }
         [Display(Name="Part Numbers")]
         ICollection<PartNumber> PartNumbers { get; set; }
-        ICollection<EquipmentItem> EquipmentItems { get; set; }
+        ICollection<EquipmentPart> EquipmentParts { get; set; }
     }
 }

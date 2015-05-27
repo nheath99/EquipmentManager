@@ -12,16 +12,19 @@ namespace EquipmentManager.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class ItemCategory
+    public partial class EquipmentPart
     {
-        public ItemCategory()
-        {
-            this.Items = new HashSet<Item>();
-        }
-    
         public int Id { get; set; }
-        public string Name { get; set; }
+        public int EquipmentModuleId { get; set; }
+        public int PartId { get; set; }
+        public double QuantityRequired { get; set; }
+        public double QuantityRequiredSpare { get; set; }
+        public string UnitOfMeasure { get; set; }
+        public string Notes { get; set; }
+        public System.DateTime ValidFrom { get; set; }
+        public Nullable<System.DateTime> ValidTo { get; set; }
     
-        public virtual ICollection<Item> Items { get; set; }
+        public virtual EquipmentModule EquipmentModule { get; set; }
+        public virtual Part Part { get; set; }
     }
 }

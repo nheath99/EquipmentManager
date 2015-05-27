@@ -12,13 +12,13 @@ namespace EquipmentManager.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class Item
+    public partial class Part
     {
-        public Item()
+        public Part()
         {
-            this.Replaces = new HashSet<Item>();
             this.PartNumbers = new HashSet<PartNumber>();
-            this.EquipmentItems = new HashSet<EquipmentItem>();
+            this.Replaces = new HashSet<Part>();
+            this.EquipmentParts = new HashSet<EquipmentPart>();
         }
     
         public int Id { get; set; }
@@ -32,12 +32,12 @@ namespace EquipmentManager.Data
         public bool Obsolete { get; set; }
         public Nullable<int> ReplacedBy_Id { get; set; }
     
-        public virtual ItemCategory ItemCategory { get; set; }
-        public virtual ICollection<Item> Replaces { get; set; }
-        public virtual Item ReplacedBy { get; set; }
         public virtual Manufacturer Manufacturer { get; set; }
-        public virtual Supplier Supplier { get; set; }
+        public virtual PartCategory PartCategory { get; set; }
         public virtual ICollection<PartNumber> PartNumbers { get; set; }
-        public virtual ICollection<EquipmentItem> EquipmentItems { get; set; }
+        public virtual ICollection<Part> Replaces { get; set; }
+        public virtual Part ReplacedBy { get; set; }
+        public virtual Supplier Supplier { get; set; }
+        public virtual ICollection<EquipmentPart> EquipmentParts { get; set; }
     }
 }

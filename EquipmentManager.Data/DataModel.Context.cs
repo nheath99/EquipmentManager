@@ -25,19 +25,19 @@ namespace EquipmentManager.Data
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Equipment> Equipments { get; set; }
-        public virtual DbSet<EquipmentItem> EquipmentItems { get; set; }
-        public virtual DbSet<Installation> Installations { get; set; }
-        public virtual DbSet<ItemCategory> ItemCategories { get; set; }
-        public virtual DbSet<Item> Items { get; set; }
         public virtual DbSet<Manufacturer> Manufacturers { get; set; }
-        public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<PartNumber> PartNumbers { get; set; }
-        public virtual DbSet<Site> Sites { get; set; }
         public virtual DbSet<Supplier> Suppliers { get; set; }
         public virtual DbSet<UnitsOfMeasure> UnitsOfMeasures { get; set; }
+        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Equipment> Equipments { get; set; }
+        public virtual DbSet<Tag> Tags { get; set; }
+        public virtual DbSet<Installation> Installations { get; set; }
+        public virtual DbSet<Site> Sites { get; set; }
         public virtual DbSet<EquipmentLabour> EquipmentLabours { get; set; }
-        public virtual DbSet<InstallationEquipmentItem> InstallationEquipmentItems { get; set; }
-        public virtual DbSet<InstallationEquipmentLabour> InstallationEquipmentLabours { get; set; }
+        public virtual DbSet<EquipmentModule> EquipmentModules { get; set; }
+        public virtual DbSet<PartCategory> PartCategories { get; set; }
+        public virtual DbSet<Part> Parts { get; set; }
+        public virtual DbSet<EquipmentPart> EquipmentParts { get; set; }
     }
 }

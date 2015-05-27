@@ -17,7 +17,7 @@ namespace EquipmentManager.Controllers
         // GET: ItemCategories
         public ActionResult Index()
         {
-            return View(db.ItemCategories.ToList());
+            return View(db.PartCategories.ToList());
         }
 
         // GET: ItemCategories/Details/5
@@ -27,12 +27,12 @@ namespace EquipmentManager.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ItemCategory itemCategory = db.ItemCategories.Find(id);
-            if (itemCategory == null)
+            PartCategory partCategory = db.PartCategories.Find(id);
+            if (partCategory == null)
             {
                 return HttpNotFound();
             }
-            return View(itemCategory);
+            return View(partCategory);
         }
 
         // GET: ItemCategories/Create
@@ -46,16 +46,16 @@ namespace EquipmentManager.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name")] ItemCategory itemCategory)
+        public ActionResult Create([Bind(Include = "Id,Name")] PartCategory partCategory)
         {
             if (ModelState.IsValid)
             {
-                db.ItemCategories.Add(itemCategory);
+                db.PartCategories.Add(partCategory);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(itemCategory);
+            return View(partCategory);
         }
 
         // GET: ItemCategories/Edit/5
@@ -65,12 +65,12 @@ namespace EquipmentManager.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ItemCategory itemCategory = db.ItemCategories.Find(id);
-            if (itemCategory == null)
+            PartCategory partCategory = db.PartCategories.Find(id);
+            if (partCategory == null)
             {
                 return HttpNotFound();
             }
-            return View(itemCategory);
+            return View(partCategory);
         }
 
         // POST: ItemCategories/Edit/5
@@ -78,15 +78,15 @@ namespace EquipmentManager.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name")] ItemCategory itemCategory)
+        public ActionResult Edit([Bind(Include = "Id,Name")] PartCategory partCategory)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(itemCategory).State = EntityState.Modified;
+                db.Entry(partCategory).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(itemCategory);
+            return View(partCategory);
         }
 
         // GET: ItemCategories/Delete/5
@@ -96,12 +96,12 @@ namespace EquipmentManager.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ItemCategory itemCategory = db.ItemCategories.Find(id);
-            if (itemCategory == null)
+            PartCategory partCategory = db.PartCategories.Find(id);
+            if (partCategory == null)
             {
                 return HttpNotFound();
             }
-            return View(itemCategory);
+            return View(partCategory);
         }
 
         // POST: ItemCategories/Delete/5
@@ -109,8 +109,8 @@ namespace EquipmentManager.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            ItemCategory itemCategory = db.ItemCategories.Find(id);
-            db.ItemCategories.Remove(itemCategory);
+            PartCategory partCategory = db.PartCategories.Find(id);
+            db.PartCategories.Remove(partCategory);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 
 namespace EquipmentManager.Data
 {
-    [MetadataType(typeof(IItemCategory))]
-    public partial class ItemCategory
+    [MetadataType(typeof(IPartCategory))]
+    public partial class PartCategory
     {
     }
 
-    public interface IItemCategory
+    public interface IPartCategory
     {
         int Id { get; set; }
         [Required]
         string Name { get; set; }
 
-        ICollection<Item> Items { get; set; }
+        ICollection<Part> Parts { get; set; }
     }
 }

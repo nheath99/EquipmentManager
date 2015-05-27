@@ -1,4 +1,6 @@
-﻿@{
+﻿@model EquipmentManager.Models.HomeModel
+
+@{
     ViewBag.Title = "Home";
 }
 
@@ -18,14 +20,45 @@
             @Html.ActionLink("Installations", "Index", "Installations", null, new { @class = "list-group-item" })
             @Html.ActionLink("Items", "Index", "Items", null, new { @class = "list-group-item" })
             @Html.ActionLink("Sites", "Index", "Sites", null, new { @class = "list-group-item" })
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="list-group">
             @Html.ActionLink("Manufacturers", "Index", "Manufacturers", null, new { @class = "list-group-item" })
             @Html.ActionLink("Suppliers", "Index", "Suppliers", null, new { @class = "list-group-item" })
             @Html.ActionLink("Categories", "Index", "ItemCategories", null, new { @class = "list-group-item" })
             @Html.ActionLink("Units", "Index", "Units", null, new { @class = "list-group-item" })
         </div>
     </div>
+    <div class="col-md-3">
+        <div class="panel panel-info">
+            <div class="panel-heading">Recent Equipment</div>
+            <div class="list-group">
+                @foreach (EquipmentManager.Data.Equipment item in Model.RecentEquipment)
+                {
+                    @Html.ActionLink(item.Name, "Details", "Equipment", new { id = item.Id }, new { @class = "list-group-item" })
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="panel panel-info">
+            <div class="panel-heading">Recent Installations</div>
+            <div class="list-group">
+                @foreach (EquipmentManager.Data.Installation item in Model.RecentInstallations)
+                {
+                    @Html.ActionLink(item.Name, "Details", "Installations", new { id = item.Id }, new { @class = "list-group-item" })
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="panel panel-info">
+            <div class="panel-heading">Recent Parts</div>
+            <div class="list-group">
+                @foreach (EquipmentManager.Data.Part part in Model.RecentParts)
+                {
+                    @Html.ActionLink(part.Name, "Details", "Items", new { id = part.Id }, new { @class = "list-group-item" })
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
 </div>

@@ -20,6 +20,6 @@ namespace EquipmentManager.Data
         public string Description { get; set; }
         public bool Active { get; set; }
     
-        public virtual Item Item { get; set; }
+        public virtual Part Part { get; set; }
     }
 }

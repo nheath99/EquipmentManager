@@ -1,0 +1,99 @@
+﻿@model EquipmentManager.Data.EquipmentModule
+
+<li>
+    <div class="panel panel-info panel-small" data-module-id="@Model.Id" data-module-name="@Model.Name">
+        <div class="panel-heading" style="cursor:pointer;" data-action="expand">
+            <span class="glyphicon glyphicon-chevron-right row-command"></span>
+            <span class="h4">@Model.Name</span>
+            <span class="pull-right">
+                <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="bottom" title="Add child module"></span>
+                <span class="glyphicon glyphicon-cog" data-toggle="tooltip" data-placement="bottom" title="Edit module"></span>
+                <span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Remove module"></span>
+            </span>
+        </div>
+        <div class="module-children panel-body">
+            <ul class="list-unstyled">
+                @foreach (var module in Model.SubordonateModules)
+                {
+                    @Html.Partial("_EquipmentModulePartial", module)
+                }
+            </ul>
+            <div class="panel panel-default panel-small">
+                <div class="panel-heading">
+                    <span data-action="expand pointer">
+                        <span class="glyphicon glyphicon-chevron-right row-command"></span>
+                        <span class="h4 pointer">Parts</span>
+                    </span>
+                    <span class="pull-right">
+                        <span class="glyphicon glyphicon-plus pointer" data-toggle="tooltip" data-placement="bottom" title="Add part"></span>
+                    </span>
+                </div>
+                <table class="table table-condensed table-hover module-children">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Manufacturer</th>
+                            <th>Supplier</th>
+                            <th>Quantity</th>
+                            <th style="width:40px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var part in Model.EquipmentParts)
+                        {
+                            <tr>
+                                <td>@Html.ActionLink(part.Part.Name, "Details", "Parts", new { id = part.PartId }, null)</td>
+                                <td>
+                                    @if (part.Part.ManufacturerId.HasValue)
+                                    {
+                                        @Html.ActionLink(part.Part.ManufacturerName, "Details", "Manufacturers", new { id = part.Part.ManufacturerId }, null)
+                                    }
+                                </td>
+                                <td>
+                                    @if (part.Part.SupplierId.HasValue)
+                                    {
+                                        @Html.ActionLink(part.Part.SupplierName, "Details", "Suppliers", new { id = part.Part.SupplierId }, null)
+                                    }
+                                </td>
+                                <td>@part.QuantityRequired @part.QuantityRequiredSpareString</td>
+                                <td><span class="glyphicon glyphicon-cog pointer" data-toggle="tooltip" data-placement="bottom" title="Edit" data-equipment-part-id="@part.Id"></span></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="panel panel-default panel-small">
+                <div class="panel-heading">
+                    <span data-action="expand pointer">
+                        <span class="glyphicon glyphicon-chevron-right row-command"></span>
+                        <span class="h4 pointer">Labour</span>
+                    </span>
+                    <span class="pull-right">
+                        <span class="glyphicon glyphicon-plus pointer" data-toggle="tooltip" data-placement="bottom" title="Add labour" data-function="addLabour"></span>
+                    </span>
+                </div>
+                <table class="table table-condensed table-hover module-children">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Supplier</th>
+                            <th>Amount</th>
+                            <th style="width:40px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var labour in Model.EquipmentLabours)
+                        {
+                            <tr>
+                                <td>@labour.Name</td>
+                                <td>@labour.SupplierName</td>
+                                <td>@labour.QuantityString</td>
+                                <td><span class="glyphicon glyphicon-cog pointer" data-toggle="tooltip" data-placement="bottom" title="Edit" data-action="editLabour"></span></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</li>

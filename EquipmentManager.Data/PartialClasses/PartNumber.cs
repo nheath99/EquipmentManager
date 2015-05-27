@@ -36,6 +36,6 @@ namespace EquipmentManager.Data
         string Description { get; set; }
         bool Active { get; set; }
 
-        Item Item { get; set; }
+        Part Part { get; set; }
     }
 }

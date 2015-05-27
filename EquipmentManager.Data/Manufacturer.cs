@@ -16,7 +16,7 @@ namespace EquipmentManager.Data
     {
         public Manufacturer()
         {
-            this.Items = new HashSet<Item>();
+            this.Parts = new HashSet<Part>();
         }
     
         public int Id { get; set; }
@@ -29,6 +29,6 @@ namespace EquipmentManager.Data
         public string Postcode { get; set; }
         public string Country { get; set; }
     
-        public virtual ICollection<Item> Items { get; set; }
+        public virtual ICollection<Part> Parts { get; set; }
     }
 }

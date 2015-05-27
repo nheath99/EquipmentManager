@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace EquipmentManager.Data
 {
-    [MetadataType(typeof(IEquipmentItem))]
-    public partial class EquipmentItem
+    [MetadataType(typeof(IEquipmentPart))]
+    public partial class EquipmentPart
     {
         public bool IsValid(DateTime date)
         {
@@ -31,11 +31,11 @@ namespace EquipmentManager.Data
         }
     }
 
-    public interface IEquipmentItem
+    public interface IEquipmentPart
     {
         int Id { get; set; }
-        int EquipmentId { get; set; }
-        int ItemId { get; set; }
+        int EquipmentModuleId { get; set; }
+        int PartId { get; set; }
         double QuantityRequired { get; set; }
         double QuantityRequiredSpare { get; set; }
         string UnitOfMeasure { get; set; }
@@ -43,8 +43,7 @@ namespace EquipmentManager.Data
         DateTime ValidFrom { get; set; }
         Nullable<DateTime> ValidTo { get; set; }
 
-        Equipment Equipment { get; set; }
-        ICollection<InstallationEquipmentItem> InstallationEquipmentItems { get; set; }
-        Item Item { get; set; }
+        EquipmentModule EquipmentModule { get; set; }
+        Part Part { get; set; }
     }
 }

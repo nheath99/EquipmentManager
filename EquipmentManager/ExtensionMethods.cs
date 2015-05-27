@@ -3,12 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
 
 namespace EquipmentManager
 {
-    public static class ExtensionMethods
+    public static class EnumHelpers
     {
         public static IEnumerable<SelectListItem> AsSelectList<T>(int? selectedItem = null)
         {
@@ -20,6 +21,19 @@ namespace EquipmentManager
                     Value = Convert.ToInt32(x).ToString(),
                     Selected = selectedItem.HasValue ? selectedItem == Convert.ToInt32(x) : false
                 });
+        }
+    }
+
+    public static class ExtensionMethods
+    {
+        public static string GetUserName(this IIdentity identity)
+        {
+            string userName = identity.Name;
+            while (userName.Contains('\\'))
+            {
+                userName = userName.Substring(1);
+            }
+            return userName;
         }
 
 

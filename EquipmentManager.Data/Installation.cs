@@ -14,12 +14,6 @@ namespace EquipmentManager.Data
     
     public partial class Installation
     {
-        public Installation()
-        {
-            this.InstallationEquipmentItems = new HashSet<InstallationEquipmentItem>();
-            this.InstallationEquipmentLabours = new HashSet<InstallationEquipmentLabour>();
-        }
-    
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -28,7 +22,5 @@ namespace EquipmentManager.Data
     
         public virtual Equipment Equipment { get; set; }
         public virtual Site Site { get; set; }
-        public virtual ICollection<InstallationEquipmentItem> InstallationEquipmentItems { get; set; }
-        public virtual ICollection<InstallationEquipmentLabour> InstallationEquipmentLabours { get; set; }
     }
 }

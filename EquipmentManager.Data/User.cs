@@ -12,15 +12,12 @@ namespace EquipmentManager.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class Order
+    public partial class User
     {
         public int Id { get; set; }
-        public int InstallationEquipmentItemId { get; set; }
-        public System.DateTime DateOrdered { get; set; }
-        public Nullable<System.DateTime> DateReceived { get; set; }
-        public double Quantity { get; set; }
-        public string Notes { get; set; }
-    
-        public virtual InstallationEquipmentItem InstallationEquipmentItem { get; set; }
+        public string UserName { get; set; }
+        public string RecentItems { get; set; }
+        public string RecentInstallations { get; set; }
+        public string RecentEquipment { get; set; }
     }
 }

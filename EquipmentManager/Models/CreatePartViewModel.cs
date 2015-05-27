@@ -7,9 +7,9 @@ using System.Web;
 
 namespace EquipmentManager.Models
 {
-    public class CreateItemViewModel
+    public class CreatePartViewModel
     {
-        public CreateItemViewModel()
+        public CreatePartViewModel()
         {
             this.PartNumberDescriptions = new List<string>();
             this.PartNumberValues = new List<string>();
@@ -29,9 +29,9 @@ namespace EquipmentManager.Models
         public List<string> PartNumberValues { get; set; }
         public List<string> PartNumberDescriptions { get; set; }
 
-        public Item GetItem()
+        public Part GetPart()
         {
-            Item i = new Item()
+            Part p = new Part()
             {
                 Name = this.Name,
                 Description = this.Description,
@@ -44,7 +44,7 @@ namespace EquipmentManager.Models
 
             for (int j = 0; j < this.PartNumberValues.Count; j++)
             {
-                i.PartNumbers.Add(new PartNumber()
+                p.PartNumbers.Add(new PartNumber()
                     {
                         Value = this.PartNumberValues[j],
                         Description = this.PartNumberDescriptions[j],
@@ -52,7 +52,7 @@ namespace EquipmentManager.Models
                     });
             }
 
-            return i;
+            return p;
         }
     }
 }

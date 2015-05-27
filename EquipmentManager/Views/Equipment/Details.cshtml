@@ -7,7 +7,26 @@
 @section scripts {
     @Scripts.Render("~/bundles/jqueryui")
     <script type="text/javascript">
+
         $(function () {
+
+            $('[data-toggle="tooltip"]').tooltip();
+
+            $('#addModule').click(function () {
+                var eqId = $('#Id').val();
+                var moduleName = $('#tbAddModuleName').val();
+                var moduleDescription = $('#tbAddModuleDescription').val();
+
+                $.ajax({
+                    type: 'post',
+                    url: '/Equipment/AddModule',
+                    data: { equipmentId: eqId, name: moduleName, description: moduleDescription },
+                    dataType: 'json',
+                    success: function (data) {
+                        location.reload();
+                    }
+                });
+            });
 
             $('#modalAddInstallation').click(function () {
                 var eqId = $('#Id').val();
@@ -24,6 +43,15 @@
                         location.reload();
                     }
                 });
+            });
+
+            $('#modulesList').on('click', '[data-function="addLabour"]', function () {
+                var root = $(this).closest('[data-module-id]');
+                var moduleId = root.data('module-id');
+                var moduleName = root.data('module-name');
+                $('#addLabour').modal('show');
+                $('#AddLabourModuleId').val(moduleId);
+                $('#addLabourModalTitle').html("Add Labour to " + moduleName);
             });
 
             $('#modalAddLabour').click(function () {
@@ -109,6 +137,35 @@
                     }
                 });
             });
+            
+            $('#modulesList').on('click', '[data-action]', function () {
+                if ($(this).data('action') == "expand") {
+                    $(this).data('action', 'collapse');
+                    var x = $(this).children('.glyphicon-chevron-right');
+                    expandModule(x);
+                }
+                else {
+                    $(this).data('action', 'expand');
+                    var x = $(this).children('.glyphicon-chevron-down');
+                    collapseModule(x);
+                }
+            });
+
+            function expandModule(module) {
+                module.toggleClass('glyphicon-chevron-right');
+                module.toggleClass('glyphicon-chevron-down');
+
+                var row = module.closest('.panel');
+                row.children('.module-children').show();
+            }
+
+            function collapseModule(module) {
+                module.toggleClass('glyphicon-chevron-right');
+                module.toggleClass('glyphicon-chevron-down');
+
+                var row = module.closest('.panel');
+                row.children('.module-children').hide();
+            }
 
             $('#modalAddItem').click(function () {
 
@@ -121,8 +178,8 @@
 
                 $.ajax({
                     type: 'POST',
-                    url: '/Equipment/AddEquipmentItem',
-                    data: { equipmentId: eqId, itemId: itId, quantityRequired: qty, quantitySpare: qtySpare, unitOfMeasure: unit, notes: n },
+                    url: '/Equipment/AddEquipmentPart',
+                    data: { equipmentId: eqId, partId: itId, quantityRequired: qty, quantitySpare: qtySpare, unitOfMeasure: unit, notes: n },
                     dataType: 'json',
                     success: function (data) {
                         var row = '<tr><td><a class="glyphicon glyphicon-remove remove-row" data-id=' + data.id + ' /></td><td>' + data.id + '</td><td>' + data.name + '</td><td>' + data.manufacturer + '</td><td>' + data.supplier + '</td><td>' + data.quantityRequired;
@@ -246,10 +303,11 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Add Labour</h4>
+                <h4 class="modal-title" id="addLabourModalTitle">Add Labour</h4>
             </div>
             <div class="modal-body">
                 <form class="form-horizontal">
+                    <input type="hidden" id="AddLabourModuleId" />
                     <div class="form-group form-group-sm form-group-condensed">
                         <label for="" class="col-sm-4 control-label">Name</label>
                         <div class="col-sm-8">
@@ -394,67 +452,21 @@
 </fieldset>
 
 <fieldset>
-    <legend>Equipment Labour <a id="addLabour" class="btn btn-info btn-xs" data-toggle="modal" data-target="#addLabour">Add</a></legend>
-    <table id="labourTable" class="table table-condensed">
-        <thead>
-            <tr>
-                <th></th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Quantity</th>
-                <th>Supplier</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var l in Model.Labour)
-            {
-                <tr>
-                    <td><a class="glyphicon glyphicon-remove remove-row" data-id="@l.Id" /></td>
-                    <td>@l.Name</td>
-                    <td>@l.Description</td>
-                    <td>@Math.Round(l.Quantity, 2) @l.QuantityUnit.Name()</td>
-                    <td>
-                        @if (l.Supplier != null)
-                        { @l.Supplier.Name }
-                </td>
-            </tr>
-            }
-        </tbody>
-    </table>
-</fieldset>
-<fieldset>
-    <legend>Equipment Items (@Model.EquipmentItems.Count)</legend>
-    <form class="form-inline">
+    <legend>Equipment Modules (@Model.EquipmentModules.Count)</legend>
+    <form class="form-inline" style="padding-bottom:15px;">
         <div class="form-group">
-            <input type="text" id="tbItemSearch" class="form-control" placeholder="Search..." style="width:700px;" />
-            <a id="addItem" class="btn btn-primary" data-toggle="modal" data-target="#addItemModal" disabled>Add Item</a>
+            <input type="text" id="tbAddModuleName" class="form-control" placeholder="Name" style="width:700px;" />
+            <input type="text" id="tbAddModuleDescription" class="form-control" placeholder="Description" style="width:700px;" />
+            <a id="addModule" class="btn btn-primary">Create Module</a>
         </div>
     </form>
-    <table id="itemsTable" class="table table-condensed">
-        <thead>
-            <tr>
-                <th></th>
-                <th>#</th>
-                <th>Name</th>
-                <th>Manufacturer</th>
-                <th>Supplier</th>
-                <th>Quantity Required (Spare)</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.EquipmentItems.Where(x => x.IsValidToday))
-            {
-                <tr>
-                    <td><a class="glyphicon glyphicon-remove remove-row" data-id="@item.Id" /></td>
-                    <td>@Html.ActionLink(item.Id.ToString(), "Details", "EquipmentItems", new { id = item.Id }, null)</td>
-                    <td>@Html.ActionLink(item.ItemName, "Details", "Items", new { id = item.ItemId }, null)</td>
-                    <td>@item.ItemManufacturerName</td>
-                    <td>@item.ItemSupplierName</td>
-                    <td>@item.QuantityRequired @item.QuantityRequiredSpareString</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <ul id="modulesList" class="list-unstyled">
+        @foreach (var module in Model.TopLevelModules)
+        {
+            @Html.Partial("_EquipmentModulePartial", module)
+        }
+    </ul>
+
 </fieldset>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |

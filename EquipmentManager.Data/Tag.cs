@@ -12,17 +12,9 @@ namespace EquipmentManager.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class EquipmentLabour
+    public partial class Tag
     {
         public int Id { get; set; }
-        public int EquipmentModuleId { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
-        public Nullable<int> SupplierId { get; set; }
-        public double Quantity { get; set; }
-        public TemporalUnit QuantityUnit { get; set; }
-    
-        public virtual EquipmentModule EquipmentModule { get; set; }
-        public virtual Supplier Supplier { get; set; }
     }
 }

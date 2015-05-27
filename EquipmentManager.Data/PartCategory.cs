@@ -12,25 +12,16 @@ namespace EquipmentManager.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class Supplier
+    public partial class PartCategory
     {
-        public Supplier()
+        public PartCategory()
         {
-            this.EquipmentLabours = new HashSet<EquipmentLabour>();
             this.Parts = new HashSet<Part>();
         }
     
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Website { get; set; }
-        public string Address1 { get; set; }
-        public string Address2 { get; set; }
-        public string Address3 { get; set; }
-        public string Address4 { get; set; }
-        public string Postcode { get; set; }
-        public string Country { get; set; }
     
-        public virtual ICollection<EquipmentLabour> EquipmentLabours { get; set; }
         public virtual ICollection<Part> Parts { get; set; }
     }
 }

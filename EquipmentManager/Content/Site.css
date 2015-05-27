@@ -60,6 +60,10 @@ a.remove-row:hover {
     cursor: pointer;
 }
 
+.pointer {
+    cursor: pointer;
+}
+
 a.row-command:hover {
     color: #333;
     text-decoration: none;
@@ -67,4 +71,22 @@ a.row-command:hover {
 
 .breadcrumb {
     margin-top: 25px;
+}
+
+.module-children {
+    display: none;
+    /*margin-left:25px;*/
+}
+
+.panel-small {
+    margin-bottom: 5px;
+}
+
+.panel-small > .panel-body {
+    padding-top: 5px;
+}
+
+.module-button {
+    padding-top: 0px;
+    padding-bottom: 15px;
 }

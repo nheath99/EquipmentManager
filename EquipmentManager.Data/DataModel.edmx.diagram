@@ -5,36 +5,33 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="6c336db397804b5a85a402694d618ff0" Name="Diagram1" ZoomLevel="86">
-        <EntityTypeShape EntityType="EquipmentManagerModel.Equipment" Width="1.5" PointX="5.875" PointY="2.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="EquipmentManagerModel.EquipmentItem" Width="1.5" PointX="8.375" PointY="1.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="EquipmentManagerModel.Installation" Width="1.5" PointX="6" PointY="5.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="EquipmentManagerModel.ItemCategory" Width="1.5" PointX="13.375" PointY="3" IsExpanded="true" />
-        <EntityTypeShape EntityType="EquipmentManagerModel.Item" Width="1.5" PointX="10.75" PointY="4.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="EquipmentManagerModel.Manufacturer" Width="1.5" PointX="13.25" PointY="7.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="EquipmentManagerModel.Order" Width="1.5" PointX="10.75" PointY="9.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="EquipmentManagerModel.PartNumber" Width="1.5" PointX="13.25" PointY="5" IsExpanded="true" />
-        <EntityTypeShape EntityType="EquipmentManagerModel.Site" Width="1.5" PointX="6" PointY="8.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="EquipmentManagerModel.Supplier" Width="1.5" PointX="10.75" PointY="0.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="EquipmentManagerModel.UnitsOfMeasure" Width="1.5" PointX="13.375" PointY="0.875" IsExpanded="true" />
-        <AssociationConnector Association="EquipmentManagerModel.FK_EquipmentItems_Items" ManuallyRouted="false" />
-        <AssociationConnector Association="EquipmentManagerModel.FK_Installations_Equipment" ManuallyRouted="false" />
-        <AssociationConnector Association="EquipmentManagerModel.FK_Installations_Site" ManuallyRouted="false" />
-        <AssociationConnector Association="EquipmentManagerModel.FK_Items_ItemCategories" ManuallyRouted="false" />
-        <AssociationConnector Association="EquipmentManagerModel.FK_Items_Items" ManuallyRouted="false" />
-        <AssociationConnector Association="EquipmentManagerModel.FK_Items_Manufacturers" ManuallyRouted="false" />
-        <AssociationConnector Association="EquipmentManagerModel.FK_Items_Suppliers" ManuallyRouted="false" />
-        <AssociationConnector Association="EquipmentManagerModel.FK_PartNumbers_Items" ManuallyRouted="false" />
-        <AssociationConnector Association="EquipmentManagerModel.FK_EquipmentItems_Items1" />
-        <EntityTypeShape EntityType="EquipmentManagerModel.EquipmentLabour" Width="1.5" PointX="3.375" PointY="1.125" />
-        <AssociationConnector Association="EquipmentManagerModel.FK_EquipmentLabour_Equipment" />
+        <EntityTypeShape EntityType="EquipmentManagerModel.Manufacturer" Width="1.5" PointX="5.125" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="EquipmentManagerModel.PartNumber" Width="1.5" PointX="5.125" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="EquipmentManagerModel.Supplier" Width="1.5" PointX="7.625" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="EquipmentManagerModel.UnitsOfMeasure" Width="1.5" PointX="5.125" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="EquipmentManagerModel.User" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="EquipmentManagerModel.Equipment" Width="1.5" PointX="17.125" PointY="3.625" />
+        <EntityTypeShape EntityType="EquipmentManagerModel.Tag" Width="1.5" PointX="0.75" PointY="3.75" />
+        <EntityTypeShape EntityType="EquipmentManagerModel.Installation" Width="1.5" PointX="17.25" PointY="6.5" />
+        <EntityTypeShape EntityType="EquipmentManagerModel.Site" Width="1.5" PointX="17.25" PointY="9.625" />
+        <AssociationConnector Association="EquipmentManagerModel.FK_Installations_Equipment" />
+        <AssociationConnector Association="EquipmentManagerModel.FK_Installations_Site" />
+        <EntityTypeShape EntityType="EquipmentManagerModel.EquipmentLabour" Width="2" PointX="9.875" PointY="1" />
+        <EntityTypeShape EntityType="EquipmentManagerModel.EquipmentModule" Width="2.125" PointX="13.625" PointY="3.25" />
+        <AssociationConnector Association="EquipmentManagerModel.FK_EquipmentModule_Equipment" />
+        <AssociationConnector Association="EquipmentManagerModel.FK_EquipmentLabour_EquipmentModule" />
         <AssociationConnector Association="EquipmentManagerModel.FK_EquipmentLabour_Suppliers" />
-        <EntityTypeShape EntityType="EquipmentManagerModel.InstallationEquipmentItem" Width="1.5" PointX="8.375" PointY="6" />
-        <AssociationConnector Association="EquipmentManagerModel.FK_InstallationEquipmentItems_EquipmentItems" />
-        <AssociationConnector Association="EquipmentManagerModel.FK_InstallationEquipmentItems_Installations" />
-        <AssociationConnector Association="EquipmentManagerModel.FK_Orders_InstallationEquipmentItems" />
-        <EntityTypeShape EntityType="EquipmentManagerModel.InstallationEquipmentLabour" Width="1.5" PointX="3.375" PointY="5.375" />
-        <AssociationConnector Association="EquipmentManagerModel.FK_InstallationEquipmentLabour_EquipmentLabour" />
-        <AssociationConnector Association="EquipmentManagerModel.FK_InstallationEquipmentLabour_Installations" />
+        <AssociationConnector Association="EquipmentManagerModel.FK_EquipmentModule_EquipmentModule" />
+        <EntityTypeShape EntityType="EquipmentManagerModel.PartCategory" Width="1.5" PointX="5.125" PointY="3" />
+        <EntityTypeShape EntityType="EquipmentManagerModel.Part" Width="1.5" PointX="7.625" PointY="4.25" />
+        <AssociationConnector Association="EquipmentManagerModel.FK_Parts_Manufacturers" />
+        <AssociationConnector Association="EquipmentManagerModel.FK_Parts_PartCategories" />
+        <AssociationConnector Association="EquipmentManagerModel.FK_PartNumbers_Parts" />
+        <AssociationConnector Association="EquipmentManagerModel.FK_Parts_Parts" />
+        <AssociationConnector Association="EquipmentManagerModel.FK_Parts_Suppliers" />
+        <EntityTypeShape EntityType="EquipmentManagerModel.EquipmentPart" Width="2" PointX="9.875" PointY="4.25" />
+        <AssociationConnector Association="EquipmentManagerModel.FK_EquipmentParts_EquipmentModule" />
+        <AssociationConnector Association="EquipmentManagerModel.FK_EquipmentParts_Part" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
