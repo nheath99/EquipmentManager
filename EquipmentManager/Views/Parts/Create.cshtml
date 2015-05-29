@@ -59,7 +59,7 @@
 
 <ol class="breadcrumb">
     <li>@Html.ActionLink("Home", "Index", "Home")</li>
-    <li>@Html.ActionLink("Items", "Index", "Items")</li>
+    <li>@Html.ActionLink("Parts", "Index", "Parts")</li>
     <li class="active">Create</li>
 </ol>
 
@@ -139,6 +139,8 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create and Continue" name="Continue" class="btn btn-primary" />
+                @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-danger" })
             </div>
         </div>
     </div>

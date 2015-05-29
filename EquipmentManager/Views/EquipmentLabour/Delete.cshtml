@@ -1,19 +1,14 @@
-﻿@model EquipmentManager.Data.Part
+﻿@model EquipmentManager.Data.EquipmentLabour
 
 @{
     ViewBag.Title = "Delete";
 }
 
-<ol class="breadcrumb">
-    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-    <li>@Html.ActionLink("Parts", "Index", "Parts")</li>
-    <li>@Html.ActionLink(Model.Name, "Details", "Parts", new { id = Model.Id }, null)</li>
-    <li class="active">Delete</li>
-</ol>
+<h2>Delete</h2>
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>Item</h4>
+    <h4>EquipmentLabour</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -33,43 +28,27 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ItemsPerUnit)
+            @Html.DisplayNameFor(model => model.Quantity)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.ItemsPerUnit)
+            @Html.DisplayFor(model => model.Quantity)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Link)
+            @Html.DisplayNameFor(model => model.QuantityUnit)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Link)
+            @Html.DisplayFor(model => model.QuantityUnit)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Obsolete)
+            @Html.DisplayNameFor(model => model.EquipmentModule.Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Obsolete)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ItemCategory.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ItemCategory.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Manufacturer.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Manufacturer.Name)
+            @Html.DisplayFor(model => model.EquipmentModule.Name)
         </dd>
 
         <dt>

@@ -20,6 +20,11 @@ namespace EquipmentManager.Data
             get { return this.IsValid(DateTime.Today); }
         }
 
+        public string QuantityString
+        {
+            get { return string.Format("{0} {1}", this.QuantityRequired, this.QuantityRequiredSpareString); }
+        }
+
         public string QuantityRequiredSpareString
         {
             get { return this.QuantityRequiredSpare != 0 ? string.Format("({0})", this.QuantityRequiredSpare) : string.Empty; }

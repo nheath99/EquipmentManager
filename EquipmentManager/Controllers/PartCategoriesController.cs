@@ -10,7 +10,7 @@ using EquipmentManager.Data;
 
 namespace EquipmentManager.Controllers
 {
-    public class ItemCategoriesController : Controller
+    public class PartCategoriesController : Controller
     {
         private EquipmentManagerEntities db = new EquipmentManagerEntities();
 

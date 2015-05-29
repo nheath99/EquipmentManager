@@ -10,116 +10,116 @@ using EquipmentManager.Data;
 
 namespace EquipmentManager.Controllers
 {
-    public class EquipmentPartsController : Controller
+    public class EquipmentModulesController : Controller
     {
         private EquipmentManagerEntities db = new EquipmentManagerEntities();
 
-        // GET: EquipmentParts
+        // GET: EquipmentModules
         public ActionResult Index()
         {
-            var equipmentParts = db.EquipmentParts.Include(e => e.EquipmentModule).Include(e => e.Part);
-            return View(equipmentParts.ToList());
+            var equipmentModules = db.EquipmentModules.Include(e => e.Equipment).Include(e => e.ParentModule);
+            return View(equipmentModules.ToList());
         }
 
-        // GET: EquipmentParts/Details/5
+        // GET: EquipmentModules/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            EquipmentPart equipmentPart = db.EquipmentParts.Find(id);
-            if (equipmentPart == null)
+            EquipmentModule equipmentModule = db.EquipmentModules.Find(id);
+            if (equipmentModule == null)
             {
                 return HttpNotFound();
             }
-            return View(equipmentPart);
+            return View(equipmentModule);
         }
 
-        // GET: EquipmentParts/Create
+        // GET: EquipmentModules/Create
         public ActionResult Create()
         {
-            ViewBag.EquipmentModuleId = new SelectList(db.EquipmentModules, "Id", "Name");
-            ViewBag.PartId = new SelectList(db.Parts, "Id", "Name");
+            ViewBag.EquipmentId = new SelectList(db.Equipments, "Id", "Name");
+            ViewBag.ParentModuleId = new SelectList(db.EquipmentModules, "Id", "Name");
             return View();
         }
 
-        // POST: EquipmentParts/Create
+        // POST: EquipmentModules/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,EquipmentModuleId,PartId,QuantityRequired,QuantityRequiredSpare,UnitOfMeasure,Notes,ValidFrom,ValidTo")] EquipmentPart equipmentPart)
+        public ActionResult Create([Bind(Include = "Id,Name,Description,EquipmentId,ParentModuleId")] EquipmentModule equipmentModule)
         {
             if (ModelState.IsValid)
             {
-                db.EquipmentParts.Add(equipmentPart);
+                db.EquipmentModules.Add(equipmentModule);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.EquipmentModuleId = new SelectList(db.EquipmentModules, "Id", "Name", equipmentPart.EquipmentModuleId);
-            ViewBag.PartId = new SelectList(db.Parts, "Id", "Name", equipmentPart.PartId);
-            return View(equipmentPart);
+            ViewBag.EquipmentId = new SelectList(db.Equipments, "Id", "Name", equipmentModule.EquipmentId);
+            ViewBag.ParentModuleId = new SelectList(db.EquipmentModules, "Id", "Name", equipmentModule.ParentModuleId);
+            return View(equipmentModule);
         }
 
-        // GET: EquipmentParts/Edit/5
+        // GET: EquipmentModules/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            EquipmentPart equipmentPart = db.EquipmentParts.Find(id);
-            if (equipmentPart == null)
+            EquipmentModule equipmentModule = db.EquipmentModules.Find(id);
+            if (equipmentModule == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.EquipmentModuleId = new SelectList(db.EquipmentModules, "Id", "Name", equipmentPart.EquipmentModuleId);
-            ViewBag.PartId = new SelectList(db.Parts, "Id", "Name", equipmentPart.PartId);
-            return View(equipmentPart);
+            ViewBag.EquipmentId = new SelectList(db.Equipments, "Id", "Name", equipmentModule.EquipmentId);
+            ViewBag.ParentModuleId = new SelectList(db.EquipmentModules, "Id", "Name", equipmentModule.ParentModuleId);
+            return View(equipmentModule);
         }
 
-        // POST: EquipmentParts/Edit/5
+        // POST: EquipmentModules/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,EquipmentModuleId,PartId,QuantityRequired,QuantityRequiredSpare,UnitOfMeasure,Notes,ValidFrom,ValidTo")] EquipmentPart equipmentPart)
+        public ActionResult Edit([Bind(Include = "Id,Name,Description,EquipmentId,ParentModuleId")] EquipmentModule equipmentModule)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(equipmentPart).State = EntityState.Modified;
+                db.Entry(equipmentModule).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.EquipmentModuleId = new SelectList(db.EquipmentModules, "Id", "Name", equipmentPart.EquipmentModuleId);
-            ViewBag.PartId = new SelectList(db.Parts, "Id", "Name", equipmentPart.PartId);
-            return View(equipmentPart);
+            ViewBag.EquipmentId = new SelectList(db.Equipments, "Id", "Name", equipmentModule.EquipmentId);
+            ViewBag.ParentModuleId = new SelectList(db.EquipmentModules, "Id", "Name", equipmentModule.ParentModuleId);
+            return View(equipmentModule);
         }
 
-        // GET: EquipmentParts/Delete/5
+        // GET: EquipmentModules/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            EquipmentPart equipmentPart = db.EquipmentParts.Find(id);
-            if (equipmentPart == null)
+            EquipmentModule equipmentModule = db.EquipmentModules.Find(id);
+            if (equipmentModule == null)
             {
                 return HttpNotFound();
             }
-            return View(equipmentPart);
+            return View(equipmentModule);
         }
 
-        // POST: EquipmentParts/Delete/5
+        // POST: EquipmentModules/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            EquipmentPart equipmentPart = db.EquipmentParts.Find(id);
-            db.EquipmentParts.Remove(equipmentPart);
+            EquipmentModule equipmentModule = db.EquipmentModules.Find(id);
+            db.EquipmentModules.Remove(equipmentModule);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

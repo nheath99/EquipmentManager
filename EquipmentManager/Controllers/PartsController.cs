@@ -22,9 +22,9 @@ namespace EquipmentManager.Controllers
             return View(Parts.ToList());
         }
 
-        public JsonResult AddPartNumber(int PartId, string value, string description)
+        public JsonResult AddPartNumber(int partId, string value, string description)
         {
-            var Part = db.Parts.Find(PartId);
+            var Part = db.Parts.Find(partId);
             if (Part != null)
             {
                 try
@@ -94,7 +94,7 @@ namespace EquipmentManager.Controllers
                     name = x.Name,
                     manufacturer = x.ManufacturerName,
                     supplier = x.SupplierName,
-                    PartsPerUnit = x.ItemsPerUnit,
+                    itemsPerUnit = x.ItemsPerUnit,
                     link = x.Link,
                     partNumbers = x.PartNumbersList
                 });
@@ -104,10 +104,15 @@ namespace EquipmentManager.Controllers
         // GET: Parts/Create
         public ActionResult Create()
         {
+            var vm = new CreatePartViewModel()
+            {
+                ItemsPerUnit = 1
+            };
+
             ViewBag.CategoryId = new SelectList(db.PartCategories.OrderBy(x => x.Name), "Id", "Name");
             ViewBag.ManufacturerId = new SelectList(db.Manufacturers.OrderBy(x => x.Name), "Id", "Name");
             ViewBag.SupplierId = new SelectList(db.Suppliers.OrderBy(x => x.Name), "Id", "Name");
-            return View();
+            return View(vm);
         }
 
         // POST: Parts/Create
@@ -115,12 +120,17 @@ namespace EquipmentManager.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Name,Description,SupplierId,ManufacturerId,PartsPerUnit,CategoryId,Link,PartNumberValues,PartNumberDescriptions")] CreatePartViewModel partVm)
+        public ActionResult Create([Bind(Include = "Name,Description,SupplierId,ManufacturerId,ItemsPerUnit,CategoryId,Link,PartNumberValues,PartNumberDescriptions,Continue")] CreatePartViewModel partVm)
         {
             if (ModelState.IsValid)
             {
                 db.Parts.Add(partVm.GetPart());
                 db.SaveChanges();
+                
+                if (partVm.Continue == "Create and Continue")
+                {
+                    return RedirectToAction("Create");
+                }                
                 return RedirectToAction("Index");
             }
 

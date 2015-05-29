@@ -123,10 +123,12 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\EquipmentController.cs" />
+    <Compile Include="Controllers\EquipmentLabourController.cs" />
+    <Compile Include="Controllers\EquipmentModulesController.cs" />
     <Compile Include="Controllers\EquipmentPartsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InstallationsController.cs" />
-    <Compile Include="Controllers\ItemCategoriesController.cs" />
+    <Compile Include="Controllers\PartCategoriesController.cs" />
     <Compile Include="Controllers\PartsController.cs" />
     <Compile Include="Controllers\ManufacturersController.cs" />
     <Compile Include="Controllers\SitesController.cs" />
@@ -265,12 +267,22 @@
     <Content Include="Views\Installations\Details.cshtml" />
     <Content Include="Views\Installations\Edit.cshtml" />
     <Content Include="Views\Installations\Index.cshtml" />
-    <Content Include="Views\EquipmentItems\Create.cshtml" />
-    <Content Include="Views\EquipmentItems\Delete.cshtml" />
-    <Content Include="Views\EquipmentItems\Details.cshtml" />
-    <Content Include="Views\EquipmentItems\Edit.cshtml" />
-    <Content Include="Views\EquipmentItems\Index.cshtml" />
     <Content Include="Views\Shared\_EquipmentModulePartial.cshtml" />
+    <Content Include="Views\EquipmentParts\Create.cshtml" />
+    <Content Include="Views\EquipmentParts\Delete.cshtml" />
+    <Content Include="Views\EquipmentParts\Details.cshtml" />
+    <Content Include="Views\EquipmentParts\Edit.cshtml" />
+    <Content Include="Views\EquipmentParts\Index.cshtml" />
+    <Content Include="Views\EquipmentLabour\Create.cshtml" />
+    <Content Include="Views\EquipmentLabour\Delete.cshtml" />
+    <Content Include="Views\EquipmentLabour\Details.cshtml" />
+    <Content Include="Views\EquipmentLabour\Edit.cshtml" />
+    <Content Include="Views\EquipmentLabour\Index.cshtml" />
+    <Content Include="Views\EquipmentModules\Create.cshtml" />
+    <Content Include="Views\EquipmentModules\Delete.cshtml" />
+    <Content Include="Views\EquipmentModules\Details.cshtml" />
+    <Content Include="Views\EquipmentModules\Edit.cshtml" />
+    <Content Include="Views\EquipmentModules\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EquipmentManager.Data\EquipmentManager.Data.csproj">

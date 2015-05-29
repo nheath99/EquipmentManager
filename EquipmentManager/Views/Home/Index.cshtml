@@ -18,7 +18,7 @@
         <div class="list-group">
             @Html.ActionLink("Equipment", "Index", "Equipment", null, new { @class = "list-group-item" })
             @Html.ActionLink("Installations", "Index", "Installations", null, new { @class = "list-group-item" })
-            @Html.ActionLink("Items", "Index", "Items", null, new { @class = "list-group-item" })
+            @Html.ActionLink("Parts", "Index", "Parts", null, new { @class = "list-group-item" })
             @Html.ActionLink("Sites", "Index", "Sites", null, new { @class = "list-group-item" })
             @Html.ActionLink("Manufacturers", "Index", "Manufacturers", null, new { @class = "list-group-item" })
             @Html.ActionLink("Suppliers", "Index", "Suppliers", null, new { @class = "list-group-item" })
@@ -54,7 +54,7 @@
             <div class="list-group">
                 @foreach (EquipmentManager.Data.Part part in Model.RecentParts)
                 {
-                    @Html.ActionLink(part.Name, "Details", "Items", new { id = part.Id }, new { @class = "list-group-item" })
+                    @Html.ActionLink(part.Name, "Details", "Parts", new { id = part.Id }, new { @class = "list-group-item" })
                 }
             </div>
         </div>

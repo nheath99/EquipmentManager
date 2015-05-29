@@ -34,7 +34,7 @@ namespace EquipmentManager.Controllers
                 return HttpNotFound();
             }
 
-            ViewBag.UnitsOfMeasure = new SelectList(db.UnitsOfMeasures.ToList(), "Name", "Name");
+            ViewBag.UnitsOfMeasure = new SelectList(db.UnitsOfMeasures.ToList(), "Id", "Name");
             ViewBag.Sites = new SelectList(db.Sites.OrderBy(x => x.Code).ToList(), "Id", "CodeName");
             ViewBag.Suppliers = new SelectList(db.Suppliers.OrderBy(x => x.Name), "Id", "Name");
             ViewBag.TemporalUnit = EnumHelpers.AsSelectList<TemporalUnit>();
@@ -52,7 +52,8 @@ namespace EquipmentManager.Controllers
                     EquipmentModule em = new EquipmentModule()
                     {
                         Name = name,
-                        Description = description
+                        Description = description,
+                        ParentModuleId = parentModuleId
                     };
                     e.EquipmentModules.Add(em);
                     db.SaveChanges();
@@ -65,32 +66,54 @@ namespace EquipmentManager.Controllers
             return Json(new { result = false }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult AddLabour(int moduleId, string name, string description, Nullable<int> supplierId, float quantity, int quantityUnit)
+        public JsonResult RemoveModule(int moduleId)
         {
-            EquipmentModule em = db.EquipmentModules.Find(moduleId);
-            if (em != null)
+            try
             {
-                EquipmentLabour el = new EquipmentLabour()
+                EquipmentModule em = db.EquipmentModules.Find(moduleId);
+                if (em != null)
                 {
-                    Name = name,
-                    Description = description,
-                    SupplierId = supplierId,
-                    Quantity = quantity,
-                    QuantityUnit = (TemporalUnit)quantityUnit
-                };
-
-                em.EquipmentLabours.Add(el);
-                db.SaveChanges();
-
-                el = db.EquipmentLabours.Include(x => x.Supplier).Single(x => x.Id == el.Id);
-                return Json(new { result = true, id = el.Id, name = el.Name, description = el.Description, supplierId = el.SupplierId, supplierName = el.SupplierId != null ? el.Supplier.Name : string.Empty, quantity = Math.Round(el.Quantity, 2).ToString() + " " + el.QuantityUnit.Name() }, JsonRequestBehavior.AllowGet);
+                    db.EquipmentModules.Remove(em);
+                    db.SaveChanges();
+                    return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+                }                
+            }
+            catch (Exception)
+            {
             }
             return Json(new { result = false }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult RemoveLabour(int id)
+        public JsonResult AddLabour(int equipmentId, int moduleId, string name, string description, Nullable<int> supplierId, float quantity, int quantityUnit)
         {
-            EquipmentLabour el = db.EquipmentLabours.Find(id);
+            Equipment e = db.Equipments.Find(equipmentId);
+            if (e != null)
+            {
+                EquipmentModule em = e.EquipmentModules.SingleOrDefault(x => x.Id == moduleId);
+                if (em != null)
+                {
+                    EquipmentLabour el = new EquipmentLabour()
+                    {
+                        Name = name,
+                        Description = description,
+                        SupplierId = supplierId,
+                        Quantity = quantity,
+                        QuantityUnit = (TemporalUnit)quantityUnit
+                    };
+
+                    em.EquipmentLabours.Add(el);
+                    db.SaveChanges();
+
+                    el = db.EquipmentLabours.Include(x => x.Supplier).Single(x => x.Id == el.Id);
+                    return Json(new { result = true, id = el.Id, name = el.Name, description = el.Description, supplierId = el.SupplierId, supplierName = el.SupplierId != null ? el.Supplier.Name : string.Empty, quantity = Math.Round(el.Quantity, 2).ToString() + " " + el.QuantityUnit.Name() }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            return Json(new { result = false }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult RemoveLabour(int labourId)
+        {
+            EquipmentLabour el = db.EquipmentLabours.Find(labourId);
             if (el != null)
             {
                 try
@@ -101,50 +124,51 @@ namespace EquipmentManager.Controllers
                 }
                 catch (Exception)
                 {
-                    return Json(new { result = false }, JsonRequestBehavior.AllowGet);
                 }
             }
-            else
-            {
-                return Json(new { result = false }, JsonRequestBehavior.AllowGet);
-            }
+            return Json(new { result = false }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult AddEquipmentPart(int moduleId, int partId, double quantityRequired, double? quantitySpare, string unitOfMeasure, string notes)
+        public JsonResult AddEquipmentPart(int equipmentId, int moduleId, int partId, double quantityRequired, double? quantitySpare, string unitOfMeasure, string notes)
         {
             try
             {
-                EquipmentModule em = db.EquipmentModules.Find(moduleId);
-                if (em != null)
+                Equipment e = db.Equipments.Find(equipmentId);
+                if (e != null)
                 {
-                    EquipmentPart ep = new EquipmentPart()
+                    EquipmentModule em = db.EquipmentModules.SingleOrDefault(x => x.Id == moduleId);
+                    if (em != null)
                     {
-                        EquipmentModuleId = moduleId,
-                        PartId = partId,
-                        QuantityRequired = quantityRequired,
-                        QuantityRequiredSpare = quantitySpare ?? 0,
-                        UnitOfMeasure = unitOfMeasure,
-                        Notes = notes,
-                        ValidFrom = DateTime.Today
-                    };
+                        EquipmentPart ep = new EquipmentPart()
+                        {
+                            EquipmentModuleId = moduleId,
+                            PartId = partId,
+                            QuantityRequired = quantityRequired,
+                            QuantityRequiredSpare = quantitySpare ?? 0,
+                            UnitOfMeasure = unitOfMeasure,
+                            Notes = notes,
+                            ValidFrom = DateTime.Today
+                        };
 
-                    em.EquipmentParts.Add(ep);
-                    db.SaveChanges();
+                        em.EquipmentParts.Add(ep);
+                        db.SaveChanges();
 
-                    ep = db.EquipmentParts.Include(x => x.Part).Single(x => x.Id == ep.Id);
+                        ep = db.EquipmentParts.Include(x => x.Part).Single(x => x.Id == ep.Id);
 
-                    return Json(new
-                    {
-                        id = ep.Id,
-                        itemId = ep.PartId,
-                        name = ep.Part.Name,
-                        manufacturer = ep.Part.ManufacturerName,
-                        supplier = ep.Part.SupplierName,
-                        quantityRequired = ep.QuantityRequired,
-                        quantitySpare = ep.QuantityRequiredSpare,
-                        unitOfMeasure = ep.UnitOfMeasure,
-                        notes = ep.Notes
-                    }, JsonRequestBehavior.AllowGet);
+                        return Json(new
+                        {
+                            id = ep.Id,
+                            itemId = ep.PartId,
+                            name = ep.Part.Name,
+                            manufacturer = ep.Part.ManufacturerName,
+                            supplier = ep.Part.SupplierName,
+                            quantityRequired = ep.QuantityRequired,
+                            quantitySpare = ep.QuantityRequiredSpare,
+                            quantityString = ep.QuantityString,
+                            unitOfMeasure = ep.UnitOfMeasure,
+                            notes = ep.Notes
+                        }, JsonRequestBehavior.AllowGet);
+                    }
                 }
             }
             catch (Exception)
@@ -153,9 +177,9 @@ namespace EquipmentManager.Controllers
             return Json(new { result = false }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult RemoveEquipmentPart(int id)
+        public JsonResult RemoveEquipmentPart(int equipmentPartId)
         {
-            EquipmentPart e = db.EquipmentParts.Find(id);
+            EquipmentPart e = db.EquipmentParts.Find(equipmentPartId);
             if (e != null)
             {
                 try
@@ -174,6 +198,27 @@ namespace EquipmentManager.Controllers
             {
                 return Json(new { result = false }, JsonRequestBehavior.AllowGet);
             }
+        }
+
+        public JsonResult MoveEquipmentPart(int equipmentPartId)
+        {
+            try
+            {
+                var ep = db.EquipmentParts.Find(equipmentPartId);
+                if (ep != null)
+                {
+                    if (ep.EquipmentModuleId != null && ep.EquipmentModule.ParentModuleId != null)
+                    {
+                        ep.EquipmentModuleId = ep.EquipmentModule.ParentModuleId.Value;
+                        db.SaveChanges();
+                        return Json(new { result = true, newModuleId = ep.EquipmentModuleId }, JsonRequestBehavior.AllowGet);
+                    }                    
+                }
+            }
+            catch (Exception)
+            {
+            }
+            return Json(new { result = false }, JsonRequestBehavior.AllowGet);
         }
 
         //public JsonResult AddEquipmentPartTag(int id, string tagName)

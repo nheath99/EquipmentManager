@@ -1,4 +1,4 @@
-﻿@model EquipmentManager.Data.EquipmentItem
+﻿@model EquipmentManager.Data.EquipmentPart
 
 @{
     ViewBag.Title = "Details";
@@ -7,7 +7,7 @@
 <h2>Details</h2>
 
 <div>
-    <h4>EquipmentItem</h4>
+    <h4>EquipmentPart</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -59,19 +59,19 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Equipment.Name)
+            @Html.DisplayNameFor(model => model.EquipmentModule.Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Equipment.Name)
+            @Html.DisplayFor(model => model.EquipmentModule.Name)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Item.Name)
+            @Html.DisplayNameFor(model => model.Part.Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Item.Name)
+            @Html.DisplayFor(model => model.Part.Name)
         </dd>
 
     </dl>

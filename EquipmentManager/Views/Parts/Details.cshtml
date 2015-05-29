@@ -8,15 +8,15 @@
         $(function () {
             $('#modalAddPartNumber').click(function () {
 
-                var itemId = @Html.Raw(Model.Id);
+                var partId = @Html.Raw(Model.Id);
                 var value = $('#pnValue').val();
                 var description = $('#pnDescription').val();
                 
                 $.ajax({
                     type: 'POST',
-                    url: '/Items/AddPartNumber',
+                    url: '/Parts/AddPartNumber',
                     dataType: 'json',
-                    data: { itemId: itemId, value: value, description: description },
+                    data: { partId: partId, value: value, description: description },
                     success: function(data) {
                         
                         if (data.result == true) {
@@ -91,7 +91,7 @@
 
 <ol class="breadcrumb">
     <li>@Html.ActionLink("Home", "Index", "Home")</li>
-    <li>@Html.ActionLink("Items", "Index", "Items")</li>
+    <li>@Html.ActionLink("Parts", "Index", "Parts")</li>
     <li class="active">@Model.Name</li>
 </ol>
 
@@ -132,11 +132,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ItemCategory)
+            @Html.DisplayNameFor(model => model.PartCategory)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.ItemCategory.Name)
+            @Html.DisplayFor(model => model.PartCategory.Name)
         </dd>
 
         <dt>

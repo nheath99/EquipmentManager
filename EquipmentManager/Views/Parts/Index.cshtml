@@ -6,7 +6,7 @@
 
 <ol class="breadcrumb">
     <li>@Html.ActionLink("Home", "Index", "Home")</li>
-    <li class="active">Items</li>
+    <li class="active">Parts</li>
 </ol>
 
 <p>
@@ -21,7 +21,7 @@
             @Html.DisplayNameFor(model => model.Link)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ItemCategory)
+            @Html.DisplayNameFor(model => model.PartCategory)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Manufacturer)
@@ -44,9 +44,9 @@
                 @Html.DisplayFor(modelItem => item.LinkShort)
             </td>
             <td>
-                @if (item.ItemCategory != null)
+                @if (item.PartCategory != null)
                 {
-                    @Html.ActionLink(item.ItemCategory.Name, "Details", "ItemCategories", new { id = item.ItemCategory.Id }, null)
+                    @Html.ActionLink(item.PartCategory.Name, "Details", "ItemCategories", new { id = item.PartCategory.Id }, null)
                 }
             </td>
             <td>

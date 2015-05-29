@@ -1,4 +1,4 @@
-﻿@model IEnumerable<EquipmentManager.Data.EquipmentItem>
+﻿@model IEnumerable<EquipmentManager.Data.EquipmentPart>
 
 @{
     ViewBag.Title = "Index";
@@ -30,10 +30,10 @@
             @Html.DisplayNameFor(model => model.ValidTo)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Equipment.Name)
+            @Html.DisplayNameFor(model => model.EquipmentModule.Name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Item.Name)
+            @Html.DisplayNameFor(model => model.Part.Name)
         </th>
         <th></th>
     </tr>
@@ -59,10 +59,10 @@
             @Html.DisplayFor(modelItem => item.ValidTo)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Equipment.Name)
+            @Html.DisplayFor(modelItem => item.EquipmentModule.Name)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Item.Name)
+            @Html.DisplayFor(modelItem => item.Part.Name)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |

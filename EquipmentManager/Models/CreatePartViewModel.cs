@@ -29,6 +29,8 @@ namespace EquipmentManager.Models
         public List<string> PartNumberValues { get; set; }
         public List<string> PartNumberDescriptions { get; set; }
 
+        public string Continue { get; set; }
+
         public Part GetPart()
         {
             Part p = new Part()

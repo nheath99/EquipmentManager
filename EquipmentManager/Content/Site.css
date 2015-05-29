@@ -90,3 +90,33 @@ a.row-command:hover {
     padding-top: 0px;
     padding-bottom: 15px;
 }
+
+.panel-info > .panel-heading > .pull-right > a {
+    
+}
+
+.panel-info > .panel-heading > .pull-right > a:hover {
+    text-decoration:none;
+}
+
+.panel-default > .panel-heading > .pull-right > a {
+    color:#999;
+}
+
+.panel-default > .panel-heading > .pull-right > a:hover {
+    color:#333;
+    text-decoration:none;
+}
+
+.panel-default > table > tbody > tr > td > a.glyphicon {
+    color:#999;
+}
+
+.panel-default > table > tbody > tr > td > a.glyphicon:hover {
+    color:#333;
+    text-decoration:none;
+}
+
+ul.ui-autocomplete {
+    z-index: 1100;
+}
