@@ -4,10 +4,19 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+    <li>@Html.ActionLink("Equipment", "Index", "Equipment")</li>
+    <li>@Html.ActionLink(Model.EquipmentModule.Equipment.Name, "Details", "Equipment", new { id = Model.EquipmentModule.EquipmentId }, null)</li>
+    @foreach (var item in Model.EquipmentModule.ModuleHierarchy)
+    {
+        <li>@Html.ActionLink(item.Value, "Details", "EquipmentModules", new { id = item.Key }, null)</li>
+    }
+    <li class="active">@Model.Name </li>
+</ol>
 
 <div>
-    <h4>EquipmentLabour</h4>
+    <h4>Labour Details</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -43,19 +52,22 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.EquipmentModule.Name)
+            @Html.DisplayNameFor(model => model.EquipmentModule)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.EquipmentModule.Name)
+            @Html.ActionLink(Model.EquipmentModule.Name, "Details", "EquipmentModules", new { id = Model.EquipmentModuleId }, null)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Supplier.Name)
+            @Html.DisplayNameFor(model => model.Supplier)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Supplier.Name)
+            @if (Model.SupplierId.HasValue)
+            {
+                @Html.ActionLink(Model.SupplierName, "Details", "Suppliers", new { id = Model.SupplierId.Value }, null)
+            }
         </dd>
 
     </dl>

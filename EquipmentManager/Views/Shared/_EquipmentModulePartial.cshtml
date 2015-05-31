@@ -40,7 +40,7 @@
                         @foreach (var part in Model.EquipmentParts)
                         {
                             <tr>
-                                <td>@Html.ActionLink(part.Part.Name, "Details", "Parts", new { id = part.PartId }, null)</td>
+                                <td>@Html.ActionLink(part.Part.Name, "Details", "EquipmentParts", new { id = part.Id }, null)</td>
                                 <td>
                                     @if (part.Part.ManufacturerId.HasValue)
                                     {
@@ -86,7 +86,7 @@
                         @foreach (var labour in Model.EquipmentLabours)
                         {
                             <tr>
-                                <td>@labour.Name</td>
+                                <td>@Html.ActionLink(labour.Name, "Details", "EquipmentLabour", new { id = labour.Id }, null)</td>
                                 <td>@labour.SupplierName</td>
                                 <td>@labour.QuantityString</td>
                                 <td>

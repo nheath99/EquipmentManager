@@ -18,7 +18,7 @@ namespace EquipmentManager.Data
         public string SupplierName
         { get { return this.Supplier != null ? this.Supplier.Name : string.Empty; } }
 
-        public string ItemCategoryName
+        public string PartCategoryName
         { get { return this.PartCategory != null ? this.PartCategory.Name : string.Empty; } }
 
         public string LinkShort

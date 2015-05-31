@@ -75,7 +75,7 @@ namespace EquipmentManager.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.EquipmentModuleId = new SelectList(db.EquipmentModules, "Id", "Name", equipmentLabour.EquipmentModuleId);
+            ViewBag.EquipmentModuleId = equipmentLabour.EquipmentModule.Equipment.ModuleList(equipmentLabour.EquipmentModuleId); 
             ViewBag.SupplierId = new SelectList(db.Suppliers, "Id", "Name", equipmentLabour.SupplierId);
             return View(equipmentLabour);
         }
@@ -93,7 +93,7 @@ namespace EquipmentManager.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.EquipmentModuleId = new SelectList(db.EquipmentModules, "Id", "Name", equipmentLabour.EquipmentModuleId);
+            ViewBag.EquipmentModuleId = equipmentLabour.EquipmentModule.Equipment.ModuleList(equipmentLabour.EquipmentModuleId); 
             ViewBag.SupplierId = new SelectList(db.Suppliers, "Id", "Name", equipmentLabour.SupplierId);
             return View(equipmentLabour);
         }

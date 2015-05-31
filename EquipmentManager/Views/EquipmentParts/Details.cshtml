@@ -4,11 +4,97 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+    <li>@Html.ActionLink("Equipment", "Index", "Equipment")</li>
+    <li>@Html.ActionLink(Model.EquipmentModule.Equipment.Name, "Details", "Equipment", new { id = Model.EquipmentModule.EquipmentId }, null)</li>
+    @foreach (var item in Model.EquipmentModule.ModuleHierarchy)
+    {
+        <li>@Html.ActionLink(item.Value, "Details", "EquipmentModules", new { id = item.Key }, null)</li>
+    }
+    <li class="active">@Model.Part.Name </li>
+</ol>
 
 <div>
-    <h4>EquipmentPart</h4>
+    <h4>Part Details</h4>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(x => x.Part.Name)
+        </dt>
+        <dd>
+            @Html.ActionLink(Model.Part.Name, "Details", "Parts", new { id = Model.PartId }, null)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Part.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Part.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Part.ItemsPerUnit)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Part.ItemsPerUnit)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Part.Link)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Part.Link)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Part.Obsolete)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Part.Obsolete)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Part.PartCategory)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Part.PartCategory.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Part.Manufacturer)
+        </dt>
+
+        <dd>
+            @if (Model.Part.ManufacturerId.HasValue)
+            {
+                @Html.ActionLink(Model.Part.ManufacturerName, "Details", "Manufacturers", new { id = Model.Part.ManufacturerId.Value }, null)
+            }
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Part.Supplier)
+        </dt>
+        <dd>
+            @if (Model.Part.SupplierId.HasValue)
+            {
+                @Html.ActionLink(Model.Part.SupplierName, "Details", "Suppliers", new { id = Model.Part.SupplierId.Value }, null)
+            }
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Part.PartNumbers)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Part.PartNumbersList)
+        </dd>
+    </dl>
+
     <hr />
+
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.QuantityRequired)
@@ -59,19 +145,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.EquipmentModule.Name)
+            @Html.DisplayNameFor(model => model.EquipmentModule)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.EquipmentModule.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Part.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Part.Name)
+            @Html.ActionLink(Model.EquipmentModule.Name, "Details", "EquipmentModules", new { id = Model.EquipmentModuleId }, null)
         </dd>
 
     </dl>

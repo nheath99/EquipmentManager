@@ -41,13 +41,19 @@ namespace EquipmentManager.Data
         int Id { get; set; }
         int EquipmentModuleId { get; set; }
         int PartId { get; set; }
+        [Display(Name="Quantity Required")]
         double QuantityRequired { get; set; }
+        [Display(Name = "Quantity Required Spare")]
         double QuantityRequiredSpare { get; set; }
+        [Display(Name = "Unit of Measure")]
         string UnitOfMeasure { get; set; }
         string Notes { get; set; }
+        [Display(Name = "Valid From")]
         DateTime ValidFrom { get; set; }
+        [Display(Name = "Valid To")]
         Nullable<DateTime> ValidTo { get; set; }
-
+        
+        [Display(Name = "Module")]
         EquipmentModule EquipmentModule { get; set; }
         Part Part { get; set; }
     }

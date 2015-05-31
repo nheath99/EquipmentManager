@@ -4,10 +4,25 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+    <li>@Html.ActionLink("Equipment", "Index", "Equipment")</li>
+    <li>@Html.ActionLink(Model.Equipment.Name, "Details", "Equipment", new { id = Model.EquipmentId }, null)</li>
+    @foreach (var item in Model.ModuleHierarchy)
+    {
+        if (item.Key == Model.Id)
+        {
+            <li class="active">@item.Value</li>
+        }
+        else
+        {
+            <li>@Html.ActionLink(item.Value, "Details", "EquipmentModules", new { id = item.Key }, null)</li>
+        }
+    }
+</ol>
 
 <div>
-    <h4>EquipmentModule</h4>
+    <h4>@Model.Equipment.Name Module: @Model.Name</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -26,25 +41,87 @@
             @Html.DisplayFor(model => model.Description)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Equipment.Name)
-        </dt>
-
+        <dt>Child Modules</dt>
         <dd>
-            @Html.DisplayFor(model => model.Equipment.Name)
+            <ul class="list-unstyled">
+                @foreach (var item in Model.SubordonateModules)
+                {
+                    <li>@Html.ActionLink(item.Name, "Details", new { id = item.Id })</li>
+                }
+            </ul>
         </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ParentModule.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ParentModule.Name)
-        </dd>
-
     </dl>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
+    </p>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+<hr />
+<div>
+    <h4>Parts</h4>
+    <table class="table table-condensed table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Manufacturer</th>
+                <th>Supplier</th>
+                <th>Quantity</th>
+                <th style="width:70px;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var part in Model.EquipmentParts)
+            {
+                <tr>
+                    <td>@Html.ActionLink(part.Part.Name, "Details", "EquipmentParts", new { id = part.Id }, null)</td>
+                    <td>
+                        @if (part.Part.ManufacturerId.HasValue)
+                        {
+                            @Html.ActionLink(part.Part.ManufacturerName, "Details", "Manufacturers", new { id = part.Part.ManufacturerId }, null)
+                        }
+                    </td>
+                    <td>
+                        @if (part.Part.SupplierId.HasValue)
+                        {
+                            @Html.ActionLink(part.Part.SupplierName, "Details", "Suppliers", new { id = part.Part.SupplierId }, null)
+                        }
+                    </td>
+                    <td>@part.QuantityRequired @part.QuantityRequiredSpareString</td>
+                    <td>
+                        <a href="@Url.Action("Details", "EquipmentParts", new { id = part.Id })"
+                           class="glyphicon glyphicon-tasks pointer" data_toggle="tooltip" data_placement="bottom" title="Details"></a>
+                        <a class="glyphicon glyphicon-remove pointer" data-toggle="tooltip" data-placement="bottom" title="Remove" data-function="removePart" data-equipment-part-id="@part.Id"></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<hr />
+<div>
+    <h4>Labour</h4>
+    <table class="table table-condensed table-hover">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Supplier</th>
+            <th>Amount</th>
+            <th style="width:70px;"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var labour in Model.EquipmentLabours)
+        {
+            <tr>
+                <td>@Html.ActionLink(labour.Name, "Details", "EquipmentLabour", new { id = labour.Id }, null)</td>
+                <td>@labour.SupplierName</td>
+                <td>@labour.QuantityString</td>
+                <td>
+                    <a href="@Url.Action("Details", "EquipmentLabour", new { id = labour.Id })" class="glyphicon glyphicon-tasks pointer" data-toggle="tooltip" data-placement="bottom" title="Details"></a>
+                    <a class="glyphicon glyphicon-remove pointer" data-toggle="tooltip" data-placement="bottom" title="Remove" data-function="removeLabour" data-labour-id="@labour.Id"></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+</div>

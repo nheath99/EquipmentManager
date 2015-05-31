@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Principal;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -63,6 +64,57 @@ namespace EquipmentManager
             }
 
             return l;
+        }
+
+        public static string Repeat(this string input, int number)
+        {
+            if (number < 1)
+            {
+                return string.Empty;
+            }
+            else
+            {
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < number; i++)
+                {
+                    sb.Append(input);
+                }
+                return sb.ToString();
+            }
+        }
+
+        public static string Repeat(this char input, int number)
+        {
+            return input.ToString().Repeat(number);
+        }
+
+        public static readonly char LevelIndicator = '-';
+
+        public static IEnumerable<SelectListItem> ModuleList(this Equipment e, int? selectedModuleId = null, bool includeCurrentModule = true, int? currentModuleId = null)
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            foreach (EquipmentModule module in e.TopLevelModules)
+            {
+                if (includeCurrentModule || (currentModuleId.HasValue && currentModuleId.Value != module.Id))
+                {
+                    list.Add(new SelectListItem() { Value = module.Id.ToString(), Text = module.Name, Selected = selectedModuleId.HasValue && selectedModuleId.Value == module.Id });
+                    module.ChildModuleList(selectedModuleId, ref list, 1, includeCurrentModule, currentModuleId);
+                }
+            }
+            return list;
+        }
+
+        public static void ChildModuleList(this EquipmentModule em, int? selectedModuleId, ref List<SelectListItem> list, int level = 0, bool includeCurrentModule = true, int? currentModuleId = null)
+        {
+            string levelIndicator = LevelIndicator.Repeat(level);
+            foreach (EquipmentModule module in em.SubordonateModules)
+            {
+                if (includeCurrentModule || (currentModuleId.HasValue && currentModuleId.Value != module.Id))
+                {
+                    list.Add(new SelectListItem() { Value = module.Id.ToString(), Text = String.Format("{0}{1}", levelIndicator, module.Name), Selected = selectedModuleId.HasValue && selectedModuleId.Value == module.Id });
+                    module.ChildModuleList(selectedModuleId, ref list, level + 1, includeCurrentModule, currentModuleId);
+                }
+            }
         }
     }
 }

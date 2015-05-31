@@ -207,7 +207,7 @@ namespace EquipmentManager.Controllers
                 var ep = db.EquipmentParts.Find(equipmentPartId);
                 if (ep != null)
                 {
-                    if (ep.EquipmentModuleId != null && ep.EquipmentModule.ParentModuleId != null)
+                    if (ep.EquipmentModule.ParentModuleId != null)
                     {
                         ep.EquipmentModuleId = ep.EquipmentModule.ParentModuleId.Value;
                         db.SaveChanges();
