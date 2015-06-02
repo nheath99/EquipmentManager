@@ -14,6 +14,11 @@ namespace EquipmentManager.Data
     
     public partial class EquipmentPart
     {
+        public EquipmentPart()
+        {
+            this.InstallationEquipmentParts = new HashSet<InstallationEquipmentPart>();
+        }
+    
         public int Id { get; set; }
         public int EquipmentModuleId { get; set; }
         public int PartId { get; set; }
@@ -26,5 +31,6 @@ namespace EquipmentManager.Data
     
         public virtual EquipmentModule EquipmentModule { get; set; }
         public virtual Part Part { get; set; }
+        public virtual ICollection<InstallationEquipmentPart> InstallationEquipmentParts { get; set; }
     }
 }

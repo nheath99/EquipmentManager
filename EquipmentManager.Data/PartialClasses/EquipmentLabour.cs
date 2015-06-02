@@ -8,6 +8,16 @@ namespace EquipmentManager.Data
 {
     public partial class EquipmentLabour
     {
+        public bool IsValid(DateTime date)
+        {
+            return this.ValidFrom.Date <= date.Date && (this.ValidTo == null || this.ValidTo.Value.Date > date.Date);
+        }
+
+        public bool IsValidToday
+        {
+            get { return this.IsValid(DateTime.Today); }
+        }
+
         public double TotalMinutes
         {
             get
@@ -38,6 +48,16 @@ namespace EquipmentManager.Data
         public string SupplierName
         {
             get { return this.Supplier != null ? this.Supplier.Name : string.Empty; }
+        }
+
+        public InstallationEquipmentLabour InstallationLabour(InstallationEquipmentModule parentModule)
+        {
+            InstallationEquipmentLabour l = new InstallationEquipmentLabour()
+            {
+                EquipmentLabour = this,
+                InstallationEquipmentModule = parentModule
+            };
+            return l;
         }
     }
 }

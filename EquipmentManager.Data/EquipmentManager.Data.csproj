@@ -82,6 +82,15 @@
     <Compile Include="Installation.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="InstallationEquipmentLabour.cs">
+      <DependentUpon>DataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="InstallationEquipmentModule.cs">
+      <DependentUpon>DataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="InstallationEquipmentPart.cs">
+      <DependentUpon>DataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Manufacturer.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
@@ -94,7 +103,11 @@
     <Compile Include="PartialClasses\EquipmentModule.cs" />
     <Compile Include="PartialClasses\EquipmentPart.cs" />
     <Compile Include="PartialClasses\EquipmentLabour.cs" />
+    <Compile Include="PartialClasses\EquipmentPartExtended.cs" />
     <Compile Include="PartialClasses\Installation.cs" />
+    <Compile Include="PartialClasses\InstallationEquipmentLabour.cs" />
+    <Compile Include="PartialClasses\InstallationEquipmentModule.cs" />
+    <Compile Include="PartialClasses\InstallationEquipmentPart.cs" />
     <Compile Include="PartialClasses\Part.cs" />
     <Compile Include="PartialClasses\Equipment.cs" />
     <Compile Include="PartialClasses\ItemCategory.cs" />

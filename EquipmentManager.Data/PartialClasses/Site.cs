@@ -12,7 +12,17 @@ namespace EquipmentManager.Data
     {
         public string CodeName
         {
-            get { return string.Format("{0} - {1}", this.Code, this.Name); }
+            get
+            {
+                if (string.IsNullOrEmpty(this.Code))
+                {
+                    return this.Name;
+                }
+                else
+                {
+                    return string.Format("{0} - {1}", this.Code, this.Name);
+                }
+            }
         }
     }
 

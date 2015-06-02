@@ -283,6 +283,7 @@
     <Content Include="Views\EquipmentModules\Details.cshtml" />
     <Content Include="Views\EquipmentModules\Edit.cshtml" />
     <Content Include="Views\EquipmentModules\Index.cshtml" />
+    <Content Include="Views\Shared\_InstallationModulePartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EquipmentManager.Data\EquipmentManager.Data.csproj">

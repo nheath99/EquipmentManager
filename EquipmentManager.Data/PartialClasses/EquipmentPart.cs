@@ -34,6 +34,16 @@ namespace EquipmentManager.Data
         {
             get { return this.QuantityRequired + this.QuantityRequiredSpare; }
         }
+        
+        public InstallationEquipmentPart InstallationPart(InstallationEquipmentModule parentModule)
+        {
+            InstallationEquipmentPart p = new InstallationEquipmentPart()
+            {
+                InstallationEquipmentModule = parentModule,
+                EquipmentPart = this
+            };
+            return p;
+        }
     }
 
     public interface IEquipmentPart

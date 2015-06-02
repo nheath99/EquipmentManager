@@ -13,6 +13,7 @@ namespace EquipmentManager.Models
         {
             this.EquipmentModules = new HashSet<EquipmentModule>();
             this.Labour = new HashSet<EquipmentLabour>();
+            this.AllPartsCombined = new HashSet<EquipmentPartExtended>();
         }
 
         public EquipmentViewModel(Equipment e)
@@ -28,6 +29,7 @@ namespace EquipmentManager.Models
             }
 
             this.Installations = e.Installations;
+            this.AllPartsCombined = e.AllPartsCombined;
         }
 
         public int Id { get; set; }
@@ -41,6 +43,13 @@ namespace EquipmentManager.Models
         {
             get { return this.EquipmentModules.Where(x => x.ParentModuleId == null); }
         }
+
+        public IEnumerable<EquipmentModule> CurrentTopLevelModules
+        {
+            get { return this.EquipmentModules.Where(x => x.ParentModuleId == null && x.IsValidToday); }
+        }
+
+        public IEnumerable<EquipmentPartExtended> AllPartsCombined { get; private set; }
     }
 
     public class EquipmentPartViewModel

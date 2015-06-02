@@ -57,7 +57,7 @@
 </div>
 <hr />
 <div>
-    <h4>Parts</h4>
+    <h4>Parts (@Model.EquipmentParts.Count())</h4>
     <table class="table table-condensed table-hover">
         <thead>
             <tr>
@@ -65,6 +65,7 @@
                 <th>Manufacturer</th>
                 <th>Supplier</th>
                 <th>Quantity</th>
+                <th>RS</th>
                 <th style="width:70px;"></th>
             </tr>
         </thead>
@@ -86,7 +87,19 @@
                         }
                     </td>
                     <td>@part.QuantityRequired @part.QuantityRequiredSpareString</td>
+
+                    @if (part.Part.PartNumbers.Count(x => x.Description == "RS") != 0)
+                    {
+                        <td>
+                            @string.Join(", ", part.Part.PartNumbers.Where(x => x.Description == "RS").Select(x => x.Value))
+                        </td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
                     <td>
+
                         <a href="@Url.Action("Details", "EquipmentParts", new { id = part.Id })"
                            class="glyphicon glyphicon-tasks pointer" data_toggle="tooltip" data_placement="bottom" title="Details"></a>
                         <a class="glyphicon glyphicon-remove pointer" data-toggle="tooltip" data-placement="bottom" title="Remove" data-function="removePart" data-equipment-part-id="@part.Id"></a>
@@ -100,28 +113,27 @@
 <div>
     <h4>Labour</h4>
     <table class="table table-condensed table-hover">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Supplier</th>
-            <th>Amount</th>
-            <th style="width:70px;"></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var labour in Model.EquipmentLabours)
-        {
+        <thead>
             <tr>
-                <td>@Html.ActionLink(labour.Name, "Details", "EquipmentLabour", new { id = labour.Id }, null)</td>
-                <td>@labour.SupplierName</td>
-                <td>@labour.QuantityString</td>
-                <td>
-                    <a href="@Url.Action("Details", "EquipmentLabour", new { id = labour.Id })" class="glyphicon glyphicon-tasks pointer" data-toggle="tooltip" data-placement="bottom" title="Details"></a>
-                    <a class="glyphicon glyphicon-remove pointer" data-toggle="tooltip" data-placement="bottom" title="Remove" data-function="removeLabour" data-labour-id="@labour.Id"></a>
-                </td>
+                <th>Name</th>
+                <th>Supplier</th>
+                <th>Amount</th>
+                <th style="width:70px;"></th>
             </tr>
-        }
-    </tbody>
-</table>
-
+        </thead>
+        <tbody>
+            @foreach (var labour in Model.EquipmentLabours)
+            {
+                <tr>
+                    <td>@Html.ActionLink(labour.Name, "Details", "EquipmentLabour", new { id = labour.Id }, null)</td>
+                    <td>@labour.SupplierName</td>
+                    <td>@labour.QuantityString</td>
+                    <td>
+                        <a href="@Url.Action("Details", "EquipmentLabour", new { id = labour.Id })" class="glyphicon glyphicon-tasks pointer" data-toggle="tooltip" data-placement="bottom" title="Details"></a>
+                        <a class="glyphicon glyphicon-remove pointer" data-toggle="tooltip" data-placement="bottom" title="Remove" data-function="removeLabour" data-labour-id="@labour.Id"></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>

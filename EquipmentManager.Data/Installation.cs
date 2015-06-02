@@ -14,6 +14,11 @@ namespace EquipmentManager.Data
     
     public partial class Installation
     {
+        public Installation()
+        {
+            this.InstallationEquipmentModules = new HashSet<InstallationEquipmentModule>();
+        }
+    
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -22,5 +27,6 @@ namespace EquipmentManager.Data
     
         public virtual Equipment Equipment { get; set; }
         public virtual Site Site { get; set; }
+        public virtual ICollection<InstallationEquipmentModule> InstallationEquipmentModules { get; set; }
     }
 }

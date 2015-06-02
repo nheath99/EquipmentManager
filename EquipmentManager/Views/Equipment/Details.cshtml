@@ -29,18 +29,31 @@
             });
 
             $('#modalAddInstallation').click(function () {
+                alert("Here");
                 var eqId = $('#Id').val();
                 var siteId = $('#Sites').val();
                 var name = $('#addInstallationName').val();
                 var desc = $('#addInstallationDescription').val();
+                var importModules = document.getElementById('addInstallationImportModules').checked;
+
+                alert(eqId);
+                alert(siteId);
+                alert(name);
+                alert(desc);
+                alert(importModules);
 
                 $.ajax({
                     type: 'POST',
                     url: '/Installations/AddInstallation',
-                    data: { equipmentId: eqId, siteId: siteId, name: name, description: desc },
+                    data: { equipmentId: eqId, siteId: siteId, name: name, description: desc, importModules: importModules },
                     dataType: 'json',
                     success: function (data) {
                         location.reload();
+                    },
+                    error: function (a, b, c) {
+                        alert(a);
+                        alert(b);
+                        alert(c);
                     }
                 });
             });
@@ -95,7 +108,7 @@
 
                                 var newModule = $('[data-module-id=' + data.newModuleId + ']');
                                 var newTable = newModule.find('[parts]').find('tbody');
-                                
+
                                 newTable.append(row);
                             }
                         }
@@ -115,6 +128,11 @@
                                 if (data.result == true) {
                                     row.remove();
                                 }
+                            },
+                            error: function (a, b, c) {
+                                alert(a);
+                                alert(b);
+                                alert(c);
                             }
                         });
                     }
@@ -236,7 +254,7 @@
                     var x = $(this).children('.glyphicon-chevron-right');
                     expandModule(x);
                 }
-                else if($(this).data('action') == 'collapse') {
+                else if ($(this).data('action') == 'collapse') {
                     $(this).data('action', 'expand');
                     var x = $(this).children('.glyphicon-chevron-down');
                     collapseModule(x);
@@ -276,16 +294,17 @@
                     dataType: 'json',
                     success: function (data) {
                         var module = $('[data-module-id=' + moduleId + ']');
-                        var partsTable = module.find('[parts] > table > tbody');
+                        var partsTable = module.find('[parts] > table > tbody').last();
 
                         var row = '<tr><td>' + data.name +
                             '</td><td>' + data.manufacturer +
                             '</td><td>' + data.supplier +
                             '</td><td>' + data.quantityString +
-                            '</td><td><a class="glyphicon glyphicon-tasks pointer" data-toggle="tooltip" data-placement="bottom" title="Edit" data-function="editPart" data-equipment-part-id="' + data.id + '"></a>' +
-                            '<a class="glyphicon glyphicon-remove pointer" data-toggle="tooltip" data-placement="bottom" title="Remove" data-function="removePart" data-equipment-part-id="' + data.id + '"></a>' +
+                            '</td><td><a class="glyphicon glyphicon-chevron-left pointer" data-toggle="tooltip" data-placement="bottom" title="Move to parent module" data-function="movePart" data-equipment-part-id="' + data.id + '"></a>' +
+                            ' <a class="glyphicon glyphicon-tasks pointer" data-toggle="tooltip" data-placement="bottom" title="Edit" data-function="editPart" data-equipment-part-id="' + data.id + '"></a>' +
+                            ' <a class="glyphicon glyphicon-remove pointer" data-toggle="tooltip" data-placement="bottom" title="Remove" data-function="removePart" data-equipment-part-id="' + data.id + '"></a>' +
                             '</td></tr>';
-
+                            
                         partsTable.append(row);
                         $('#addPart').modal('hide');
                     },
@@ -384,7 +403,7 @@
                         </div>
                     </div>
                     <div class="form-group form-group-sm form-group-condensed">
-                        <label for="" class="col-sm-4 control-label">Name</label>
+                        <label for="" class="col-sm-4 control-label">Installation Name</label>
                         <div class="col-sm-8">
                             <input type="text" id="addInstallationName" class="form-control" />
                         </div>
@@ -393,6 +412,12 @@
                         <label for="" class="col-sm-4 control-label">Description</label>
                         <div class="col-sm-8">
                             <input type="text" id="addInstallationDescription" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm form-group-condensed">
+                        <label for="addInstallationImportModules" class="col-sm-4 control-label">Import Modules</label>
+                        <div class="col-sm-8 checkbox">
+                            <input type="checkbox" id="addInstallationImportModules" />
                         </div>
                     </div>
                 </form>
@@ -459,7 +484,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">
-                    Enter Details                    
+                    Enter Details
                 </h4>
             </div>
             <div class="modal-body">
@@ -551,6 +576,10 @@
 
 <h2>@Model.Name</h2>
 <h4>@Model.Description</h4>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
+</p>
+
 @Html.HiddenFor(model => model.Id)
 
 <fieldset>
@@ -560,7 +589,7 @@
             @foreach (var item in Model.Installations)
             {
                 <li>
-                    @Html.ActionLink(item.Site.CodeName, "Details", "Installations", new { id = item.Id }, null)
+                    @Html.ActionLink(item.Name, "Details", "Installations", new { id = item.Id }, null)
                 </li>
             }
         </ul>
@@ -577,14 +606,50 @@
         </div>
     </form>
     <ul id="modulesList" class="list-unstyled">
-        @foreach (var module in Model.TopLevelModules)
+        @foreach (var module in Model.CurrentTopLevelModules)
         {
             @Html.Partial("_EquipmentModulePartial", module)
         }
     </ul>
 
 </fieldset>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+<fieldset>
+    <legend>All Parts Grouped</legend>
+    <table class="table table-condensed table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>Lines</th>
+                <th>Part</th>
+                <th>Manufacturer</th>
+                <th>Modules</th>
+                <th>Qty</th>
+                <th>Unit</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.AllPartsCombined)
+            {
+                <tr>
+                    @if (item.Lines > 1)
+                    {
+                        <td class="bg-danger">@item.Lines</td>
+                    }
+                    else
+                    {
+                        <td>@item.Lines</td>
+                    }                    
+                    <td>@Html.ActionLink(item.Part.Name, "Details", "Parts", new { id = item.PartId }, null)</td>
+                    <td>@item.Part.ManufacturerName</td>
+                    <td>
+                        @foreach (var module in item.EquipmentModules)
+                        {
+                            @Html.ActionLink(module.Name, "Details", "EquipmentModules", new { id = module.Id }, null)
+                        }
+                    </td>
+                    <td>@item.QuantityString</td>
+                    <td>@item.UnitOfMeasure</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</fieldset>

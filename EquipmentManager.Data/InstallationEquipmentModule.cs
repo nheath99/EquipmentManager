@@ -12,25 +12,26 @@ namespace EquipmentManager.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class EquipmentLabour
+    public partial class InstallationEquipmentModule
     {
-        public EquipmentLabour()
+        public InstallationEquipmentModule()
         {
             this.InstallationEquipmentLabours = new HashSet<InstallationEquipmentLabour>();
+            this.InstallationEquipmentParts = new HashSet<InstallationEquipmentPart>();
+            this.SubordonateModules = new HashSet<InstallationEquipmentModule>();
         }
     
         public int Id { get; set; }
         public int EquipmentModuleId { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public Nullable<int> SupplierId { get; set; }
-        public double Quantity { get; set; }
-        public TemporalUnit QuantityUnit { get; set; }
-        public System.DateTime ValidFrom { get; set; }
-        public Nullable<System.DateTime> ValidTo { get; set; }
+        public int InstallationId { get; set; }
+        public Nullable<decimal> ActualCost { get; set; }
+        public Nullable<int> ParentModuleId { get; set; }
     
         public virtual EquipmentModule EquipmentModule { get; set; }
-        public virtual Supplier Supplier { get; set; }
         public virtual ICollection<InstallationEquipmentLabour> InstallationEquipmentLabours { get; set; }
+        public virtual Installation Installation { get; set; }
+        public virtual ICollection<InstallationEquipmentPart> InstallationEquipmentParts { get; set; }
+        public virtual ICollection<InstallationEquipmentModule> SubordonateModules { get; set; }
+        public virtual InstallationEquipmentModule ParentModule { get; set; }
     }
 }

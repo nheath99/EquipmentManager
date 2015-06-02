@@ -42,7 +42,7 @@
                 
                 $.ajax({
                     type: 'POST',
-                    url: '/Items/DeletePartNumber',
+                    url: '/Parts/DeletePartNumber',
                     dataType: 'json',
                     data: { id: id },
                     success: function (data) {
@@ -164,7 +164,7 @@
                 @pn.Value @pn.DescriptionAddition
             </li>
         }
-    </ul>
+    </ul>    
     <a id="addPartNumber" class="btn btn-default" data-toggle="modal" data-target="#addPartNumber">Add Part Number</a>
 </div>
 

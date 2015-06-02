@@ -34,7 +34,7 @@ namespace EquipmentManager.Controllers
                 return HttpNotFound();
             }
 
-            ViewBag.UnitsOfMeasure = new SelectList(db.UnitsOfMeasures.ToList(), "Id", "Name");
+            ViewBag.UnitsOfMeasure = new SelectList(db.UnitsOfMeasures.ToList(), "Name", "Name");
             ViewBag.Sites = new SelectList(db.Sites.OrderBy(x => x.Code).ToList(), "Id", "CodeName");
             ViewBag.Suppliers = new SelectList(db.Suppliers.OrderBy(x => x.Name), "Id", "Name");
             ViewBag.TemporalUnit = EnumHelpers.AsSelectList<TemporalUnit>();
@@ -73,10 +73,17 @@ namespace EquipmentManager.Controllers
                 EquipmentModule em = db.EquipmentModules.Find(moduleId);
                 if (em != null)
                 {
-                    db.EquipmentModules.Remove(em);
+                    if (em.InstallationEquipmentModules.Count() == 0)
+                    {
+                        db.EquipmentModules.Remove(em);
+                    }
+                    else
+                    {
+                        em.ValidTo = DateTime.Now;
+                    }
                     db.SaveChanges();
                     return Json(new { result = true }, JsonRequestBehavior.AllowGet);
-                }                
+                }
             }
             catch (Exception)
             {
@@ -179,25 +186,28 @@ namespace EquipmentManager.Controllers
 
         public JsonResult RemoveEquipmentPart(int equipmentPartId)
         {
-            EquipmentPart e = db.EquipmentParts.Find(equipmentPartId);
-            if (e != null)
+            try
             {
-                try
+                EquipmentPart e = db.EquipmentParts.Find(equipmentPartId);
+                if (e != null)
                 {
-                    db.EquipmentParts.Remove(e);
-                    db.SaveChanges();
+                    if (e.InstallationEquipmentParts.Count == 0)
+                    {
+                        db.EquipmentParts.Remove(e);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        e.ValidTo = DateTime.Today;
+                        db.SaveChanges();
+                    }
+                    return Json(new { result = true }, JsonRequestBehavior.AllowGet);
                 }
-                catch (Exception)
-                {
-                    e.ValidTo = DateTime.Today;
-                    db.SaveChanges();
-                }
-                return Json(new { result = true }, JsonRequestBehavior.AllowGet);
             }
-            else
+            catch (Exception)
             {
-                return Json(new { result = false }, JsonRequestBehavior.AllowGet);
             }
+            return Json(new { result = false }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult MoveEquipmentPart(int equipmentPartId)
@@ -212,7 +222,7 @@ namespace EquipmentManager.Controllers
                         ep.EquipmentModuleId = ep.EquipmentModule.ParentModuleId.Value;
                         db.SaveChanges();
                         return Json(new { result = true, newModuleId = ep.EquipmentModuleId }, JsonRequestBehavior.AllowGet);
-                    }                    
+                    }
                 }
             }
             catch (Exception)
@@ -276,7 +286,7 @@ namespace EquipmentManager.Controllers
         public JsonResult SearchTags(string q)
         {
             var tags = db.Tags.Where(x => x.Name.ToLower().Contains(q.ToLower())).ToList();
-            return Json(new { tags = tags.Select(x => new { tagName = x.Name}) }, JsonRequestBehavior.AllowGet);
+            return Json(new { tags = tags.Select(x => new { tagName = x.Name }) }, JsonRequestBehavior.AllowGet);
         }
 
         // GET: Equipment/Create
@@ -354,6 +364,7 @@ namespace EquipmentManager.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Equipment equipment = db.Equipments.Find(id);
+            Membership.GetOrCreateUser(User.Identity.GetUserName()).RemoveEquipment(id);
             db.Equipments.Remove(equipment);
             db.SaveChanges();
             return RedirectToAction("Index");

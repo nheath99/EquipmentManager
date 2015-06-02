@@ -198,6 +198,7 @@ namespace EquipmentManager.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Part Part = db.Parts.Find(id);
+            Membership.GetOrCreateUser(User.Identity.GetUserName()).RemovePart(id);
             db.Parts.Remove(Part);
             db.SaveChanges();
             return RedirectToAction("Index");

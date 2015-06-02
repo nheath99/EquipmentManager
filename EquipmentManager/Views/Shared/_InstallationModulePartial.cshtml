@@ -1,4 +1,4 @@
-﻿@model EquipmentManager.Data.EquipmentModule
+﻿@model EquipmentManager.Data.InstallationEquipmentModule
 
 <li>
     <div class="panel panel-info panel-small" data-module-id="@Model.Id" data-module-name="@Model.Name">
@@ -13,15 +13,15 @@
         </div>
         <div class="module-children panel-body">
             <ul class="list-unstyled">
-                @foreach (var module in Model.CurrentSubordonateModules)
+                @foreach (var module in Model.SubordonateModules)
                 {
-                    @Html.Partial("_EquipmentModulePartial", module)
+                    @Html.Partial("_InstallationModulePartial", module)
                 }
             </ul>
             <div parts class="panel panel-default panel-small">
                 <div class="panel-heading pointer" data-action="expand">
                     <span class="glyphicon glyphicon-chevron-right row-command"></span>
-                    <span class="h4 pointer" data-count="@Model.CurrentParts.Count()">Parts (@Model.CurrentParts.Count())</span>
+                    <span class="h4 pointer">Parts</span>
                     <span class="pull-right">
                         <a class="glyphicon glyphicon-plus pointer" data-toggle="tooltip" data-placement="bottom" title="Add part" data-function="addPart"></a>
                     </span>
@@ -37,25 +37,24 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var part in Model.CurrentParts)
+                        @foreach (var part in Model.InstallationEquipmentParts)
                         {
                             <tr>
-                                <td>@Html.ActionLink(part.Part.Name, "Details", "EquipmentParts", new { id = part.Id }, null)</td>
+                                <td>@Html.ActionLink(part.Name, "Details", "EquipmentParts", new { id = part.Id }, null)</td>
                                 <td>
-                                    @if (part.Part.ManufacturerId.HasValue)
+                                    @if (part.EquipmentPart.Part.ManufacturerId.HasValue)
                                     {
-                                        @Html.ActionLink(part.Part.ManufacturerName, "Details", "Manufacturers", new { id = part.Part.ManufacturerId }, null)
+                                        @Html.ActionLink(part.EquipmentPart.Part.ManufacturerName, "Details", "Manufacturers", new { id = part.EquipmentPart.Part.ManufacturerId }, null)
                                     }
                                 </td>
                                 <td>
-                                    @if (part.Part.SupplierId.HasValue)
+                                    @if (part.EquipmentPart.Part.SupplierId.HasValue)
                                     {
-                                        @Html.ActionLink(part.Part.SupplierName, "Details", "Suppliers", new { id = part.Part.SupplierId }, null)
+                                        @Html.ActionLink(part.EquipmentPart.Part.SupplierName, "Details", "Suppliers", new { id = part.EquipmentPart.Part.SupplierId }, null)
                                     }
                                 </td>
-                                <td>@part.QuantityRequired @part.QuantityRequiredSpareString</td>
+                                <td>@part.EquipmentPart.QuantityRequired @part.EquipmentPart.QuantityRequiredSpareString</td>
                                 <td>
-                                    <a class="glyphicon glyphicon-chevron-left pointer" data-toggle="tooltip" data-placement="bottom" title="Move to parent module" data-function="movePart" data-equipment-part-id="@part.Id"></a>
                                     <a href="@Url.Action("Details", "EquipmentParts", new { id = part.Id })"
                                        class="glyphicon glyphicon-tasks pointer" data-toggle="tooltip" data-placement="bottom" title="Details"></a>
                                     <a class="glyphicon glyphicon-remove pointer" data-toggle="tooltip" data-placement="bottom" title="Remove" data-function="removePart" data-equipment-part-id="@part.Id"></a>
@@ -68,7 +67,7 @@
             <div labour class="panel panel-default panel-small">
                 <div class="panel-heading pointer" data-action="expand">
                     <span class="glyphicon glyphicon-chevron-right row-command"></span>
-                    <span class="h4 pointer">Labour (@Model.CurrentLabour.Count())</span>
+                    <span class="h4 pointer">Labour</span>
                     <span class="pull-right">
                         <a class="glyphicon glyphicon-plus pointer" data-toggle="tooltip" data-placement="bottom" title="Add labour" data-function="addLabour"></a>
                     </span>
@@ -83,14 +82,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var labour in Model.CurrentLabour)
+                        @foreach (var labour in Model.InstallationEquipmentLabours)
                         {
                             <tr>
-                                <td>@Html.ActionLink(labour.Name, "Details", "EquipmentLabour", new { id = labour.Id }, null)</td>
-                                <td>@labour.SupplierName</td>
-                                <td>@labour.QuantityString</td>
+                                <td>@Html.ActionLink(labour.EquipmentLabour.Name, "Details", "EquipmentLabour", new { id = labour.Id }, null)</td>
+                                <td>@labour.EquipmentLabour.SupplierName</td>
+                                <td>@labour.EquipmentLabour.QuantityString</td>
                                 <td>
-                                    <a class="glyphicon glyphicon-chevron-left pointer" data-toggle="tooltip" data-placement="bottom" title="Move to parent module" data-function="movePart" data-labour-id="@labour.Id"></a>
                                     <a href="@Url.Action("Details", "EquipmentLabour", new { id = labour.Id })" class="glyphicon glyphicon-tasks pointer" data-toggle="tooltip" data-placement="bottom" title="Details"></a>
                                     <a class="glyphicon glyphicon-remove pointer" data-toggle="tooltip" data-placement="bottom" title="Remove" data-function="removeLabour" data-labour-id="@labour.Id"></a>
                                 </td>

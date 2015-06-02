@@ -19,6 +19,7 @@ namespace EquipmentManager.Data
             this.EquipmentLabours = new HashSet<EquipmentLabour>();
             this.SubordonateModules = new HashSet<EquipmentModule>();
             this.EquipmentParts = new HashSet<EquipmentPart>();
+            this.InstallationEquipmentModules = new HashSet<InstallationEquipmentModule>();
         }
     
         public int Id { get; set; }
@@ -26,11 +27,14 @@ namespace EquipmentManager.Data
         public string Description { get; set; }
         public Nullable<int> EquipmentId { get; set; }
         public Nullable<int> ParentModuleId { get; set; }
+        public System.DateTime ValidFrom { get; set; }
+        public Nullable<System.DateTime> ValidTo { get; set; }
     
         public virtual Equipment Equipment { get; set; }
         public virtual ICollection<EquipmentLabour> EquipmentLabours { get; set; }
         public virtual ICollection<EquipmentModule> SubordonateModules { get; set; }
         public virtual EquipmentModule ParentModule { get; set; }
         public virtual ICollection<EquipmentPart> EquipmentParts { get; set; }
+        public virtual ICollection<InstallationEquipmentModule> InstallationEquipmentModules { get; set; }
     }
 }

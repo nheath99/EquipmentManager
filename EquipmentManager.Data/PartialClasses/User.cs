@@ -14,6 +14,36 @@ namespace EquipmentManager.Data
 
         public static readonly char SplitChar = ',';
 
+        public void RemovePart(int partId)
+        {
+            if (this.RecentItemIds.Contains(partId))
+            {
+                var partIds = this.RecentItemIds;
+                partIds.Remove(partId);
+                this.RecentItemIds = partIds;
+            }
+        }
+
+        public void RemoveEquipment(int equipmentId)
+        {
+            if (this.RecentEquipmentIds.Contains(equipmentId))
+            {
+                var equipmentIds = this.RecentEquipmentIds;
+                equipmentIds.Remove(equipmentId);
+                this.RecentEquipmentIds = equipmentIds;
+            }
+        }
+
+        public void RemoveInstallation(int installationId)
+        {
+            if (this.RecentInstallationIds.Contains(installationId))
+            {
+                var installationIds = this.RecentInstallationIds;
+                installationIds.Remove(installationId);
+                this.RecentInstallationIds = installationIds;
+            }
+        }
+
         public void AddRecentEquipment(int equipmentId)
         {
             if (string.IsNullOrEmpty(this.RecentEquipment))
@@ -102,6 +132,10 @@ namespace EquipmentManager.Data
                 else
                     return new List<int>();
             }
+            set
+            {
+                this.RecentItems = string.Join(SplitChar.ToString(), value);
+            }
         }
 
         public List<int> RecentInstallationIds
@@ -113,6 +147,10 @@ namespace EquipmentManager.Data
                 else
                     return new List<int>();
             }
+            set
+            {
+                this.RecentInstallations = string.Join(SplitChar.ToString(), value);
+            }
         }
 
         public List<int> RecentEquipmentIds
@@ -123,6 +161,10 @@ namespace EquipmentManager.Data
                     return this.RecentEquipment.Split(SplitChar).Select(x => Convert.ToInt32(x)).Reverse().ToList();
                 else
                     return new List<int>();
+            }
+            set
+            {
+                this.RecentEquipment = string.Join(SplitChar.ToString(), value);
             }
         }
     }
