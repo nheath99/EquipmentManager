@@ -29,8 +29,8 @@ namespace EquipmentManager.Data
         public System.DateTime ValidFrom { get; set; }
         public Nullable<System.DateTime> ValidTo { get; set; }
     
-        public virtual EquipmentModule EquipmentModule { get; set; }
         public virtual Supplier Supplier { get; set; }
         public virtual ICollection<InstallationEquipmentLabour> InstallationEquipmentLabours { get; set; }
+        public virtual EquipmentModule EquipmentModule { get; set; }
     }
 }

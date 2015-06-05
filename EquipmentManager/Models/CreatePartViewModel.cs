@@ -7,6 +7,20 @@ using System.Web;
 
 namespace EquipmentManager.Models
 {
+    public class CreateEquipmentPartViewModel : CreatePartViewModel
+    {
+        public CreateEquipmentPartViewModel()
+            : base()
+        {
+        }
+
+        public int EquipmentId { get; set; }
+        public int EquipmentModuleId { get; set; }
+        public double QuantityRequired { get; set; }
+        public string UnitOfMeasure { get; set; }
+        public string Notes { get; set; }
+    }
+
     public class CreatePartViewModel
     {
         public CreatePartViewModel()

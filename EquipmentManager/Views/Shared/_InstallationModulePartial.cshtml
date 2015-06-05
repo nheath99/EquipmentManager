@@ -7,8 +7,7 @@
             <span class="h4">@Model.Name</span>
             <span class="pull-right">
                 <a class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="bottom" title="Add child module" data-function="addChildModule"></a>
-                <a href="@Url.Action("Details", "EquipmentModules", new { id = Model.Id })" class="glyphicon glyphicon-tasks" data-toggle="tooltip" data-placement="bottom" title="Details"></a>
-                <a class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="bottom" title="Remove module" data-function="removeChildModule"></a>
+                <a href="@Url.Action("Details", "InstallationEquipmentModules", new { id = Model.Id })" class="glyphicon glyphicon-tasks" data-toggle="tooltip" data-placement="bottom" title="Details"></a>                
             </span>
         </div>
         <div class="module-children panel-body">
@@ -21,7 +20,7 @@
             <div parts class="panel panel-default panel-small">
                 <div class="panel-heading pointer" data-action="expand">
                     <span class="glyphicon glyphicon-chevron-right row-command"></span>
-                    <span class="h4 pointer">Parts</span>
+                    <span class="h4 pointer">Parts (@Model.InstallationEquipmentParts.Count())</span>
                     <span class="pull-right">
                         <a class="glyphicon glyphicon-plus pointer" data-toggle="tooltip" data-placement="bottom" title="Add part" data-function="addPart"></a>
                     </span>
@@ -30,34 +29,53 @@
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Manufacturer</th>
                             <th>Supplier</th>
-                            <th>Quantity</th>
-                            <th style="width:70px;"></th>
+                            <th>Status</th>
+                            <th>Qty Req</th>
+                            <th>Qty Ordered</th>
+                            <th>Unit Cost</th>
+                            <th>Postage</th>
+                            <th>Quoted Cost</th>
+                            <th>Cost</th>
+                            <th style="width:50px;"></th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var part in Model.InstallationEquipmentParts)
                         {
                             <tr>
-                                <td>@Html.ActionLink(part.Name, "Details", "EquipmentParts", new { id = part.Id }, null)</td>
-                                <td>
-                                    @if (part.EquipmentPart.Part.ManufacturerId.HasValue)
-                                    {
-                                        @Html.ActionLink(part.EquipmentPart.Part.ManufacturerName, "Details", "Manufacturers", new { id = part.EquipmentPart.Part.ManufacturerId }, null)
-                                    }
-                                </td>
+                                @if (part.EquipmentPart.Part.Obsolete)
+                                {
+                                    <td class="bg-danger"><strong><a class="pointer" data-part-id="@part.Id">@part.Name</a></strong></td>
+                                }
+                                else
+                                {
+                                    <td><a class="pointer" data-part-id="@part.Id">@part.Name</a></td>
+                                }                                
                                 <td>
                                     @if (part.EquipmentPart.Part.SupplierId.HasValue)
                                     {
                                         @Html.ActionLink(part.EquipmentPart.Part.SupplierName, "Details", "Suppliers", new { id = part.EquipmentPart.Part.SupplierId }, null)
                                     }
                                 </td>
-                                <td>@part.EquipmentPart.QuantityRequired @part.EquipmentPart.QuantityRequiredSpareString</td>
+                                <td><a data-field="statusId" class="pointer" data-part-id="@part.Id">@part.StatusId.Name()</a></td>
+                                <td class="text-right">@part.EquipmentPart.QuantityRequired</td>
+                                <td class="text-right" data-field="unitsOrdered">@part.UnitsOrdered</td>
+                                @if (part.CostPerUnit.HasValue)
+                                {
+                                    <td class="text-right" data-field="costPerUnit">@part.CostPerUnit</td>
+                                }
+                                else
+                                {
+                                    <td data-field="costPerUnit" class="bg-danger text-right">@part.CostPerUnit</td>
+                                }
+                                <td class="text-right" data-field="postage">@part.Postage</td>
+                                <td class="text-right" data-field="quotedCost">@part.QuotedCost</td>
+                                <td class="text-right" data-field="cost">@part.Cost</td>
                                 <td>
-                                    <a href="@Url.Action("Details", "EquipmentParts", new { id = part.Id })"
+                                    <a href="@Url.Action("Details", "InstallationEquipmentParts", new { id = part.Id })"
                                        class="glyphicon glyphicon-tasks pointer" data-toggle="tooltip" data-placement="bottom" title="Details"></a>
-                                    <a class="glyphicon glyphicon-remove pointer" data-toggle="tooltip" data-placement="bottom" title="Remove" data-function="removePart" data-equipment-part-id="@part.Id"></a>
+                                    <a class="glyphicon glyphicon-remove pointer" data-toggle="tooltip" data-placement="bottom" title="Remove" data-installation-part-id="@part.Id" />
                                 </td>
                             </tr>
                         }
@@ -67,7 +85,7 @@
             <div labour class="panel panel-default panel-small">
                 <div class="panel-heading pointer" data-action="expand">
                     <span class="glyphicon glyphicon-chevron-right row-command"></span>
-                    <span class="h4 pointer">Labour</span>
+                    <span class="h4 pointer">Labour (@Model.InstallationEquipmentLabours.Count())</span>
                     <span class="pull-right">
                         <a class="glyphicon glyphicon-plus pointer" data-toggle="tooltip" data-placement="bottom" title="Add labour" data-function="addLabour"></a>
                     </span>
@@ -78,7 +96,7 @@
                             <th>Name</th>
                             <th>Supplier</th>
                             <th>Amount</th>
-                            <th style="width:70px;"></th>
+                            <th style="width:30px;"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -90,7 +108,6 @@
                                 <td>@labour.EquipmentLabour.QuantityString</td>
                                 <td>
                                     <a href="@Url.Action("Details", "EquipmentLabour", new { id = labour.Id })" class="glyphicon glyphicon-tasks pointer" data-toggle="tooltip" data-placement="bottom" title="Details"></a>
-                                    <a class="glyphicon glyphicon-remove pointer" data-toggle="tooltip" data-placement="bottom" title="Remove" data-function="removeLabour" data-labour-id="@labour.Id"></a>
                                 </td>
                             </tr>
                         }

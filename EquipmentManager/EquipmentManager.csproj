@@ -127,6 +127,8 @@
     <Compile Include="Controllers\EquipmentModulesController.cs" />
     <Compile Include="Controllers\EquipmentPartsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InstallationEquipmentModulesController.cs" />
+    <Compile Include="Controllers\InstallationEquipmentPartsController.cs" />
     <Compile Include="Controllers\InstallationsController.cs" />
     <Compile Include="Controllers\PartCategoriesController.cs" />
     <Compile Include="Controllers\PartsController.cs" />
@@ -284,6 +286,20 @@
     <Content Include="Views\EquipmentModules\Edit.cshtml" />
     <Content Include="Views\EquipmentModules\Index.cshtml" />
     <Content Include="Views\Shared\_InstallationModulePartial.cshtml" />
+    <Content Include="Views\Installations\Parts.cshtml" />
+    <Content Include="Views\InstallationEquipmentParts\Details.cshtml" />
+    <Content Include="Views\InstallationEquipmentParts\Edit.cshtml" />
+    <Content Include="Views\Shared\_PartPartial.cshtml" />
+    <Content Include="Views\Shared\_EquipmentPartPartial.cshtml" />
+    <Content Include="Views\Shared\_InstallationPartPartial.cshtml" />
+    <Content Include="Views\Installations\MissingParts.cshtml" />
+    <Content Include="Views\Installations\_MissingPartsPartial.cshtml" />
+    <Content Include="Views\InstallationEquipmentModules\Details.cshtml" />
+    <Content Include="Views\InstallationEquipmentModules\Edit.cshtml" />
+    <Content Include="Views\Installations\Labour.cshtml" />
+    <Content Include="Views\Installations\Modules.cshtml" />
+    <Content Include="Views\Installations\_ChildModules.cshtml" />
+    <Content Include="Views\Shared\_InstallationEquipmentModulesCheckboxes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EquipmentManager.Data\EquipmentManager.Data.csproj">

@@ -1,0 +1,14 @@
+﻿@model EquipmentManager.Data.InstallationEquipmentModule
+
+<ul>
+    @foreach (var module in Model.SubordonateModules)
+    {
+        <li>
+            @Html.ActionLink(module.Name, "Details", "InstallationEquipmentModules", new { id = module.Id }, null)
+            @if (module.SubordonateModules.Count > 0)
+            {
+                @Html.Partial("_ChildModules", module)
+            }
+        </li>
+    }
+</ul>

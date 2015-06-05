@@ -1,0 +1,66 @@
+﻿@model EquipmentManager.Data.Installation
+
+@section scripts {
+    <script type="text/javascript">
+        $(function () {
+            $('#addAll').click(function () {
+                var installationId = $('#installationId').val();
+                $.ajax({
+                    type: 'post',
+                    url: '/Installations/AddMissingEquipmentParts',
+                    data: { installationId: installationId },
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.result == true) {
+                            location.reload();
+                        }
+                    },
+                    error: function (a, b, c) {
+                        alert(c);
+                    }
+                });                
+            });
+
+            $('[data-id]').click(function () {
+                var row = $(this).closest('tr');
+                var partId = $(this).data('id');
+                var installationId = $('#installationId').val();
+
+                AddPart(installationId, partId, row);                
+            });
+        });
+
+        function AddPart(installationId, equipmentPartId, row) {
+            $.ajax({
+                type: 'post',
+                url: '/Installations/AddEquipmentPart',
+                data: { installationId: installationId, equipmentPartId: equipmentPartId },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.result == true) {
+                        if (row != null) {
+                            row.remove();
+                        }
+                    }
+                },
+                error: function (a, b, c) {
+                    alert(c);
+                }
+            });
+        }
+
+    </script>
+}
+
+<input type="hidden" id="installationId" value="@Model.Id" />
+
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+    <li>@Html.ActionLink("Installations", "Index", "Installations")</li>
+    <li>@Html.ActionLink(Model.Name, "Details", "Installations", new { id = Model.Id}, null)</li>
+    <li class="active">Missing Parts</li>
+</ol>
+
+<a class="btn btn-primary" id="addAll">Add All to @Model.Name</a>
+<br /><br />
+@Html.Partial("_MissingPartsPartial", Model.MissingParts)

@@ -20,21 +20,6 @@ namespace EquipmentManager.Data
             get { return this.IsValid(DateTime.Today); }
         }
 
-        public string QuantityString
-        {
-            get { return string.Format("{0} {1}", this.QuantityRequired, this.QuantityRequiredSpareString); }
-        }
-
-        public string QuantityRequiredSpareString
-        {
-            get { return this.QuantityRequiredSpare != 0 ? string.Format("({0})", this.QuantityRequiredSpare) : string.Empty; }
-        }
-
-        public double TotalRequired
-        {
-            get { return this.QuantityRequired + this.QuantityRequiredSpare; }
-        }
-        
         public InstallationEquipmentPart InstallationPart(InstallationEquipmentModule parentModule)
         {
             InstallationEquipmentPart p = new InstallationEquipmentPart()
@@ -43,6 +28,14 @@ namespace EquipmentManager.Data
                 EquipmentPart = this
             };
             return p;
+        }
+
+        public string QuantityString
+        {
+            get
+            {
+                return string.Format("{0} {1}", this.QuantityRequired, this.UnitOfMeasure);
+            }
         }
     }
 
@@ -53,8 +46,6 @@ namespace EquipmentManager.Data
         int PartId { get; set; }
         [Display(Name="Quantity Required")]
         double QuantityRequired { get; set; }
-        [Display(Name = "Quantity Required Spare")]
-        double QuantityRequiredSpare { get; set; }
         [Display(Name = "Unit of Measure")]
         string UnitOfMeasure { get; set; }
         string Notes { get; set; }
@@ -66,5 +57,8 @@ namespace EquipmentManager.Data
         [Display(Name = "Module")]
         EquipmentModule EquipmentModule { get; set; }
         Part Part { get; set; }
+
+        [Display(Name="Quantity Required")]
+        string QuantityString { get; }
     }
 }

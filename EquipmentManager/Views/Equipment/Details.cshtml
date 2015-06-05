@@ -11,37 +11,32 @@
         $(function () {
 
             $('[data-toggle="tooltip"]').tooltip();
+            setExistingPart();
 
-            $('#addModule').click(function () {
+            $('#addTopLevelModule').click(function () {
                 var eqId = $('#Id').val();
-                var moduleName = $('#tbAddModuleName').val();
-                var moduleDescription = $('#tbAddModuleDescription').val();
 
-                $.ajax({
-                    type: 'post',
-                    url: '/Equipment/AddModule',
-                    data: { equipmentId: eqId, name: moduleName, description: moduleDescription },
-                    dataType: 'json',
-                    success: function (data) {
-                        location.reload();
-                    }
-                });
+                var result = prompt("Add top level module:", "");
+                if (result != null && result != "") {
+                    $.ajax({
+                        type: 'post',
+                        url: '/Equipment/AddModule',
+                        data: { equipmentId: eqId, name: result.trim(), description: "" },
+                        dataType: 'json',
+                        success: function (data) {
+                            location.reload();
+                        }
+                    });
+                }
             });
 
             $('#modalAddInstallation').click(function () {
-                alert("Here");
                 var eqId = $('#Id').val();
                 var siteId = $('#Sites').val();
                 var name = $('#addInstallationName').val();
                 var desc = $('#addInstallationDescription').val();
                 var importModules = document.getElementById('addInstallationImportModules').checked;
-
-                alert(eqId);
-                alert(siteId);
-                alert(name);
-                alert(desc);
-                alert(importModules);
-
+                                
                 $.ajax({
                     type: 'POST',
                     url: '/Installations/AddInstallation',
@@ -248,6 +243,19 @@
                 row.remove();
             });
 
+            $('#partsList').on('click', '.panel-heading', function () {
+                if ($(this).data('action') == 'expand') {
+                    $(this).data('action', 'collapse');
+                    var x = $(this).children('.glyphicon-chevron-right');
+                    expandModule(x);
+                }
+                else if ($(this).data('action') == 'collapse') {
+                    $(this).data('action', 'expand');
+                    var x = $(this).children('.glyphicon-chevron-down');
+                    collapseModule(x);
+                }
+            });
+
             $('#modulesList').on('click', '[data-action]', function () {
                 if ($(this).data('action') == 'expand') {
                     $(this).data('action', 'collapse');
@@ -278,43 +286,111 @@
             }
 
             $('#modalAddPart').click(function () {
+                
+                if ($('#addExistingPartRadio').prop('checked')) {
 
-                var eqId = $('#Id').val();
-                var moduleId = $('#addPartModuleId').val();
-                var itId = $('#addPartId').val();
-                var qty = $('#addPartQty').val();
-                var qtySpare = $('#addPartQtySpare').val();
-                var unit = $('#UnitsOfMeasure').val();
-                var n = $('#addPartNotes').val();
+                    var eqId = $('#Id').val();
+                    var moduleId = $('#addPartModuleId').val();
+                    var itId = $('#addPartId').val();
+                    var qty = $('#addPartQty').val();
+                    var unit = $('#UnitsOfMeasure').val();
+                    var n = $('#addPartNotes').val();
 
-                $.ajax({
-                    type: 'POST',
-                    url: '/Equipment/AddEquipmentPart',
-                    data: { equipmentId: eqId, moduleId: moduleId, partId: itId, quantityRequired: qty, quantitySpare: qtySpare, unitOfMeasure: unit, notes: n },
-                    dataType: 'json',
-                    success: function (data) {
-                        var module = $('[data-module-id=' + moduleId + ']');
-                        var partsTable = module.find('[parts] > table > tbody').last();
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Equipment/AddEquipmentPart',
+                        data: { equipmentId: eqId, moduleId: moduleId, partId: itId, quantityRequired: qty, unitOfMeasure: unit, notes: n },
+                        dataType: 'json',
+                        success: function (data) {
+                            var module = $('[data-module-id=' + moduleId + ']');
+                            var partsTable = module.find('[parts] > table > tbody').last();
 
-                        var row = '<tr><td>' + data.name +
-                            '</td><td>' + data.manufacturer +
-                            '</td><td>' + data.supplier +
-                            '</td><td>' + data.quantityString +
-                            '</td><td><a class="glyphicon glyphicon-chevron-left pointer" data-toggle="tooltip" data-placement="bottom" title="Move to parent module" data-function="movePart" data-equipment-part-id="' + data.id + '"></a>' +
-                            ' <a class="glyphicon glyphicon-tasks pointer" data-toggle="tooltip" data-placement="bottom" title="Edit" data-function="editPart" data-equipment-part-id="' + data.id + '"></a>' +
-                            ' <a class="glyphicon glyphicon-remove pointer" data-toggle="tooltip" data-placement="bottom" title="Remove" data-function="removePart" data-equipment-part-id="' + data.id + '"></a>' +
-                            '</td></tr>';
-                            
-                        partsTable.append(row);
-                        $('#addPart').modal('hide');
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        alert(errorThrown);
+                            var row = '<tr><td>' + data.name +
+                                '</td><td>' + data.manufacturer +
+                                '</td><td>' + data.supplier +
+                                '</td><td>' + data.quantityRequired +
+                                '</td><td><a class="glyphicon glyphicon-chevron-left pointer" data-toggle="tooltip" data-placement="bottom" title="Move to parent module" data-function="movePart" data-equipment-part-id="' + data.id + '"></a>' +
+                                ' <a class="glyphicon glyphicon-tasks pointer" data-toggle="tooltip" data-placement="bottom" title="Edit" data-function="editPart" data-equipment-part-id="' + data.id + '"></a>' +
+                                ' <a class="glyphicon glyphicon-remove pointer" data-toggle="tooltip" data-placement="bottom" title="Remove" data-function="removePart" data-equipment-part-id="' + data.id + '"></a>' +
+                                '</td></tr>';
+
+                            partsTable.append(row);
+                            $('#addPart').modal('hide');
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert(errorThrown);
+                        }
+                    });
+                    resetAddPartModal();
+                }
+                else {
+                    var eqId = $('#Id').val();
+                    var moduleId = $('#addPartModuleId').val();
+
+                    var name = $('#addPartNameInput').val();
+                    var description = $('#addPartDescriptionInput').val();
+                    var categoryId = $('#categoriesAddNew').val();
+                    var manufacturerId = $('#manufacturersAddNew').val();
+                    var supplierId = $('#suppliersAddNew').val();
+                    var link = $('#linkAddNew').val();
+                    var itemsPerUnit = $('#itemsPerUnitAddNew').val();
+                    var partValues = [];
+                    var partDescriptions = [];
+                    $('[name="partNumberValues"]').each(function (i, element) {
+                        partValues[i] = $(element).val();
+                    });
+                    $('[name="partNumberDescriptions"]').each(function (i, element) {
+                        partDescriptions[i] = $(element).val();
+                    })
+
+                    var qty = $('#addPartQty').val();
+                    var unit = $('#UnitsOfMeasure').val();
+                    var n = $('#addPartNotes').val();
+                    
+                    if (name != "" && itemsPerUnit != "" && qty != "") {
+                        $.ajax({
+                            type: 'post',
+                            url: '/Equipment/AddNewEquipmentPart',
+                            data: {
+                                name: name,
+                                description: description,
+                                manufacturerId: manufacturerId,
+                                supplierId: supplierId,
+                                categoryId: categoryId,
+                                link: link,
+                                partNumberValues: partValues,
+                                partNumberDescriptions: partDescriptions,
+                                itemsPerUnit: itemsPerUnit,
+                                equipmentId: eqId,
+                                moduleId: moduleId,
+                                quantityRequired: qty,
+                                unitOfMeasure: unit,
+                                notes: n
+                            },
+                            dataType: 'json',
+                            success: function (data) {
+                                var module = $('[data-module-id=' + moduleId + ']');
+                                var partsTable = module.find('[parts] > table > tbody').last();
+
+                                var row = '<tr><td>' + data.name +
+                                    '</td><td>' + data.manufacturer +
+                                    '</td><td>' + data.supplier +
+                                    '</td><td>' + data.quantityRequired +
+                                    '</td><td><a class="glyphicon glyphicon-chevron-left pointer" data-toggle="tooltip" data-placement="bottom" title="Move to parent module" data-function="movePart" data-equipment-part-id="' + data.id + '"></a>' +
+                                    ' <a class="glyphicon glyphicon-tasks pointer" data-toggle="tooltip" data-placement="bottom" title="Edit" data-function="editPart" data-equipment-part-id="' + data.id + '"></a>' +
+                                    ' <a class="glyphicon glyphicon-remove pointer" data-toggle="tooltip" data-placement="bottom" title="Remove" data-function="removePart" data-equipment-part-id="' + data.id + '"></a>' +
+                                    '</td></tr>';
+
+                                partsTable.append(row);
+                                $('#addPart').modal('hide');
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                alert(errorThrown);
+                            }
+                        });
+                        resetAddPartModal();
                     }
-                });
-
-                $('#addItemModal').modal('hide');
-                resetAddPartModal();
+                }
             });
 
             $("#tbItemSearch").autocomplete({
@@ -338,13 +414,14 @@
                     if (ui.item) {
                         $('#addPartId').val(ui.item.value);
                         $('#addPartName').html(ui.item.name);
+                        $('#addPartDescription').html(ui.item.description);
+                        $('#addPartCategory').html(ui.item.category);
                         $('#addPartManufacturer').html(ui.item.manufacturer);
                         $('#addPartSupplier').html(ui.item.supplier);
                         $('#addPartLink').html(ui.item.link);
                         $('#addPartPartNumbers').html(ui.item.partNumbers);
                         $('#addPartItemsPerUnit').html(ui.item.itemsPerUnit);
                         $('#addPartQty').val('1');
-                        $('#addPartQtySpare').val('0');
                         $('#UnitsOfMeasure').get(0).selectedIndex = 0;
                         $('#addPartNotes').val('');
                         $('#modalAddPart').prop('disabled', false);
@@ -372,17 +449,102 @@
                 $('#addPartModuleId').val('');
                 $('#tbItemSearch').val('');
                 $('#addPartName').html('');
+                $('#addPartDescription').html('');
+                $('#addPartCategory').html('');
                 $('#addPartManufacturer').html('');
                 $('#addPartSupplier').html('');
                 $('#addPartLink').html('');
                 $('#addPartPartNumbers').html('');
                 $('#addPartItemsPerUnit').html('');
-                $('#addPartQty').val('');
-                $('#addPartQtySpare').val('');
+                $('#addPartQty').val('1');
                 $('#UnitsOfMeasure').get(0).selectedIndex = 0;
                 $('#addPartNotes').val('');
-                $('#modalAddPart').prop('disabled', true);
+
+                $('#addPartNameInput').val('');
+                $('#addPartDescriptionInput').val('');
+                $('#categoriesAddNew').get(0).selectedIndex = 0;
+                $('#manufacturersAddNew').get(0).selectedIndex = 0;
+                $('#suppliersAddNew').get(0).selectedIndex = 0;
+                $('#linkAddNew').val('');
+                $('#itemsPerUnitAddNew').val('1');
+                $('#partNumbersNew').find('li').remove();
+
+                if ($('#addExistingPartRadio').prop('checked')) {
+                    $('#modalAddPart').prop('disabled', true);
+                }                
             }
+
+            function setExistingPart() {
+                $('#addPartSearchDiv').show();
+
+                $('#addPartName').show();
+                $('#addPartDescription').show();
+                $('#addPartCategory').show();
+                $('#addPartManufacturer').show();
+                $('#addPartSupplier').show();
+                $('#addPartLink').show();
+                $('#addPartItemsPerUnit').show();
+                $('#addPartPartNumbers').show();
+
+                $('#addPartNameInput').hide();
+                $('#addPartDescriptionInput').hide();
+                $('#categoriesAddNew').hide();
+                $('#manufacturersAddNew').hide();
+                $('#suppliersAddNew').hide();
+                $('#linkAddNew').hide();
+                $('#itemsPerUnitAddNew').hide();
+                $('#partNumbersNew').hide();
+            }
+
+            function setNewPart() {
+                $('#addPartSearchDiv').hide();
+
+                $('#addPartName').hide();
+                $('#addPartDescription').hide();
+                $('#addPartCategory').hide();
+                $('#addPartManufacturer').hide();
+                $('#addPartSupplier').hide();
+                $('#addPartLink').hide();
+                $('#addPartItemsPerUnit').hide();
+                $('#addPartPartNumbers').hide();
+
+                $('#addPartNameInput').show();
+                $('#addPartDescriptionInput').show();
+                $('#categoriesAddNew').show();
+                $('#manufacturersAddNew').show();
+                $('#suppliersAddNew').show();
+                $('#linkAddNew').show();
+                $('#itemsPerUnitAddNew').show();
+                $('#partNumbersNew').show();
+
+                $('#modalAddPart').prop('disabled', false);
+            }
+
+            $('input[name="newPartType"]:radio').change(function () {
+                if ($('#addExistingPartRadio').prop('checked')) {
+                    setExistingPart();
+                }
+                else {
+                    setNewPart();
+                }
+            });
+
+            $('#partNumbersNewList').on('click', 'a.remove-row', function () {
+                var row = $(this).closest('li');
+                row.remove();
+            });
+
+            $('#partNumbersNewAdd').click(function () {
+                var value = $('#partNumbersNewValue').val();
+                var description = $('#partNumbersNewDescription').val();
+                if (value != null && value != "") {
+                    var row = '<li><a class="glyphicon glyphicon-remove remove-row" /> ' + value + '<input type="hidden" value="' + value + '" name="partNumberValues" /><input type="hidden" value="' + description + '" name="partNumberDescriptions" /></li>';
+                    $('#partNumbersNewList').append(row);
+
+                    $('#partNumbersNewValue').val('');
+                    $('#partNumbersNewDescription').val('');
+                }
+            });
         });
     </script>
 }
@@ -486,12 +648,21 @@
                 <h4 class="modal-title" id="myModalLabel">
                     Enter Details
                 </h4>
+                <label class="radio-inline">
+                    <input type="radio" name="newPartType" value="Existing" checked="checked" id="addExistingPartRadio" />
+                    Existing Part
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="newPartType" value="New" />
+                    New Part
+                </label>
+
             </div>
             <div class="modal-body">
                 <input type="hidden" id="addPartId" />
                 <input type="hidden" id="addPartModuleId" />
                 <form class="form-horizontal">
-                    <div class="form-group form-group-sm form-group-condensed">
+                    <div id="addPartSearchDiv" class="form-group form-group-sm form-group-condensed">
                         <label for="" class="col-sm-4 control-label">Select Part</label>
                         <div class="col-sm-8">
                             <input type="text" id="tbItemSearch" class="form-control" placeholder="Search..." style="width:700px;" />
@@ -501,49 +672,68 @@
                     <div class="form-group form-group-sm form-group-condensed">
                         <label for="" class="col-sm-4 control-label">Part Name</label>
                         <div class="col-sm-8">
-                            <p id="addPartName" class="form-control-static" />
+                            <p id="addPartName" class="form-control-static"></p>
+                            <input type="text" id="addPartNameInput" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm form-group-condensed">
+                        <label for="" class="col-sm-4 control-label">Description</label>
+                        <div class="col-sm-8">
+                            <p id="addPartDescription" class="form-control-static"></p>
+                            <input type="text" id="addPartDescriptionInput" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm form-group-condensed">
+                        <label for="" class="col-sm-4 control-label">Category</label>
+                        <div class="col-sm-8">
+                            <p id="addPartCategory" class="form-control-static"></p>
+                            @Html.DropDownList("Categories", null, "Select...", new { id = "categoriesAddNew", @class = "form-control" })
                         </div>
                     </div>
                     <div class="form-group form-group-sm form-group-condensed">
                         <label for="" class="col-sm-4 control-label">Manufacturer</label>
                         <div class="col-sm-8">
                             <p id="addPartManufacturer" class="form-control-static"></p>
+                            @Html.DropDownList("Manufacturers", null, "Select...", new { id = "manufacturersAddNew", @class = "form-control" })
                         </div>
                     </div>
                     <div class="form-group form-group-sm form-group-condensed">
                         <label for="" class="col-sm-4 control-label">Supplier</label>
                         <div class="col-sm-8">
                             <p id="addPartSupplier" class="form-control-static"></p>
+                            @Html.DropDownList("Suppliers", null, "Select...", new { id = "suppliersAddNew", @class = "form-control" })
                         </div>
                     </div>
                     <div class="form-group form-group-sm form-group-condensed">
                         <label for="" class="col-sm-4 control-label">Link</label>
                         <div class="col-sm-8">
                             <p id="addPartLink" class="form-control-static"></p>
+                            <input type="text" id="linkAddNew" class="form-control" />
                         </div>
                     </div>
                     <div class="form-group form-group-sm form-group-condensed">
                         <label for="" class="col-sm-4 control-label">Part Numbers</label>
                         <div class="col-sm-8">
                             <p id="addPartPartNumbers" class="form-control-static"></p>
+                            <div id="partNumbersNew">
+                                <ul class="list-unstyled" id="partNumbersNewList"></ul>
+                                <input type="text" id="partNumbersNewValue" class="form-control" placeholder="Value..." />
+                                <input type="text" id="partNumbersNewDescription" class="form-control" placeholder="Description" />
+                                <a class="btn btn-xs btn-info" id="partNumbersNewAdd">Add Part Number</a>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group form-group-sm form-group-condensed">
                         <label for="" class="col-sm-4 control-label">Items per Unit</label>
                         <div class="col-sm-8">
                             <p id="addPartItemsPerUnit" class="form-control-static"></p>
+                            <input type="number" id="itemsPerUnitAddNew" class="form-control" value="1" />
                         </div>
                     </div>
                     <div class="form-group form-group-sm form-group-condensed">
                         <label for="" class="col-sm-4 control-label">Quantity Required</label>
                         <div class="col-sm-8">
                             <input type="text" id="addPartQty" class="form-control" value="1" />
-                        </div>
-                    </div>
-                    <div class="form-group form-group-sm form-group-condensed">
-                        <label for="" class="col-sm-4 control-label">Quantity Spare</label>
-                        <div class="col-sm-8">
-                            <input type="text" id="addPartQtySpare" class="form-control" value="0" />
                         </div>
                     </div>
                     <div class="form-group form-group-sm form-group-condensed">
@@ -597,14 +787,7 @@
 </fieldset>
 
 <fieldset>
-    <legend>Equipment Modules</legend>
-    <form class="form-inline" style="padding-bottom:15px;">
-        <div class="form-group">
-            <input type="text" id="tbAddModuleName" class="form-control" placeholder="Name" style="width:700px;" />
-            <input type="text" id="tbAddModuleDescription" class="form-control" placeholder="Description" style="width:700px;" />
-            <a id="addModule" class="btn btn-primary">Create Module</a>
-        </div>
-    </form>
+    <legend>Equipment Modules <button id="addTopLevelModule" class="btn btn-info btn-xs">Add Module</button></legend>
     <ul id="modulesList" class="list-unstyled">
         @foreach (var module in Model.CurrentTopLevelModules)
         {
@@ -612,44 +795,48 @@
         }
     </ul>
 
-</fieldset>
-<fieldset>
-    <legend>All Parts Grouped</legend>
-    <table class="table table-condensed table-hover table-bordered">
-        <thead>
-            <tr>
-                <th>Lines</th>
-                <th>Part</th>
-                <th>Manufacturer</th>
-                <th>Modules</th>
-                <th>Qty</th>
-                <th>Unit</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.AllPartsCombined)
-            {
+
+    <div id="partsList" class="panel panel-default panel-small">
+        <div class="panel-heading" style="cursor:pointer;" data-action="expand">
+            <span class="glyphicon glyphicon-chevron-right row-command"></span>
+            <span class="h4">All Parts Grouped</span>
+        </div>
+        <table class="table table-condensed table-hover table-bordered module-children">
+            <thead>
                 <tr>
-                    @if (item.Lines > 1)
-                    {
-                        <td class="bg-danger">@item.Lines</td>
-                    }
-                    else
-                    {
-                        <td>@item.Lines</td>
-                    }                    
-                    <td>@Html.ActionLink(item.Part.Name, "Details", "Parts", new { id = item.PartId }, null)</td>
-                    <td>@item.Part.ManufacturerName</td>
-                    <td>
-                        @foreach (var module in item.EquipmentModules)
-                        {
-                            @Html.ActionLink(module.Name, "Details", "EquipmentModules", new { id = module.Id }, null)
-                        }
-                    </td>
-                    <td>@item.QuantityString</td>
-                    <td>@item.UnitOfMeasure</td>
+                    <th>Lines</th>
+                    <th>Part</th>
+                    <th>Manufacturer</th>
+                    <th>Modules</th>
+                    <th>Qty</th>
+                    <th>Unit</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.AllPartsCombined)
+                {
+                    <tr>
+                        @if (item.Lines > 1)
+                        {
+                            <td class="bg-danger">@item.Lines</td>
+                        }
+                        else
+                        {
+                            <td>@item.Lines</td>
+                        }
+                        <td>@Html.ActionLink(item.Part.Name, "Details", "Parts", new { id = item.PartId }, null)</td>
+                        <td>@item.Part.ManufacturerName</td>
+                        <td>
+                            @foreach (var module in item.EquipmentModules)
+                            {
+                                @Html.ActionLink(module.Name, "Details", "EquipmentModules", new { id = module.Id }, null)
+                            }
+                        </td>
+                        <td>@item.QuantityRequired</td>
+                        <td>@item.UnitOfMeasure</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </fieldset>

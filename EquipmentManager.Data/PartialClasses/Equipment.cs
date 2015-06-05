@@ -15,6 +15,20 @@ namespace EquipmentManager.Data
             get { return this.EquipmentModules.Where(x => x.ParentModuleId == null); }
         }
 
+        public IEnumerable<EquipmentModule> CurrentModules
+        {
+            get { return this.EquipmentModules.Where(x => x.IsValidToday); }
+        }
+
+        public IEnumerable<EquipmentPart> CurrentParts
+        {
+            get
+            {
+                return this.CurrentModules
+                    .SelectMany(x => x.CurrentParts);
+            }
+        }
+
         /// <summary>
         /// Returns all active parts in the Equipment grouped by Part and Unit.
         /// </summary>
@@ -30,7 +44,6 @@ namespace EquipmentManager.Data
                         Part = x.Key.Part,
                         UnitOfMeasure = x.Key.UnitOfMeasure,
                         QuantityRequired = x.Sum(y => y.QuantityRequired),
-                        QuantityRequiredSpare = x.Sum(y => y.QuantityRequiredSpare),
                         EquipmentModules = x.Select(y => y.EquipmentModule).Distinct(),
                         Lines = x.Count()
                     });

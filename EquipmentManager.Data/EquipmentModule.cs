@@ -25,7 +25,7 @@ namespace EquipmentManager.Data
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public Nullable<int> EquipmentId { get; set; }
+        public int EquipmentId { get; set; }
         public Nullable<int> ParentModuleId { get; set; }
         public System.DateTime ValidFrom { get; set; }
         public Nullable<System.DateTime> ValidTo { get; set; }

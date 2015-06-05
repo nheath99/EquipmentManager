@@ -1,0 +1,23 @@
+﻿@model EquipmentManager.Data.InstallationEquipmentModule
+
+<ul class="checkbox-list">
+    @foreach (var module in Model.SubordonateModules)
+    {
+        <li>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="moduleId" value="@module.Id" />
+                    @module.Name
+                    @if (module.SubordonateModules.Count > 0)
+                    {
+                        <span class="glyphicon glyphicon-th-list" data-module-id="@module.Id"></span>
+                    }
+                </label>
+            </div>
+            @if (module.SubordonateModules.Count > 0)
+            {
+                @Html.Partial("_InstallationEquipmentModulesCheckboxes", module)
+            }
+        </li>
+    }
+</ul>

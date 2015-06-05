@@ -71,8 +71,7 @@ namespace EquipmentManager.Data
                     {
                         Part = x.Key.Part,
                         UnitOfMeasure = x.Key.UnitOfMeasure,
-                        QuantityRequired = x.Sum(y => y.QuantityRequired),
-                        QuantityRequiredSpare = x.Sum(y => y.QuantityRequiredSpare)
+                        QuantityRequired = x.Sum(y => y.QuantityRequired)
                     });
 
                 return results;

@@ -67,11 +67,197 @@ namespace EquipmentManager.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.Statuses = EnumHelpers.AsSelectList<ItemStatus>();
+            ViewBag.Statuses = EnumHelpers.AsSelectList<InstallationPartStatus>();
             ViewBag.LabourStatuses = EnumHelpers.AsSelectList<LabourStatus>();
             ViewBag.Units = EnumHelpers.AsSelectList<TemporalUnit>();
+            ViewBag.HasMissingParts = installation.MissingParts.Count() != 0;
             Membership.AddRecentInstallationToUser(User.Identity.GetUserName(), installation.Id);
             return View(installation);
+        }
+
+        public JsonResult PartDetails(int installationEquipmentPatId)
+        {
+            try
+            {
+                var p = db.InstallationEquipmentParts.Find(installationEquipmentPatId);
+                if (p != null)
+                {
+                    return Json(
+                        new
+                        { 
+                            result = true,
+                            partId = p.Id,
+                            name = p.Name,
+                            description = p.EquipmentPart.Part.Description,
+                            manufacturer = p.EquipmentPart.Part.ManufacturerName,
+                            supplier = p.EquipmentPart.Part.SupplierName,
+                            itemsPerUnit = p.EquipmentPart.Part.ItemsPerUnit,
+                            quantityRequired = p.EquipmentPart.QuantityRequired,
+                            statusId = (int)p.StatusId,
+                            costPerUnit = p.CostPerUnit,
+                            unitsOrdered = p.UnitsOrdered,
+                            postage = p.Postage,
+                            actualCost = p.ActualCost
+                        }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception)
+            {
+            }
+            return Json(new { result = false }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult UpdatePart(int id, int statusId, decimal? costPerUnit, double? unitsOrdered, decimal? postage, decimal? actualCost)
+        {
+            try
+            {
+                var p = db.InstallationEquipmentParts.Find(id);
+                if (p != null)
+                {
+                    p.StatusId = (InstallationPartStatus)statusId;
+                    p.CostPerUnit = costPerUnit;
+                    p.UnitsOrdered = unitsOrdered;
+                    p.Postage = postage;
+                    p.ActualCost = actualCost;
+
+                    db.SaveChanges();
+                    return Json(new
+                    { 
+                        result = true,
+                        statusId = (int)p.StatusId,
+                        statusName = p.StatusId.Name(),
+                        unitsOrdered = p.UnitsOrdered,
+                        costPerUnit = p.CostPerUnit,
+                        postage = p.Postage,
+                        quotedCost = p.QuotedCost,
+                        cost = p.Cost
+                    }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception)
+            {
+            }
+            return Json(new { result = false }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Parts(int? id)
+        {            
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Installation installation = db.Installations.Find(id);
+            if (installation == null)
+            {
+                return HttpNotFound();
+            }
+            return View(installation);
+        }
+
+        public ActionResult Labour(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Installation installation = db.Installations.Find(id);
+            if (installation == null)
+            {
+                return HttpNotFound();
+            }
+            return View(installation);
+        }
+
+        public ActionResult Modules(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Installation installation = db.Installations.Find(id);
+            if (installation == null)
+            {
+                return HttpNotFound();
+            }
+            return View(installation);
+        }
+
+        public ActionResult MissingParts(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Installation installation = db.Installations.Find(id);
+            if (installation == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(installation);
+        }
+
+        public JsonResult AddMissingEquipmentParts(int installationId)
+        {
+            try
+            {
+                Installation i = db.Installations.Find(installationId);
+                foreach (var item in i.MissingParts)
+                {
+                    AddEquipmentPart(installationId, item.Id);
+                }
+                return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+            }
+            return Json(new { result = false }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddEquipmentPart(int installationId, int equipmentPartId)
+        {
+            try
+            {
+                Installation i = db.Installations.Find(installationId);
+                EquipmentPart p = db.EquipmentParts.Find(equipmentPartId);
+                InstallationEquipmentModule iem = i.InstallationEquipmentModules.SingleOrDefault(x => x.EquipmentModuleId == p.EquipmentModuleId);
+                if (i != null && p != null && iem != null && i.EquipmentId == p.EquipmentModule.EquipmentId)
+                {
+                    InstallationEquipmentPart iep = new InstallationEquipmentPart()
+                    {
+                        InstallationEquipmentModule = iem,
+                        EquipmentPart = p
+                    };
+
+                    db.InstallationEquipmentParts.Add(iep);
+                    db.SaveChanges();
+
+                    return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception)
+            {
+            }
+            return Json(new { result = false }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult RemoveInstallationEquipmentPart(int id)
+        {
+            try
+            {
+                InstallationEquipmentPart i = db.InstallationEquipmentParts.Find(id);
+                if (i != null)
+                {
+                    db.InstallationEquipmentParts.Remove(i);
+                    db.SaveChanges();
+
+                    return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception)
+            {
+            }
+            return Json(new { result = false }, JsonRequestBehavior.AllowGet);
         }
 
         // GET: Installations/Create

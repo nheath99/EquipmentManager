@@ -1,0 +1,69 @@
+﻿@model EquipmentManager.Data.Installation
+
+@{
+    ViewBag.Title = string.Format("{0} - Labour", Model.Name);
+}
+
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+    <li>@Html.ActionLink("Installations", "Index", "Installations")</li>
+    <li>@Html.ActionLink(Model.Name, "Details", "Installations", new { id = Model.Id }, null)</li>
+    <li class="active">Labour</li>
+</ol>
+
+<table class="table table-condensed table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Supplier</th>
+            <th>Qty Required</th>
+            <th>Status</th>
+            <th>Cost Per Unit</th>
+            <th>Qty Ordered</th>
+            <th>Quoted Cost</th>
+            <th>Reported Cost</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var l in Model.AllLabour)
+        {
+            <tr>
+                <td>@Html.ActionLink(l.EquipmentLabour.Name, "Details", "InstallationEquipmentLabour", new { id = l.Id }, null)</td>
+                <td>
+                    @if (l.EquipmentLabour.SupplierId.HasValue)
+                    {
+                        @Html.ActionLink(l.EquipmentLabour.SupplierName, "Details", "Suppliers", new { id = l.EquipmentLabour.SupplierId.Value }, null)
+                    }
+                </td>
+                <td>@l.EquipmentLabour.QuantityString</td>
+                @if (l.LabourStatusId == EquipmentManager.Data.LabourStatus.None
+                    || l.LabourStatusId == EquipmentManager.Data.LabourStatus.QuoteReceived)
+                {
+                    <td class="bg-danger text-danger">
+                        @l.LabourStatusId.Name()
+                    </td>
+                }
+                else if (l.LabourStatusId == EquipmentManager.Data.LabourStatus.Scheduled)
+                {
+                    <td class="bg-warning text-warning">
+                        @l.LabourStatusId.Name()
+                    </td>
+                }
+                else if (l.LabourStatusId == EquipmentManager.Data.LabourStatus.Completed)
+                {
+                    <td class="bg-success text-success">
+                        @l.LabourStatusId.Name()
+                    </td>
+                }
+                else
+                {
+                <td>@l.LabourStatusId.Name()</td>
+                }                
+                <td class="text-right">@l.CostPerUnit</td>
+                <td>@l.QuantityString</td>
+                <td class="text-right">@l.QuotedCost</td>
+                <td class="text-right">@l.Cost</td>
+            </tr>
+        }
+    </tbody>
+</table>

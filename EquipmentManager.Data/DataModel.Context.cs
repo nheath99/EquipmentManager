@@ -35,12 +35,12 @@ namespace EquipmentManager.Data
         public virtual DbSet<Installation> Installations { get; set; }
         public virtual DbSet<Site> Sites { get; set; }
         public virtual DbSet<EquipmentLabour> EquipmentLabours { get; set; }
-        public virtual DbSet<EquipmentModule> EquipmentModules { get; set; }
         public virtual DbSet<PartCategory> PartCategories { get; set; }
         public virtual DbSet<Part> Parts { get; set; }
-        public virtual DbSet<EquipmentPart> EquipmentParts { get; set; }
         public virtual DbSet<InstallationEquipmentLabour> InstallationEquipmentLabours { get; set; }
         public virtual DbSet<InstallationEquipmentModule> InstallationEquipmentModules { get; set; }
         public virtual DbSet<InstallationEquipmentPart> InstallationEquipmentParts { get; set; }
+        public virtual DbSet<EquipmentPart> EquipmentParts { get; set; }
+        public virtual DbSet<EquipmentModule> EquipmentModules { get; set; }
     }
 }

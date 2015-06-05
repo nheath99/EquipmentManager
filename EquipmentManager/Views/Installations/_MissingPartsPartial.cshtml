@@ -1,0 +1,45 @@
+﻿@model IEnumerable<EquipmentManager.Data.EquipmentPart>
+
+<table class="table">
+    <tr>
+        <th style="width:25px;"></th>
+        <th>
+            Part
+        </th>
+        <th>
+            Manufacturer
+        </th>
+        <th>
+            Supplier
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.QuantityRequired)
+        </th>
+        <th>
+            Module
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td><a class="btn btn-xs btn-info" data-id="@item.Id">Add</a></td>
+            <td>
+                @Html.ActionLink(item.Part.Name, "Details", "EquipmentParts", new { id = item.PartId }, null)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Part.ManufacturerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Part.SupplierName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.QuantityString)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EquipmentModule.Name)
+            </td>
+        </tr>
+    }
+
+</table>

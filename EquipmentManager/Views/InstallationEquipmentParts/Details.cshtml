@@ -1,0 +1,44 @@
+﻿@model EquipmentManager.Data.InstallationEquipmentPart
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+    <li>@Html.ActionLink("Installations", "Index", "Installations")</li>
+    <li>@Html.ActionLink(Model.InstallationEquipmentModule.Installation.Name, "Details", "Installations", new { id = Model.InstallationEquipmentModule.InstallationId }, null)</li>
+    <li>@Html.ActionLink("Parts", "Parts", "Installations", new { id = Model.InstallationEquipmentModule.InstallationId }, null)</li>
+    <li class="active">@Model.Name</li>
+</ol>
+
+<div>
+    <div class="row">
+        <div class="col-md-4">
+            <fieldset>
+                <legend>Part</legend>
+                @Html.Partial("_PartPartial", Model.EquipmentPart.Part)
+            </fieldset>
+        </div>
+        <div class="col-md-4">
+            <fieldset>
+                <legend>@Model.InstallationEquipmentModule.Installation.Equipment.Name</legend>
+                @Html.Partial("_EquipmentPartPartial", Model.EquipmentPart)
+            </fieldset>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <fieldset>
+                <legend>@Model.InstallationEquipmentModule.Installation.Name @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-xs btn-info" })</legend>
+                @Html.Partial("_InstallationPartPartial", Model)
+            </fieldset>
+        </div>
+        <div class="col-md-4">
+            <fieldset>
+                <legend>@Html.DisplayNameFor(model => model.Notes)</legend>
+                @Html.DisplayFor(model => model.Notes)
+            </fieldset>
+        </div>
+    </div>
+</div>

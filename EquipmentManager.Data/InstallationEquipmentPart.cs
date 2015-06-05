@@ -21,13 +21,14 @@ namespace EquipmentManager.Data
         public Nullable<System.DateTime> DateOrdered { get; set; }
         public Nullable<System.DateTime> DateExpected { get; set; }
         public Nullable<System.DateTime> DateReceived { get; set; }
-        public int StatusId { get; set; }
+        public InstallationPartStatus StatusId { get; set; }
         public Nullable<decimal> CostPerUnit { get; set; }
         public Nullable<double> UnitsOrdered { get; set; }
         public Nullable<decimal> Postage { get; set; }
         public Nullable<decimal> ActualCost { get; set; }
+        public string Notes { get; set; }
     
-        public virtual EquipmentPart EquipmentPart { get; set; }
         public virtual InstallationEquipmentModule InstallationEquipmentModule { get; set; }
+        public virtual EquipmentPart EquipmentPart { get; set; }
     }
 }

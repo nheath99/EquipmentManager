@@ -8,6 +8,16 @@ namespace EquipmentManager.Data
 {
     public partial class Installation
     {
+        public IEnumerable<InstallationEquipmentPart> AllParts
+        {
+            get { return this.InstallationEquipmentModules.SelectMany(x => x.InstallationEquipmentParts); }
+        }
+
+        public IEnumerable<InstallationEquipmentLabour> AllLabour
+        {
+            get { return this.InstallationEquipmentModules.SelectMany(x => x.InstallationEquipmentLabours); }
+        }
+
         public IEnumerable<InstallationEquipmentModule> TopLevelModules
         {
             get { return this.InstallationEquipmentModules.Where(x => x.ParentModuleId == null); }
@@ -26,6 +36,15 @@ namespace EquipmentManager.Data
             }
         }
 
+        public IEnumerable<EquipmentPart> MissingParts
+        {
+            get
+            {
+                return this.Equipment.CurrentParts
+                    .Where(x => !this.AllParts.Select(y => y.EquipmentPartId).Contains(x.Id));
+            }
+        }
+        
         public decimal Cost
         {
             get { return this.InstallationEquipmentModules.Sum(x => x.Cost); }

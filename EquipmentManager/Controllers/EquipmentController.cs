@@ -37,6 +37,8 @@ namespace EquipmentManager.Controllers
             ViewBag.UnitsOfMeasure = new SelectList(db.UnitsOfMeasures.ToList(), "Name", "Name");
             ViewBag.Sites = new SelectList(db.Sites.OrderBy(x => x.Code).ToList(), "Id", "CodeName");
             ViewBag.Suppliers = new SelectList(db.Suppliers.OrderBy(x => x.Name), "Id", "Name");
+            ViewBag.Manufacturers = new SelectList(db.Manufacturers.OrderBy(x => x.Name), "Id", "Name");
+            ViewBag.Categories = new SelectList(db.PartCategories.OrderBy(x => x.Name), "Id", "Name");
             ViewBag.TemporalUnit = EnumHelpers.AsSelectList<TemporalUnit>();
             Membership.AddRecentEquipmentToUser(User.Identity.GetUserName(), equipment.Id);
             return View(new EquipmentViewModel(equipment));
@@ -136,7 +138,43 @@ namespace EquipmentManager.Controllers
             return Json(new { result = false }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult AddEquipmentPart(int equipmentId, int moduleId, int partId, double quantityRequired, double? quantitySpare, string unitOfMeasure, string notes)
+        public JsonResult AddNewEquipmentPart(string name, string description, int? manufacturerId, int? supplierId, int? categoryId, string link, decimal itemsPerUnit, List<string> partNumberValues, List<string> partNumberDescriptions, int equipmentId, int moduleId, double quantityRequired, string unitOfMeasure, string notes)
+        {            
+            try
+            {
+                Part p = new Part()
+                {
+                    Name = name,
+                    Description = description,
+                    ManufacturerId = manufacturerId,
+                    SupplierId = supplierId,
+                    CategoryId = categoryId,
+                    ItemsPerUnit = itemsPerUnit
+                };
+                if (partNumberValues != null && partNumberDescriptions != null)
+                {
+                    for (int i = 0; i < partNumberValues.Count; i++)
+                    {
+                        PartNumber pn = new PartNumber()
+                        {
+                            Value = partNumberValues[i],
+                            Description = partNumberDescriptions[i],
+                            Active = true
+                        };
+                        p.PartNumbers.Add(pn);
+                    }
+                }
+                
+                db.Parts.Add(p);
+                return AddEquipmentPart(equipmentId, moduleId, p.Id, quantityRequired, unitOfMeasure, notes);
+            }
+            catch (Exception)
+            {
+            }
+            return Json(new { result = false }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddEquipmentPart(int equipmentId, int moduleId, int partId, double quantityRequired, string unitOfMeasure, string notes)
         {
             try
             {
@@ -151,7 +189,6 @@ namespace EquipmentManager.Controllers
                             EquipmentModuleId = moduleId,
                             PartId = partId,
                             QuantityRequired = quantityRequired,
-                            QuantityRequiredSpare = quantitySpare ?? 0,
                             UnitOfMeasure = unitOfMeasure,
                             Notes = notes,
                             ValidFrom = DateTime.Today
@@ -160,7 +197,11 @@ namespace EquipmentManager.Controllers
                         em.EquipmentParts.Add(ep);
                         db.SaveChanges();
 
-                        ep = db.EquipmentParts.Include(x => x.Part).Single(x => x.Id == ep.Id);
+                        ep = db.EquipmentParts
+                            .Include(x => x.Part)
+                            .Include(x => x.Part.Manufacturer)
+                            .Include(x => x.Part.Supplier)
+                            .Single(x => x.Id == ep.Id);
 
                         return Json(new
                         {
@@ -170,8 +211,6 @@ namespace EquipmentManager.Controllers
                             manufacturer = ep.Part.ManufacturerName,
                             supplier = ep.Part.SupplierName,
                             quantityRequired = ep.QuantityRequired,
-                            quantitySpare = ep.QuantityRequiredSpare,
-                            quantityString = ep.QuantityString,
                             unitOfMeasure = ep.UnitOfMeasure,
                             notes = ep.Notes
                         }, JsonRequestBehavior.AllowGet);

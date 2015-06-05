@@ -1,0 +1,91 @@
+﻿@model EquipmentManager.Data.InstallationEquipmentPart
+
+<dl class="dl-horizontal">
+
+    <dt>
+        @Html.DisplayNameFor(model => model.InstallationEquipmentModule)
+    </dt>
+
+    <dd>
+        @Html.ActionLink(Model.InstallationEquipmentModule.Name, "Details", "InstallationEquipmentModules", new { id = Model.InstallationModuleId }, null)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.StatusId)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.StatusId)
+    </dd>
+    <dt>
+        @Html.DisplayNameFor(model => model.DateQuoted)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.DateQuoted)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.DateOrdered)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.DateOrdered)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.DateExpected)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.DateExpected)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.DateReceived)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.DateReceived)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.CostPerUnit)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.CostPerUnit)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.UnitsOrdered)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.UnitsOrdered)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.Postage)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Postage)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.ActualCost)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.ActualCost)
+    </dd>
+
+    <dt>
+        @Html.DisplayNameFor(model => model.Cost)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Cost)
+    </dd>
+</dl>

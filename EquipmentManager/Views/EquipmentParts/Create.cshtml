@@ -40,14 +40,6 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.QuantityRequiredSpare, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.QuantityRequiredSpare, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.QuantityRequiredSpare, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
             @Html.LabelFor(model => model.UnitOfMeasure, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.UnitOfMeasure, new { htmlAttributes = new { @class = "form-control" } })

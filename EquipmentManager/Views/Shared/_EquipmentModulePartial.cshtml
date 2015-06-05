@@ -38,9 +38,15 @@
                     </thead>
                     <tbody>
                         @foreach (var part in Model.CurrentParts)
-                        {
-                            <tr>
-                                <td>@Html.ActionLink(part.Part.Name, "Details", "EquipmentParts", new { id = part.Id }, null)</td>
+                        {   
+                            <tr @(part.Part.Obsolete ? "class=bg-danger" : "")>
+                                <td>
+                                    @Html.ActionLink(part.Part.Name, "Details", "EquipmentParts", new { id = part.Id }, null)
+                                    @if (part.Part.Obsolete)
+                                    {
+                                        <strong> - OBSOLETE</strong>
+                                    }
+                                </td>
                                 <td>
                                     @if (part.Part.ManufacturerId.HasValue)
                                     {
@@ -53,7 +59,7 @@
                                         @Html.ActionLink(part.Part.SupplierName, "Details", "Suppliers", new { id = part.Part.SupplierId }, null)
                                     }
                                 </td>
-                                <td>@part.QuantityRequired @part.QuantityRequiredSpareString</td>
+                                <td>@part.QuantityRequired</td>
                                 <td>
                                     <a class="glyphicon glyphicon-chevron-left pointer" data-toggle="tooltip" data-placement="bottom" title="Move to parent module" data-function="movePart" data-equipment-part-id="@part.Id"></a>
                                     <a href="@Url.Action("Details", "EquipmentParts", new { id = part.Id })"

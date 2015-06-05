@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EquipmentManager.Data
 {
-    public enum ItemStatus
+    public enum InstallationPartStatus
     {
         None = 0,
         [Display(Name="Quote Received")]

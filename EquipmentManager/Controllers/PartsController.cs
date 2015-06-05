@@ -92,6 +92,8 @@ namespace EquipmentManager.Controllers
                     value = x.Id,
                     label = x.DisplayString,
                     name = x.Name,
+                    description = x.Description,
+                    category = x.PartCategoryName,
                     manufacturer = x.ManufacturerName,
                     supplier = x.SupplierName,
                     itemsPerUnit = x.ItemsPerUnit,

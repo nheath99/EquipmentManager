@@ -1,0 +1,93 @@
+﻿@model EquipmentManager.Data.Installation
+
+@{
+    ViewBag.Title = string.Format("{0} - Parts", Model.Name);
+}
+
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+    <li>@Html.ActionLink("Installations", "Index", "Installations")</li>
+    <li>@Html.ActionLink(Model.Name, "Details", "Installations", new { id = Model.Id }, null)</li>
+    <li class="active">Parts</li>
+</ol>
+
+<table class="table table-condensed table-bordered table-hover">
+    <tr>
+        <th>Part Name</th>
+        <th>Date Quoted</th>
+        <th>Date Ordered</th>
+        <th>Date Expected</th>
+        <th>Date Received</th>
+        <th>Status</th>
+        <th>Cost Per Unit</th>
+        <th>Units Ordered</th>
+        <th>Postage</th>
+        <th>Quoted Cost</th>
+        <th>Reported Cost</th>
+    </tr>
+
+    @foreach (var item in Model.AllParts)
+    {
+        <tr>
+            <td>@Html.ActionLink(item.Name, "Details", "InstallationEquipmentParts", new { id = item.Id }, null)</td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateQuoted)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateOrdered)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateExpected)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateReceived)
+            </td>
+            @if (item.StatusId == EquipmentManager.Data.InstallationPartStatus.None)
+            {
+                <td class="bg-danger text-danger">
+                    @item.StatusId.Name()
+                </td>
+            }
+            else if (item.StatusId == EquipmentManager.Data.InstallationPartStatus.QuoteReceived)
+            {
+                <td class="bg-danger text-danger">
+                    @item.StatusId.Name()
+                </td>
+            }
+            else if (item.StatusId == EquipmentManager.Data.InstallationPartStatus.OnOrder)
+            {
+                <td class="bg-warning text-warning">
+                    @item.StatusId.Name()
+                </td>
+            }
+            else if (item.StatusId == EquipmentManager.Data.InstallationPartStatus.Delivered ||
+                item.StatusId == EquipmentManager.Data.InstallationPartStatus.InStock)
+            {
+                <td class="bg-success text-success">
+                    @item.StatusId.Name()
+                </td>
+            }
+            else
+            {
+                <td>
+                    @item.StatusId.Name()
+                </td>
+            }
+            <td class="text-right">
+                @Html.DisplayFor(modelItem => item.CostPerUnit)
+            </td>
+            <td class="text-right">
+                @Html.DisplayFor(modelItem => item.UnitsOrdered)
+            </td>
+            <td class="text-right">
+                @Html.DisplayFor(modelItem => item.Postage)
+            </td>
+            <td class="text-right">
+                @Html.DisplayFor(modelItem => item.QuotedCost)
+            </td>
+            <td class="text-right">
+                @Html.DisplayFor(modelItem => item.Cost)
+            </td>
+        </tr>
+    }
+</table>

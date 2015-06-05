@@ -49,7 +49,7 @@ namespace EquipmentManager.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,EquipmentModuleId,PartId,QuantityRequired,QuantityRequiredSpare,UnitOfMeasure,Notes,ValidFrom,ValidTo")] EquipmentPart equipmentPart)
+        public ActionResult Create([Bind(Include = "Id,EquipmentModuleId,PartId,QuantityRequired,UnitOfMeasure,Notes,ValidFrom,ValidTo")] EquipmentPart equipmentPart)
         {
             if (ModelState.IsValid)
             {
@@ -84,7 +84,7 @@ namespace EquipmentManager.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,EquipmentModuleId,PartId,QuantityRequired,QuantityRequiredSpare,UnitOfMeasure,Notes,ValidFrom,ValidTo")] EquipmentPart equipmentPart)
+        public ActionResult Edit([Bind(Include = "Id,EquipmentModuleId,PartId,QuantityRequired,UnitOfMeasure,Notes,ValidFrom,ValidTo")] EquipmentPart equipmentPart)
         {
             if (ModelState.IsValid)
             {

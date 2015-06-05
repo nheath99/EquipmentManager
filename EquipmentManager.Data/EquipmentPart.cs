@@ -23,14 +23,13 @@ namespace EquipmentManager.Data
         public int EquipmentModuleId { get; set; }
         public int PartId { get; set; }
         public double QuantityRequired { get; set; }
-        public double QuantityRequiredSpare { get; set; }
         public string UnitOfMeasure { get; set; }
         public string Notes { get; set; }
         public System.DateTime ValidFrom { get; set; }
         public Nullable<System.DateTime> ValidTo { get; set; }
     
-        public virtual EquipmentModule EquipmentModule { get; set; }
         public virtual Part Part { get; set; }
         public virtual ICollection<InstallationEquipmentPart> InstallationEquipmentParts { get; set; }
+        public virtual EquipmentModule EquipmentModule { get; set; }
     }
 }

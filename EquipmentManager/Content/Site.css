@@ -120,3 +120,7 @@ a.row-command:hover {
 ul.ui-autocomplete {
     z-index: 1100;
 }
+
+ul.checkbox-list {
+    list-style-type: none;
+}

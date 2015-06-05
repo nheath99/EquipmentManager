@@ -64,7 +64,6 @@ namespace EquipmentManager.Models
             this.EquipmentCompositeId = e.EquipmentModuleId;
             this.ItemId = e.PartId;
             this.QuantityRequired = e.QuantityRequired;
-            this.QuantityRequiredSpare = e.QuantityRequiredSpare;
             this.UnitOfMeasure = e.UnitOfMeasure;
             this.Notes = e.Notes;
             this.ValidFrom = e.ValidFrom;
@@ -89,7 +88,6 @@ namespace EquipmentManager.Models
         public int EquipmentCompositeId { get; set; }
         public int ItemId { get; set; }
         public double QuantityRequired { get; set; }
-        public double QuantityRequiredSpare { get; set; }
         public string UnitOfMeasure { get; set; }
         public string Notes { get; set; }
         public DateTime ValidFrom { get; set; }
@@ -115,20 +113,5 @@ namespace EquipmentManager.Models
 
         public string PartCategoryName
         { get { return this.PartCategory != null ? this.PartCategory.Name : string.Empty; } }
-
-        public string QuantityRequiredSpareString
-        {
-            get
-            {
-                if (this.QuantityRequiredSpare == 0)
-                {
-                    return string.Empty;
-                }
-                else
-                {
-                    return string.Format("({0})", this.QuantityRequiredSpare);
-                }
-            }
-        }
     }
 }

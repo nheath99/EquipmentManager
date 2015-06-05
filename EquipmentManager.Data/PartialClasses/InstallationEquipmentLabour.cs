@@ -8,6 +8,11 @@ namespace EquipmentManager.Data
 {
     public partial class InstallationEquipmentLabour
     {
+        public string QuantityString
+        {
+            get { return string.Format("{0} {1}", this.Quantity, this.QuantityUnit.Name()); }
+        }
+
         public decimal Cost
         {
             get { return this.ActualCost ?? this.QuotedCost; }

@@ -86,7 +86,7 @@
                             @Html.ActionLink(part.Part.SupplierName, "Details", "Suppliers", new { id = part.Part.SupplierId }, null)
                         }
                     </td>
-                    <td>@part.QuantityRequired @part.QuantityRequiredSpareString</td>
+                    <td>@part.QuantityRequired</td>
 
                     @if (part.Part.PartNumbers.Count(x => x.Description == "RS") != 0)
                     {

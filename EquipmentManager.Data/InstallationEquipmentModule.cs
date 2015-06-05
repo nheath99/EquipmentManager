@@ -27,11 +27,11 @@ namespace EquipmentManager.Data
         public Nullable<decimal> ActualCost { get; set; }
         public Nullable<int> ParentModuleId { get; set; }
     
-        public virtual EquipmentModule EquipmentModule { get; set; }
         public virtual ICollection<InstallationEquipmentLabour> InstallationEquipmentLabours { get; set; }
         public virtual Installation Installation { get; set; }
         public virtual ICollection<InstallationEquipmentPart> InstallationEquipmentParts { get; set; }
         public virtual ICollection<InstallationEquipmentModule> SubordonateModules { get; set; }
         public virtual InstallationEquipmentModule ParentModule { get; set; }
+        public virtual EquipmentModule EquipmentModule { get; set; }
     }
 }
